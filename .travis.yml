@@ -1,5 +1,5 @@
 language: java
 
-before_script: ./gradlew -b downloadIdea.gradle extractIdeaSdk
+before_install: ./gradlew -b downloadIdea.gradle extractIdeaSdk
 
 script: ./gradlew build
