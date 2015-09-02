@@ -4,6 +4,7 @@ ext {
 }
 
 task downloadIdeaSdk << {
+    ant.mkdir(dir: "$projectDir/lib")
     ant.get(src: "http://download.jetbrains.com/idea/${ideaDistArchive}",
             dest: "$projectDir/lib/${ideaDistArchive}", skipexisting: true)
 }
