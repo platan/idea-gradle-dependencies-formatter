@@ -6,20 +6,13 @@ plugins {
     id 'checkstyle'
     id 'codenarc'
     id 'me.champeau.gradle.jmh' version '0.2.0'
-    id 'pl.allegro.tech.build.axion-release' version '1.3.2'
 }
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-scmVersion {
-    tag {
-        prefix = 'v'
-    }
-}
-
 group 'com.github.platan'
-project.version = scmVersion.version
+project.version = '0.1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
