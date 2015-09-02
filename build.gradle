@@ -1,0 +1,124 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'jacoco'
+    id 'idea'
+    id 'checkstyle'
+    id 'codenarc'
+    id 'me.champeau.gradle.jmh' version '0.2.0'
+    id 'pl.allegro.tech.build.axion-release' version '1.3.2'
+}
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+scmVersion {
+    tag {
+        prefix = 'v'
+    }
+}
+
+group 'com.github.platan'
+project.version = scmVersion.version
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    ideaSdk
+}
+
+ext {
+    ideaVersion = project.hasProperty('ideaVersion') ? project.getProperty('ideaVersion') : ideaVersion
+    ideaSdkPath = "${projectDir}/lib/sdk-${ideaVersion}"
+    if (!System.env.JAVA_HOME) {
+        throw new GradleException('JAVA_HOME is not set')
+    }
+    jdkToolsJar = "${System.env.JAVA_HOME}/lib/tools.jar"
+}
+
+def intellijLibs = fileTree(dir: ideaSdkPath, include: 'lib/*.jar')
+
+def spockVersion() {
+    def groovyVersion = getGroovyVersionFromIdea()
+    def groovyToSpock = ['2.0': '2.0', '2.1': '2.0', '2.2': '2.0', '2.3': '2.3', '2.4': '2.4']
+    def groovyForSpock = groovyToSpock[groovyVersion]
+    if (!groovyForSpock) {
+        throw new GradleException("Cannot resolve spock version for groovy ${groovyVersion}!")
+    }
+    "1.0-groovy-${groovyForSpock}"
+}
+
+private getGroovyVersionFromIdea() {
+    def groovyFile = project.configurations.ideaSdk.find { it.name ==~ /groovy-all-.+/ }?.name
+    def versionMatcher
+    if ((versionMatcher = groovyFile =~ /^groovy-all-(\d\.\d)\..+/)) {
+        return versionMatcher.group(1)
+    }
+    throw new GradleException('File groovy-all-x.x.x.jar not found in IntelliJ IDEA distribution')
+}
+
+dependencies {
+    compile files(jdkToolsJar)
+    ideaSdk intellijLibs
+    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/Groovy/lib/**/*.jar')
+    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/gradle/lib/**/*.jar')
+    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/properties/lib/**/*.jar')
+    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/junit/lib/**/*.jar')
+
+    compile configurations.ideaSdk
+    compile files("src/main/resources")
+
+    testCompile("org.spockframework:spock-core:${spockVersion()}") {
+        exclude module: 'groovy-all'
+    }
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            'plugin.version': project.version
+    ]
+}
+
+task copyIntoIdea(dependsOn: build, type: Copy) {
+    into 'build/run/plugins/'
+    from jar.archivePath
+}
+
+task runIdea(type: JavaExec, dependsOn: copyIntoIdea) {
+    main = 'com.intellij.idea.Main'
+    classpath = intellijLibs.plus(files(jdkToolsJar))
+
+    systemProperty 'idea.config.path', 'build/run/config'
+    systemProperty 'idea.system.path', 'build/run/system'
+    systemProperty 'idea.plugins.path', 'build/run/plugins'
+    systemProperty 'idea.launcher.port', '8998'
+}
+
+
+idea {
+    module {
+        scopes.TEST.plus += [configurations.jmh]
+    }
+}
+
+codenarc {
+    configFile = file("${project.rootDir}/config/codenarc/rules.groovy")
+    toolVersion = codenarcToolVersion
+}
+
+jacoco {
+    toolVersion = jacocoToolVersion
+}
+
+checkstyle {
+    toolVersion = checkstyleToolVersion
+    configFile = file("${project.rootDir}/config/checkstyle/checks.xml")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}

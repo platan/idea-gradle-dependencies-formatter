@@ -1,0 +1,44 @@
+<idea-plugin version="2">
+    <id>com.github.platan.gradle-dependencies-formatter</id>
+    <name>Gradle Dependencies Formatter</name>
+    <version>@plugin.version@</version>
+    <vendor email="marcin.mielnicki@gmail.com" url="https://github.com/platan">Marcin Mielnicki</vendor>
+    <description><![CDATA[
+      <h3>Features</h3>
+      <ul>
+        <li>Paste a Maven dependency as a Gradle dependency</li>
+      </ul>
+    ]]>
+    </description>
+    <change-notes><![CDATA[
+      <p>
+        <b>0.1.0</b> (initial release)
+        <ul>
+            <li>Paste a Maven dependency as a Gradle dependency</li>
+        </ul>
+      </p>
+    ]]>
+    </change-notes>
+    <idea-version since-build="133"/>
+    <depends>org.jetbrains.plugins.gradle</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
+    </extensions>
+    <application-components>
+        <component>
+            <implementation-class>com.github.platan.idea.dependencies.MavenToGradleConverter</implementation-class>
+        </component>
+        <component>
+            <interface-class>com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializer</interface-class>
+            <implementation-class>com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializerImpl</implementation-class>
+        </component>
+        <component>
+            <interface-class>com.github.platan.idea.dependencies.maven.MavenToGradleMapper</interface-class>
+            <implementation-class>com.github.platan.idea.dependencies.maven.MavenToGradleMapperImpl</implementation-class>
+        </component>
+        <component>
+            <interface-class>com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializer</interface-class>
+            <implementation-class>com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializerImpl</implementation-class>
+        </component>
+    </application-components>
+</idea-plugin>

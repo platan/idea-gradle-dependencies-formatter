@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="dependency" type="Dependency"/>
+    <xs:complexType name="Dependency">
+        <xs:all>
+            <xs:element name="groupId" type="xs:string"/>
+            <xs:element name="artifactId" minOccurs="0" type="xs:string"/>
+            <xs:element name="version" minOccurs="0" type="xs:string"/>
+            <xs:element name="type" minOccurs="0" type="xs:string" default="jar"/>
+            <xs:element name="classifier" minOccurs="0" type="xs:string"/>
+            <xs:element name="scope" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="compile"/>
+                        <xs:enumeration value="provided"/>
+                        <xs:enumeration value="runtime"/>
+                        <xs:enumeration value="test"/>
+                        <xs:enumeration value="system"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="systemPath" minOccurs="0" type="xs:string"/>
+            <xs:element name="exclusions" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="exclusion" minOccurs="0" maxOccurs="unbounded" type="Exclusion"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="optional" minOccurs="0" type="xs:boolean" default="false"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="Exclusion">
+        <xs:all>
+            <xs:element name="artifactId" minOccurs="0" type="xs:string"/>
+            <xs:element name="groupId" minOccurs="0" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+</xs:schema>
