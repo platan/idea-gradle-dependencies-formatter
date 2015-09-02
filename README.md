@@ -1,4 +1,4 @@
-# Gradle dependencies formatter
+# Gradle dependencies formatter [![Build Status](https://travis-ci.org/platan/idea-gradle-dependencies-formatter.svg?branch=master)](https://travis-ci.org/platan/idea-gradle-dependencies-formatter)
 IntelliJ IDEA plugin for formatting Gradle dependencies. 
 
 ## Features
