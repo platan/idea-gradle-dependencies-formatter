@@ -17,6 +17,8 @@ Download from [releases page](https://github.com/platan/idea-gradle-dependencies
 1. Copy a declaration of a Maven dependency in any editor.
 2. Paste it into gradle file to dependencies section. Plugin will automatically convert it to a Gradle dependency.
 
+![Paste a Maven dependency as a Gradle dependency](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/paste.gif)
+
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
 ## Development
