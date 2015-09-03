@@ -7,7 +7,7 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ## Installation
 
-- Build using `./gradlew build` and install from file `build/libs/idea-gradle-dependencies-formatter-x.x.x.jar`:  
+Download from [releases page](https://github.com/platan/idea-gradle-dependencies-formatter/releases) and install from disk:  
 `File` > `Settings` > `Plugins` > `Install plugin from disk...` > Choose plugin file in `Choose Plugin File` window > `OK`
 
 ## Usage
