@@ -37,7 +37,8 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-2015-09-02 - Initial release
+### 0.1.0 - initial release (2015-09-02)
+- Paste a Maven dependency as a Gradle dependency
 
 ## License
 
