@@ -34,6 +34,17 @@ class MavenToGradleConverterTest extends Specification {
         mavenToGradleConverter.convert(mavenDependency) == "compile 'org.spockframework:spock-core:\${version.spock}'"
     }
 
+    def 'convert maven dependency without version'() {
+        given:
+        def mavenDependency = """<dependency>
+    <groupId>org.spockframework</groupId>
+    <artifactId>spock-core</artifactId>
+</dependency>
+"""
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "compile 'org.spockframework:spock-core'"
+    }
+
     def 'skip comments during conversion'() {
         given:
         def mavenDependency = """<dependency>

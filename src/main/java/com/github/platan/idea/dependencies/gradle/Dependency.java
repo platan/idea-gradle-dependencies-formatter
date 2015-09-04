@@ -52,6 +52,10 @@ public final class Dependency {
         return transitive;
     }
 
+    public boolean hasVersion() {
+        return version != null;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(group, name, version, configuration, exclusions, transitive);
