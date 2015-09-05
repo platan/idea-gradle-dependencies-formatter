@@ -62,6 +62,23 @@ public class MavenToGradleDependenciesCopyPasteProcessorTest extends LightPlatfo
                 + "</dependency>");
     }
 
+    public void test__do_not_convert_maven_to_gradle_while_pasting_to_non_gradle_file() {
+        myFixture.configureByText("Test.groovy", "<caret>");
+        String toPaste = "<dependency>\n"
+                + "\t<groupId>org.spockframework</groupId>\n"
+                + "\t<artifactId>spock-core</artifactId>\n"
+                + "\t<version>1.0-groovy-2.4</version>\n"
+                + "</dependency>";
+
+        runPasteAction(toPaste);
+
+        myFixture.checkResult("<dependency>\n"
+                + "<groupId>org.spockframework</groupId>\n"
+                + "\t<artifactId>spock-core</artifactId>\n"
+                + "<version>1.0-groovy-2.4</version>\n"
+                + "</dependency>");
+    }
+
     private void runPasteAction(final String toPaste) {
         final Producer<Transferable> producer = new Producer<Transferable>() {
             @Nullable
