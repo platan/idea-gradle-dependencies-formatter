@@ -3,6 +3,7 @@ package com.github.platan.idea.dependencies.maven;
 import com.github.platan.idea.dependencies.gradle.Dependency;
 import com.github.platan.idea.dependencies.gradle.Exclusion;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -35,7 +36,7 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
         boolean hasWildcardExclude = Iterables.removeIf(mavenDependency.getExclusions(), IS_WILDCARD_EXCLUDE);
         boolean transitive = !hasWildcardExclude;
         return new Dependency(mavenDependency.getGroupId(), mavenDependency.getArtifactId(), mavenDependency.getVersion(),
-                getScope(mavenDependency.getScope()), excludes, transitive);
+                Optional.fromNullable(mavenDependency.getClassifier()), getScope(mavenDependency.getScope()), excludes, transitive);
     }
 
     private String getScope(Scope scope) {

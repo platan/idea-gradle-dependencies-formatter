@@ -45,6 +45,19 @@ class MavenToGradleConverterTest extends Specification {
         mavenToGradleConverter.convert(mavenDependency) == "compile 'org.spockframework:spock-core'"
     }
 
+    def 'convert maven dependency with classifier'() {
+        given:
+        def mavenDependency = """<dependency>
+  <groupId>com.carrotsearch</groupId>
+  <artifactId>hppc</artifactId>
+  <version>0.5.4</version>
+  <classifier>jdk15</classifier>
+</dependency>
+"""
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "compile 'com.carrotsearch:hppc:0.5.4:jdk15'"
+    }
+
     def 'skip comments during conversion'() {
         given:
         def mavenDependency = """<dependency>

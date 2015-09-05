@@ -2,6 +2,7 @@ package com.github.platan.idea.dependencies.gradle;
 
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -11,18 +12,21 @@ public final class Dependency {
     private final String group;
     private final String name;
     private final String version;
+    private final Optional<String> classifier;
     private final String configuration;
     private final List<Exclusion> exclusions;
     private final boolean transitive;
 
     public Dependency(String group, String name, String version, String configuration, List<Exclusion> exclusions) {
-        this(group, name, version, configuration, exclusions, true);
+        this(group, name, version, Optional.<String>absent(), configuration, exclusions, true);
     }
 
-    public Dependency(String group, String name, String version, String configuration, List<Exclusion> exclusions, boolean transitive) {
+    public Dependency(String group, String name, String version, Optional<String> classifier, String configuration, List<Exclusion>
+            exclusions, boolean transitive) {
         this.group = group;
         this.name = name;
         this.version = version;
+        this.classifier = classifier;
         this.configuration = configuration;
         this.exclusions = ImmutableList.copyOf(exclusions);
         this.transitive = transitive;
@@ -38,6 +42,10 @@ public final class Dependency {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getClassifier() {
+        return classifier.orNull();
     }
 
     public String getConfiguration() {
@@ -58,7 +66,7 @@ public final class Dependency {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(group, name, version, configuration, exclusions, transitive);
+        return Objects.hashCode(group, name, version, classifier, configuration, exclusions, transitive);
     }
 
     @Override
@@ -74,6 +82,7 @@ public final class Dependency {
                 && Objects.equal(this.name, other.name)
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.configuration, other.configuration)
+                && Objects.equal(this.classifier, other.classifier)
                 && Objects.equal(this.exclusions, other.exclusions)
                 && Objects.equal(this.transitive, other.transitive);
     }
@@ -84,10 +93,16 @@ public final class Dependency {
                 + "group='" + group + '\''
                 + ", name='" + name + '\''
                 + ", version='" + version + '\''
+                + ", classifier=" + classifier
                 + ", configuration='" + configuration + '\''
                 + ", exclusions=" + exclusions
                 + ", transitive=" + transitive
                 + '}';
     }
+
+    public boolean hasClassifier() {
+        return classifier.isPresent();
+    }
+
 
 }

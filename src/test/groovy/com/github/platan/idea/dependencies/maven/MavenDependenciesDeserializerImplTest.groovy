@@ -1,5 +1,7 @@
 package com.github.platan.idea.dependencies.maven
 
+import static com.github.platan.idea.dependencies.maven.MavenDependencyBuilder.aMavenDependency
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -19,7 +21,7 @@ class MavenDependenciesDeserializerImplTest extends Specification {
         def dependencies = mavenDependencyParser.deserialize(mavenDependency)
 
         then:
-        dependencies == [new MavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4', Scope.COMPILE)]
+        dependencies == [aMavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4').withScope(Scope.COMPILE).build()]
     }
 
     def 'parse one dependency with exclusions'() {
@@ -40,8 +42,8 @@ class MavenDependenciesDeserializerImplTest extends Specification {
         def dependencies = mavenDependencyParser.deserialize(mavenDependency)
 
         then:
-        dependencies == [new MavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4',
-                [new MavenExclusion('org.codehaus.groovy', 'groovy-all')])]
+        dependencies == [aMavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4')
+                                 .withExclusionList([new MavenExclusion('org.codehaus.groovy', 'groovy-all')]).build()]
     }
 
     @Unroll
@@ -58,7 +60,7 @@ class MavenDependenciesDeserializerImplTest extends Specification {
         def dependencies = mavenDependencyParser.deserialize(mavenDependency)
 
         then:
-        dependencies == [new MavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4', expextedScope)]
+        dependencies == [aMavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4').withScope(expextedScope).build()]
 
         where:
         scope      || expextedScope
@@ -132,8 +134,8 @@ class MavenDependenciesDeserializerImplTest extends Specification {
         def dependencies = mavenDependencyParser.deserialize(mavenDependencies)
 
         then:
-        dependencies == [new MavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4'),
-                         new MavenDependency('org.codehaus.groovy', 'groovy-all', '2.3.11')]
+        dependencies == [aMavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4').build(),
+                         aMavenDependency('org.codehaus.groovy', 'groovy-all', '2.3.11').build()]
     }
 
     def 'parse two dependencies nested in dependencies element'() {
@@ -155,8 +157,8 @@ class MavenDependenciesDeserializerImplTest extends Specification {
         def dependencies = mavenDependencyParser.deserialize(mavenDependencies)
 
         then:
-        dependencies == [new MavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4'),
-                         new MavenDependency('org.codehaus.groovy', 'groovy-all', '2.3.11')]
+        dependencies == [aMavenDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4').build(),
+                         aMavenDependency('org.codehaus.groovy', 'groovy-all', '2.3.11').build()]
     }
 
 }

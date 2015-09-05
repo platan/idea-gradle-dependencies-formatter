@@ -10,15 +10,16 @@ import static com.google.common.collect.Iterables.transform;
 
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
 
-    private static final Joiner NEW_LINE_JOINER = Joiner.on('\n');
+    private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final Joiner NEW_LINE_JOINER = Joiner.on(NEW_LINE);
 
     private static final Function<Dependency, String> FORMAT_GRADLE_DEPENDENCY = new Function<Dependency, String>() {
         @NotNull
         @Override
         public String apply(@NotNull Dependency dependency) {
             if (useClosure(dependency)) {
-                return String.format("%s(%s) {\n%s}",
-                        dependency.getConfiguration(), toStringNotation(dependency), getClosureContent(dependency));
+                return String.format("%s(%s) {%s%s}",
+                        dependency.getConfiguration(), toStringNotation(dependency), NEW_LINE, getClosureContent(dependency));
             }
             return String.format("%s %s", dependency.getConfiguration(), toStringNotation(dependency));
         }
@@ -34,23 +35,32 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
         StringBuilder stringBuilder = new StringBuilder();
         for (Exclusion exclusion : dependency.getExclusions()) {
             stringBuilder.append(String.format("\texclude group: '%s', module: '%s'", exclusion.getGroup(), exclusion.getModule()));
-            stringBuilder.append('\n');
+            stringBuilder.append(NEW_LINE);
         }
         if (!dependency.isTransitive()) {
-            stringBuilder.append("\ttransitive = false\n");
+            stringBuilder.append("\ttransitive = false");
+            stringBuilder.append(NEW_LINE);
         }
         return stringBuilder.toString();
     }
 
     private static String toStringNotation(Dependency dependency) {
-        String groupAndName = String.format("%s:%s", dependency.getGroup(), dependency.getName());
-        String result;
-        if (dependency.hasVersion()) {
-            result = String.format("%s:%s", groupAndName, dependency.getVersion());
-        } else {
-            result = groupAndName;
+        StringBuilder result = new StringBuilder();
+        result.append('\'');
+        result.append(dependency.getGroup());
+        result.append(':');
+        result.append(dependency.getName());
+        appendIf(dependency.getVersion(), result, dependency.hasVersion());
+        appendIf(dependency.getClassifier(), result, dependency.hasClassifier());
+        result.append('\'');
+        return result.toString();
+    }
+
+    private static void appendIf(String value, StringBuilder result, boolean shouldAppend) {
+        if (shouldAppend) {
+            result.append(':');
+            result.append(value);
         }
-        return String.format("'%s'", result);
     }
 
     @NotNull

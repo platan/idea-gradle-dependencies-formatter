@@ -18,32 +18,14 @@ public class MavenDependency {
     private String groupId;
     private String artifactId;
     private String version;
+    private String classifier;
     private Scope scope = Scope.COMPILE;
     @XmlElement(name = "exclusion")
     @XmlElementWrapper(name = "exclusions")
     private List<MavenExclusion> exclusionList = new ArrayList<MavenExclusion>();
 
+
     public MavenDependency() {
-    }
-
-    public MavenDependency(String groupId, String artifactId, String version, Scope scope) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        this.scope = scope;
-    }
-
-    public MavenDependency(String groupId, String artifactId, String version) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-    }
-
-    public MavenDependency(String groupId, String artifactId, String version, List<MavenExclusion> exclusions) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        this.exclusionList = exclusions;
     }
 
     public String getGroupId() {
@@ -86,9 +68,17 @@ public class MavenDependency {
         this.exclusionList = exclusions;
     }
 
+    public String getClassifier() {
+        return classifier;
+    }
+
+    public void setClassifier(String classifier) {
+        this.classifier = classifier;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hashCode(groupId, artifactId, version, scope, exclusionList);
+        return Objects.hashCode(groupId, artifactId, version, classifier, scope, exclusionList);
     }
 
     @Override
@@ -103,6 +93,7 @@ public class MavenDependency {
         return Objects.equal(this.groupId, other.groupId)
                 && Objects.equal(this.artifactId, other.artifactId)
                 && Objects.equal(this.version, other.version)
+                && Objects.equal(this.classifier, other.classifier)
                 && Objects.equal(this.scope, other.scope)
                 && Objects.equal(this.exclusionList, other.exclusionList);
     }
@@ -113,9 +104,11 @@ public class MavenDependency {
                 + "groupId='" + groupId + '\''
                 + ", artifactId='" + artifactId + '\''
                 + ", version='" + version + '\''
+                + ", classifier='" + classifier + '\''
                 + ", scope=" + scope
                 + ", exclusionList=" + exclusionList
                 + '}';
     }
+
 
 }
