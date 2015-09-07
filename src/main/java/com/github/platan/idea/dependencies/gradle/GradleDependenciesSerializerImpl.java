@@ -44,7 +44,7 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
         }
 
         private String prepareComment(String comment, String text) {
-            return comment.isEmpty() ? String.format(" // %s", text) : text;
+            return comment.isEmpty() ? String.format(" // %s", text) : String.format(", %s", text);
         }
 
         private String createComment(Map<String, String> extraOptions) {
