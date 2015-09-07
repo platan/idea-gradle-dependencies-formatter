@@ -72,14 +72,15 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
     }
 
     private static String toStringNotation(Dependency dependency) {
+        char quotationMark = dependency.getVersion() != null && dependency.getVersion().contains("${") ? '"' : '\'';
         StringBuilder result = new StringBuilder();
-        result.append('\'');
+        result.append(quotationMark);
         result.append(dependency.getGroup());
         result.append(':');
         result.append(dependency.getName());
         appendIf(dependency.getVersion(), result, dependency.hasVersion());
         appendIf(dependency.getClassifier(), result, dependency.hasClassifier());
-        result.append('\'');
+        result.append(quotationMark);
         return result.toString();
     }
 

@@ -31,7 +31,7 @@ class MavenToGradleConverterTest extends Specification {
 </dependency>
 """
         expect:
-        mavenToGradleConverter.convert(mavenDependency) == "compile 'org.spockframework:spock-core:\${version.spock}'"
+        mavenToGradleConverter.convert(mavenDependency) == 'compile "org.spockframework:spock-core:\${version.spock}"'
     }
 
     def 'convert maven dependency without version'() {
