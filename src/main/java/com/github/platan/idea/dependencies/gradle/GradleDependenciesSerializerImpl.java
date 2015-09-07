@@ -15,14 +15,15 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final Joiner NEW_LINE_JOINER = Joiner.on(NEW_LINE);
     private static final Joiner COMMA_JOINER = Joiner.on(", ");
-    private static final Function<Map.Entry<String, String>, String> EXTRA_OPTION_FORMATTER = new Function<Map.Entry<String, String>,
-            String>() {
-        @Nullable
-        @Override
-        public String apply(Map.Entry<String, String> extraOption) {
-            return String.format("%s = %s (%s is not supported)", extraOption.getKey(), extraOption.getValue(), extraOption.getKey());
-        }
-    };
+    private static final Function<Map.Entry<String, String>, String> EXTRA_OPTION_FORMATTER =
+            new Function<Map.Entry<String, String>, String>() {
+                @Nullable
+                @Override
+                public String apply(Map.Entry<String, String> extraOption) {
+                    return String.format("%s = %s (%s is not supported)", extraOption.getKey(), extraOption.getValue(), extraOption
+                            .getKey());
+                }
+            };
     private static final Function<Dependency, String> FORMAT_GRADLE_DEPENDENCY = new Function<Dependency, String>() {
         @NotNull
         @Override
@@ -32,10 +33,18 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
                 comment = createComment(dependency.getExtraOptions());
             }
             if (useClosure(dependency)) {
-                return String.format("%s(%s) {%s%s%s}",
-                        dependency.getConfiguration(), toStringNotation(dependency), comment, NEW_LINE, getClosureContent(dependency));
+                if (dependency.isOptional()) {
+                    comment += prepareComment(comment, "optional = true (optional is not supported for dependency with closure)");
+                }
+                return String.format("%s(%s) {%s%n%s}",
+                        dependency.getConfiguration(), toStringNotation(dependency), comment, getClosureContent(dependency));
             }
-            return String.format("%s %s%s", dependency.getConfiguration(), toStringNotation(dependency), comment);
+            String optional = dependency.isOptional() ? ", optional" : "";
+            return String.format("%s %s%s%s", dependency.getConfiguration(), toStringNotation(dependency), optional, comment);
+        }
+
+        private String prepareComment(String comment, String text) {
+            return comment.isEmpty() ? String.format(" // %s", text) : text;
         }
 
         private String createComment(Map<String, String> extraOptions) {

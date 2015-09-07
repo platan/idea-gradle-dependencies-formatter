@@ -35,7 +35,7 @@ class MavenToGradleMapperTest extends Specification {
     }
 
     private aDependency(String group, String name, String version, String configuration, List<Exclusion> exclusions) {
-        new Dependency(group, name, version, Optional.<String> absent(), configuration, exclusions, true, [:])
+        new Dependency(group, name, version, Optional.<String> absent(), configuration, exclusions, true, [:], false)
     }
 
 }

@@ -16,6 +16,7 @@ public class DependencyBuilder {
     private List<Exclusion> exclusions = new ArrayList<Exclusion>();
     private boolean transitive = true;
     private Map<String, String> extraOptions = new HashMap<String, String>();
+    private boolean optional;
 
     private DependencyBuilder() {
     }
@@ -64,8 +65,13 @@ public class DependencyBuilder {
         return this;
     }
 
+    public DependencyBuilder withOptional(boolean optional) {
+        this.optional = optional;
+        return this;
+    }
+
     public Dependency build() {
-        Dependency dependency = new Dependency(group, name, version, classifier, configuration, exclusions, transitive, extraOptions);
-        return dependency;
+        return new Dependency(group, name, version, classifier, configuration, exclusions, transitive, extraOptions,
+                optional);
     }
 }

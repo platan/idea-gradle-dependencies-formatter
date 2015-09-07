@@ -58,6 +58,41 @@ class MavenToGradleConverterTest extends Specification {
         mavenToGradleConverter.convert(mavenDependency) == "compile 'com.carrotsearch:hppc:0.5.4:jdk15'"
     }
 
+    def 'convert maven dependency with optional'() {
+        given:
+        def mavenDependency = """<dependency>
+  <groupId>joda-time</groupId>
+  <artifactId>joda-time</artifactId>
+  <version>2.8</version>
+  <optional>true</optional>
+</dependency>
+"""
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "compile 'joda-time:joda-time:2.8', optional"
+    }
+
+    def 'convert maven dependency with optional and with closure'() {
+        given:
+        def mavenDependency = """<dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.8</version>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-convert</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    """
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == """compile('joda-time:joda-time:2.8') """ +
+                """{ // optional = true (optional is not supported for dependency with closure)
+\texclude group: 'joda-time', module: 'joda-convert'
+}"""
+    }
+
     def 'maven dependency with systemPath is not supported yet'() {
         given:
         def mavenDependency = """<dependency>

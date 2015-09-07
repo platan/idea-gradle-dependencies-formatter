@@ -32,6 +32,7 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
     };
     private static final String SYSTEM_PATH = "systemPath";
     private static final String TYPE = "type";
+    private static final String TRUE = "true";
 
     @Override
     @NotNull
@@ -40,9 +41,10 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
         boolean hasWildcardExclude = Iterables.removeIf(mavenDependency.getExclusions(), IS_WILDCARD_EXCLUDE);
         boolean transitive = !hasWildcardExclude;
         Map<String, String> extraOptions = createExtraOptions(mavenDependency);
+        boolean optional = isOptional(mavenDependency);
         return new Dependency(mavenDependency.getGroupId(), mavenDependency.getArtifactId(), mavenDependency.getVersion(),
                 Optional.fromNullable(mavenDependency.getClassifier()), getScope(mavenDependency.getScope()), excludes, transitive,
-                extraOptions);
+                extraOptions, optional);
     }
 
     private HashMap<String, String> createExtraOptions(MavenDependency mavenDependency) {
@@ -54,6 +56,14 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
             extraOptions.put(TYPE, mavenDependency.getType());
         }
         return extraOptions;
+    }
+
+    private boolean isOptional(MavenDependency mavenDependency) {
+        return isEqualTo(mavenDependency.getOptional(), TRUE);
+    }
+
+    private boolean isEqualTo(String string1, String string2) {
+        return string1 != null && string1.compareTo(string2) == 0;
     }
 
     private String getScope(Scope scope) {

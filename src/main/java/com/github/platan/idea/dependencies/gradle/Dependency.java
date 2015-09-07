@@ -17,16 +17,18 @@ public final class Dependency {
     private final Optional<String> classifier;
     private final String configuration;
     private final List<Exclusion> exclusions;
+    private final boolean optional;
     private final boolean transitive;
     private final Map<String, String> extraOptions;
 
     public Dependency(String group, String name, String version, Optional<String> classifier, String configuration, List<Exclusion>
-            exclusions, boolean transitive, Map<String, String> extraOptions) {
+            exclusions, boolean transitive, Map<String, String> extraOptions, boolean optional) {
         this.group = group;
         this.name = name;
         this.version = version;
         this.classifier = classifier;
         this.configuration = configuration;
+        this.optional = optional;
         this.extraOptions = ImmutableMap.copyOf(extraOptions);
         this.exclusions = ImmutableList.copyOf(exclusions);
         this.transitive = transitive;
@@ -72,9 +74,13 @@ public final class Dependency {
         return version != null;
     }
 
+    public boolean isOptional() {
+        return optional;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hashCode(group, name, version, classifier, configuration, exclusions, extraOptions, transitive);
+        return Objects.hashCode(group, name, version, classifier, configuration, exclusions, extraOptions, optional, transitive);
     }
 
     public boolean hasClassifier() {
@@ -97,6 +103,7 @@ public final class Dependency {
                 && Objects.equal(this.classifier, other.classifier)
                 && Objects.equal(this.exclusions, other.exclusions)
                 && Objects.equal(this.extraOptions, other.extraOptions)
+                && Objects.equal(this.optional, other.optional)
                 && Objects.equal(this.transitive, other.transitive);
     }
 
@@ -109,6 +116,7 @@ public final class Dependency {
                 + ", classifier=" + classifier
                 + ", configuration='" + configuration + '\''
                 + ", exclusions=" + exclusions
+                + ", optional=" + optional
                 + ", transitive=" + transitive
                 + ", extraOptions=" + extraOptions
                 + '}';

@@ -19,6 +19,7 @@ public class MavenDependency {
     private String artifactId;
     private String version;
     private String classifier;
+    private String optional;
     private Scope scope = Scope.COMPILE;
     private String systemPath;
     private String type;
@@ -96,9 +97,16 @@ public class MavenDependency {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(groupId, artifactId, version, classifier, scope, systemPath, type, exclusionList);
+        return Objects.hashCode(groupId, artifactId, version, classifier, optional, scope, systemPath, type, exclusionList);
     }
 
+    public String getOptional() {
+        return optional;
+    }
+
+    public void setOptional(String optional) {
+        this.optional = optional;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -113,6 +121,7 @@ public class MavenDependency {
                 && Objects.equal(this.artifactId, other.artifactId)
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.classifier, other.classifier)
+                && Objects.equal(this.optional, other.optional)
                 && Objects.equal(this.scope, other.scope)
                 && Objects.equal(this.systemPath, other.systemPath)
                 && Objects.equal(this.type, other.type)
@@ -126,10 +135,12 @@ public class MavenDependency {
                 + ", artifactId='" + artifactId + '\''
                 + ", version='" + version + '\''
                 + ", classifier='" + classifier + '\''
+                + ", optional='" + optional + '\''
                 + ", scope=" + scope
                 + ", systemPath='" + systemPath + '\''
                 + ", type='" + type + '\''
                 + ", exclusionList=" + exclusionList
                 + '}';
     }
+
 }
