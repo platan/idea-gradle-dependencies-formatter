@@ -3,7 +3,9 @@ package com.github.platan.idea.dependencies.gradle;
 import com.google.common.base.Optional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DependencyBuilder {
     private String group;
@@ -13,6 +15,7 @@ public class DependencyBuilder {
     private String configuration;
     private List<Exclusion> exclusions = new ArrayList<Exclusion>();
     private boolean transitive = true;
+    private Map<String, String> extraOptions = new HashMap<String, String>();
 
     private DependencyBuilder() {
     }
@@ -56,8 +59,13 @@ public class DependencyBuilder {
         return this;
     }
 
+    public DependencyBuilder withExtraOption(String extraOptionKey, String extraOptionValue) {
+        this.extraOptions.put(extraOptionKey, extraOptionValue);
+        return this;
+    }
+
     public Dependency build() {
-        Dependency dependency = new Dependency(group, name, version, classifier, configuration, exclusions, transitive);
+        Dependency dependency = new Dependency(group, name, version, classifier, configuration, exclusions, transitive, extraOptions);
         return dependency;
     }
 }

@@ -4,7 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Iterables.transform;
 
@@ -12,16 +14,32 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
 
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final Joiner NEW_LINE_JOINER = Joiner.on(NEW_LINE);
-
+    private static final Joiner COMMA_JOINER = Joiner.on(", ");
+    private static final Function<Map.Entry<String, String>, String> EXTRA_OPTION_FORMATTER = new Function<Map.Entry<String, String>,
+            String>() {
+        @Nullable
+        @Override
+        public String apply(Map.Entry<String, String> extraOption) {
+            return String.format("%s = %s (%s is not supported)", extraOption.getKey(), extraOption.getValue(), extraOption.getKey());
+        }
+    };
     private static final Function<Dependency, String> FORMAT_GRADLE_DEPENDENCY = new Function<Dependency, String>() {
         @NotNull
         @Override
         public String apply(@NotNull Dependency dependency) {
-            if (useClosure(dependency)) {
-                return String.format("%s(%s) {%s%s}",
-                        dependency.getConfiguration(), toStringNotation(dependency), NEW_LINE, getClosureContent(dependency));
+            String comment = "";
+            if (dependency.hasExtraOptions()) {
+                comment = createComment(dependency.getExtraOptions());
             }
-            return String.format("%s %s", dependency.getConfiguration(), toStringNotation(dependency));
+            if (useClosure(dependency)) {
+                return String.format("%s(%s) {%s%s%s}",
+                        dependency.getConfiguration(), toStringNotation(dependency), comment, NEW_LINE, getClosureContent(dependency));
+            }
+            return String.format("%s %s%s", dependency.getConfiguration(), toStringNotation(dependency), comment);
+        }
+
+        private String createComment(Map<String, String> extraOptions) {
+            return String.format(" // %s", COMMA_JOINER.join(transform(extraOptions.entrySet(), EXTRA_OPTION_FORMATTER)));
         }
 
         private boolean useClosure(Dependency dependency) {

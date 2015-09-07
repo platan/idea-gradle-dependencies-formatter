@@ -1,9 +1,10 @@
 package com.github.platan.idea.dependencies.maven
 
-import static MavenDependencyBuilder.aMavenDependency
+import static com.github.platan.idea.dependencies.maven.MavenDependencyBuilder.aMavenDependency
 
 import com.github.platan.idea.dependencies.gradle.Dependency
 import com.github.platan.idea.dependencies.gradle.Exclusion
+import com.google.common.base.Optional
 import spock.lang.Specification
 
 class MavenToGradleMapperTest extends Specification {
@@ -15,7 +16,7 @@ class MavenToGradleMapperTest extends Specification {
                 .withExclusionList([new MavenExclusion('org.codehaus.groovy', 'groovy-all')]).build()
 
         expect:
-        mavenToGradleMapper.map(dependency) == new Dependency('org.spockframework', 'spock-core', '1.0-groovy-2.4', 'compile',
+        mavenToGradleMapper.map(dependency) == aDependency('org.spockframework', 'spock-core', '1.0-groovy-2.4', 'compile',
                 [new Exclusion('org.codehaus.groovy', 'groovy-all')])
     }
 
@@ -31,6 +32,10 @@ class MavenToGradleMapperTest extends Specification {
         then:
         !dependency.transitive
         !dependency.exclusions
+    }
+
+    private aDependency(String group, String name, String version, String configuration, List<Exclusion> exclusions) {
+        new Dependency(group, name, version, Optional.<String> absent(), configuration, exclusions, true, [:])
     }
 
 }

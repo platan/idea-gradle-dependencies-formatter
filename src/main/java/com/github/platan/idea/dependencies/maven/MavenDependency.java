@@ -20,6 +20,8 @@ public class MavenDependency {
     private String version;
     private String classifier;
     private Scope scope = Scope.COMPILE;
+    private String systemPath;
+    private String type;
     @XmlElement(name = "exclusion")
     @XmlElementWrapper(name = "exclusions")
     private List<MavenExclusion> exclusionList = new ArrayList<MavenExclusion>();
@@ -76,10 +78,27 @@ public class MavenDependency {
         this.classifier = classifier;
     }
 
+    public String getSystemPath() {
+        return systemPath;
+    }
+
+    public void setSystemPath(String systemPath) {
+        this.systemPath = systemPath;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hashCode(groupId, artifactId, version, classifier, scope, exclusionList);
+        return Objects.hashCode(groupId, artifactId, version, classifier, scope, systemPath, type, exclusionList);
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -95,6 +114,8 @@ public class MavenDependency {
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.classifier, other.classifier)
                 && Objects.equal(this.scope, other.scope)
+                && Objects.equal(this.systemPath, other.systemPath)
+                && Objects.equal(this.type, other.type)
                 && Objects.equal(this.exclusionList, other.exclusionList);
     }
 
@@ -106,9 +127,9 @@ public class MavenDependency {
                 + ", version='" + version + '\''
                 + ", classifier='" + classifier + '\''
                 + ", scope=" + scope
+                + ", systemPath='" + systemPath + '\''
+                + ", type='" + type + '\''
                 + ", exclusionList=" + exclusionList
                 + '}';
     }
-
-
 }

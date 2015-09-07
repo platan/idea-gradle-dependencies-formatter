@@ -58,6 +58,53 @@ class MavenToGradleConverterTest extends Specification {
         mavenToGradleConverter.convert(mavenDependency) == "compile 'com.carrotsearch:hppc:0.5.4:jdk15'"
     }
 
+    def 'maven dependency with systemPath is not supported yet'() {
+        given:
+        def mavenDependency = """<dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>gherkin</artifactId>
+            <version>2.12.2</version>
+            <scope>system</scope>
+            <systemPath>\${project.basedir}/lib/gherkin-2.12.2.jar</systemPath>
+        </dependency>"""
+
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "system 'info.cukes:gherkin:2.12.2' " +
+                "// systemPath = \${project.basedir}/lib/gherkin-2.12.2.jar (systemPath is not supported)"
+    }
+
+    def 'maven dependency with two unsupported elements'() {
+        given:
+        def mavenDependency = """<dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>gherkin</artifactId>
+            <version>2.12.2</version>
+            <scope>system</scope>
+            <systemPath>\${project.basedir}/lib/gherkin-2.12.2.jar</systemPath>
+            <type>jar</type>
+        </dependency>"""
+
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "system 'info.cukes:gherkin:2.12.2' " +
+                "// systemPath = \${project.basedir}/lib/gherkin-2.12.2.jar (systemPath is not supported), " +
+                "type = jar (type is not supported)"
+    }
+
+    def 'maven dependency with type is not supported yet'() {
+        given:
+        def mavenDependency = """<dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>apache-maven</artifactId>
+            <version>3.0.1</version>
+            <classifier>bin</classifier>
+            <type>zip</type>
+        </dependency>"""
+
+        expect:
+        mavenToGradleConverter.convert(mavenDependency) == "compile 'org.apache.maven:apache-maven:3.0.1:bin' " +
+                "// type = zip (type is not supported)"
+    }
+
     def 'skip comments during conversion'() {
         given:
         def mavenDependency = """<dependency>

@@ -4,8 +4,10 @@ package com.github.platan.idea.dependencies.gradle;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
+import java.util.Map;
 
 public final class Dependency {
 
@@ -16,18 +18,16 @@ public final class Dependency {
     private final String configuration;
     private final List<Exclusion> exclusions;
     private final boolean transitive;
-
-    public Dependency(String group, String name, String version, String configuration, List<Exclusion> exclusions) {
-        this(group, name, version, Optional.<String>absent(), configuration, exclusions, true);
-    }
+    private final Map<String, String> extraOptions;
 
     public Dependency(String group, String name, String version, Optional<String> classifier, String configuration, List<Exclusion>
-            exclusions, boolean transitive) {
+            exclusions, boolean transitive, Map<String, String> extraOptions) {
         this.group = group;
         this.name = name;
         this.version = version;
         this.classifier = classifier;
         this.configuration = configuration;
+        this.extraOptions = ImmutableMap.copyOf(extraOptions);
         this.exclusions = ImmutableList.copyOf(exclusions);
         this.transitive = transitive;
     }
@@ -56,6 +56,14 @@ public final class Dependency {
         return exclusions;
     }
 
+    public Map<String, String> getExtraOptions() {
+        return extraOptions;
+    }
+
+    public boolean hasExtraOptions() {
+        return !extraOptions.isEmpty();
+    }
+
     public boolean isTransitive() {
         return transitive;
     }
@@ -66,7 +74,11 @@ public final class Dependency {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(group, name, version, classifier, configuration, exclusions, transitive);
+        return Objects.hashCode(group, name, version, classifier, configuration, exclusions, extraOptions, transitive);
+    }
+
+    public boolean hasClassifier() {
+        return classifier.isPresent();
     }
 
     @Override
@@ -84,6 +96,7 @@ public final class Dependency {
                 && Objects.equal(this.configuration, other.configuration)
                 && Objects.equal(this.classifier, other.classifier)
                 && Objects.equal(this.exclusions, other.exclusions)
+                && Objects.equal(this.extraOptions, other.extraOptions)
                 && Objects.equal(this.transitive, other.transitive);
     }
 
@@ -97,11 +110,8 @@ public final class Dependency {
                 + ", configuration='" + configuration + '\''
                 + ", exclusions=" + exclusions
                 + ", transitive=" + transitive
+                + ", extraOptions=" + extraOptions
                 + '}';
-    }
-
-    public boolean hasClassifier() {
-        return classifier.isPresent();
     }
 
 
