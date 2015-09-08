@@ -22,6 +22,8 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ![Paste a Maven dependency as a Gradle dependency](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/paste.gif)
 
+Optional dependencies are coded using syntax defined by [Nebula Extra Configurations](https://github.com/nebula-plugins/gradle-extra-configurations-plugin/). 
+
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
 ## Development
