@@ -42,6 +42,11 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### 0.2.0 (2015-09-08)
+- Paste a Maven dependency as a Gradle dependency:
+    - added support for elements `classifier` and `optional`
+    - version is skipped for dependency without version
+
 ### 0.1.0 - initial release (2015-09-02)
 - Paste a Maven dependency as a Gradle dependency
 
