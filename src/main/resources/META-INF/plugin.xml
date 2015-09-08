@@ -12,6 +12,11 @@
     </description>
     <change-notes><![CDATA[
       <p>
+        <b>0.2.0</b>
+        <ul>
+            <li>Paste a Maven dependency as a Gradle dependency - added support for elements `classifier` and `optional`</li>
+            <li>Paste a Maven dependency as a Gradle dependency - version is skipped for dependency without version</li>
+        </ul>
         <b>0.1.0</b> (initial release)
         <ul>
             <li>Paste a Maven dependency as a Gradle dependency</li>
