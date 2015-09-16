@@ -28,6 +28,10 @@
     <depends>org.jetbrains.plugins.gradle</depends>
     <extensions defaultExtensionNs="com.intellij">
         <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
+
+        <intentionAction>
+            <className>com.github.platan.idea.dependencies.intentions.StringNotationToMapNotationIntention</className>
+        </intentionAction>
     </extensions>
     <application-components>
         <component>

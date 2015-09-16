@@ -1,5 +1,7 @@
 ruleset {
     ruleset('file:config/codenarc/StarterRuleSet-AllRulesByCategory.groovy') {
+        AbstractClassWithoutAbstractMethod(enabled: false)
+        AbstractClassWithPublicConstructor(enabled: false)
         ClassJavadoc(enabled: false)
         ClosureAsLastMethodParameter(enabled: false)
         CrapMetric(enabled: false)
@@ -8,6 +10,7 @@ ruleset {
         FactoryMethodName(enabled: false)
         GStringExpressionWithinString(enabled: false)
         JUnitPublicNonTestMethod(enabled: false)
+        JUnitTestMethodWithoutAssert(enabled: false)
         LineLength(length: 140)
         MethodName(enabled: false)
         NoDef(enabled: false)
