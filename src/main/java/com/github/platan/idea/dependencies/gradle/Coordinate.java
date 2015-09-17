@@ -64,7 +64,7 @@ public class Coordinate {
         return coordinateBuilder.build();
     }
 
-    public static boolean isParsable(String stringNotation) {
+    public static boolean isStringNotationCoordinate(String stringNotation) {
         return Pattern.compile("[^:\\s]+:[^:\\s]+(:[^:\\s]*)?(:[^:\\s]+)?(@[^:\\s]+)?").matcher(stringNotation).matches();
     }
 

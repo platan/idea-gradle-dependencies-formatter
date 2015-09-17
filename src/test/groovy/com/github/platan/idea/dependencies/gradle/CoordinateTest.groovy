@@ -104,7 +104,7 @@ class CoordinateTest extends Specification {
     @Unroll
     def '#dependency is parsable'() {
         expect:
-        Coordinate.isParsable(dependency)
+        Coordinate.isStringNotationCoordinate(dependency)
 
         where:
         dependency                                | _
@@ -120,7 +120,7 @@ class CoordinateTest extends Specification {
     @Unroll
     def '#dependency is not parsable'() {
         expect:
-        !Coordinate.isParsable(dependency)
+        !Coordinate.isStringNotationCoordinate(dependency)
 
         where:
         dependency               | _

@@ -28,7 +28,8 @@ public class StringNotationToMapNotationIntention extends Intention {
         return new PsiElementPredicate() {
             @Override
             public boolean satisfiedBy(PsiElement element) {
-                return element instanceof GrLiteral && GrStringUtil.isStringLiteral((GrLiteral) element);
+                return element instanceof GrLiteral && GrStringUtil.isStringLiteral((GrLiteral) element) &&
+                        Coordinate.isStringNotationCoordinate(GrStringUtil.removeQuotes(element.getText()));
             }
         };
     }

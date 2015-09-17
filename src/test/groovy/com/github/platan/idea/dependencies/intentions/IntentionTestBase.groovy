@@ -6,19 +6,24 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 
 abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
 
-    protected final String hint
+    protected final String intention
 
-    IntentionTestBase(String hint) {
-        assert hint != null
-        this.hint = hint
+    IntentionTestBase(String intentionName) {
+        assert intentionName != null
+        this.intention = intentionName
     }
 
-    protected void doTest() {
-        myFixture.configureByFile(getTestName(false) + ".gradle")
-        List<IntentionAction> list = myFixture.filterAvailableIntentions(hint)
+    protected void doTextTest(String given, String expected) {
+        myFixture.configureByText("build.gradle", given)
+        List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
         myFixture.launchAction(assertOneElement(list))
         PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
-        myFixture.checkResultByFile(getTestName(false) + "_after.gradle")
+        myFixture.checkResult(expected)
+    }
+
+    protected void doAntiTest(String given) {
+        myFixture.configureByText("build.gradle", given)
+        assertEmpty(myFixture.filterAvailableIntentions(intention))
     }
 
 }
