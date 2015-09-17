@@ -90,7 +90,7 @@ class CoordinateTest extends Specification {
         thrown IllegalArgumentException
 
         where:
-        stringCoordinate << ['', ' ']
+        stringCoordinate << ['', ' ', ':']
     }
 
     def 'cannot create coordinate from string representation with empty element'() {
@@ -99,6 +99,50 @@ class CoordinateTest extends Specification {
 
         then:
         thrown IllegalArgumentException
+    }
+
+    @Unroll
+    def '#dependency is parsable'() {
+        expect:
+        Coordinate.isParsable(dependency)
+
+        where:
+        dependency                                | _
+        'com.google.guava:guava'                  | _
+        'com.google.guava:guava:18.0'             | _
+        'com.google.guava:guava:18.0:sources'     | _
+        'com.google.guava:guava::sources'         | _
+        'com.google.guava:guava:18.0:sources@jar' | _
+        'com.google.guava:guava:18.0:@jar'        | _
+        'com.google.guava:guava::@jar'            | _
+    }
+
+    @Unroll
+    def '#dependency is not parsable'() {
+        expect:
+        !Coordinate.isParsable(dependency)
+
+        where:
+        dependency               | _
+        ' '                      | _
+        ':'                      | _
+        'guava'                  | _
+        'com.google.guava::18.0' | _
+        'com.google.guava::'     | _
+        '::18.0'                 | _
+        ':guava:'                | _
+    }
+
+    def 'convert to map notation'() {
+        given:
+        def coordinate = Coordinate.CoordinateBuilder.aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withVersion('18.0')
+                .withClassifier('sources')
+                .withExtension('jar').build()
+
+        expect:
+        coordinate.toMapNotation() == "group: 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'"
     }
 
 }

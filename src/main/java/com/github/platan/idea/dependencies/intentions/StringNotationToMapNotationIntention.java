@@ -1,5 +1,6 @@
 package com.github.platan.idea.dependencies.intentions;
 
+import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -17,14 +18,8 @@ public class StringNotationToMapNotationIntention extends Intention {
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
         if (!(element instanceof GrLiteral)) return;
         String stringNotation = GrStringUtil.removeQuotes(element.getText());
-        String mapNotation = toMapNotation(stringNotation);
+        String mapNotation = Coordinate.parse(stringNotation).toMapNotation();
         element.replace(GroovyPsiElementFactory.getInstance(project).createArgumentListFromText(mapNotation));
-    }
-
-    @NotNull
-    private String toMapNotation(String dependency) {
-        String[] depElements = dependency.split(":");
-        return "group: '" + depElements[0] + "', name: '" + depElements[1] + "', version: '" + depElements[2] + "'";
     }
 
     @NotNull
