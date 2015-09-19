@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
 
@@ -28,7 +29,8 @@ public class StringNotationToMapNotationIntention extends Intention {
         return new PsiElementPredicate() {
             @Override
             public boolean satisfiedBy(PsiElement element) {
-                return element instanceof GrLiteral && GrStringUtil.isStringLiteral((GrLiteral) element) &&
+                return element.getParent() instanceof GrArgumentList &&
+                        element instanceof GrLiteral && GrStringUtil.isStringLiteral((GrLiteral) element) &&
                         Coordinate.isStringNotationCoordinate(GrStringUtil.removeQuotes(element.getText()));
             }
         };
