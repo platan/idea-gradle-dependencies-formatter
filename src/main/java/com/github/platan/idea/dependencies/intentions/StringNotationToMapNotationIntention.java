@@ -19,6 +19,7 @@ import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
+import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
 
 public class StringNotationToMapNotationIntention extends Intention {
 
@@ -39,7 +40,9 @@ public class StringNotationToMapNotationIntention extends Intention {
         for (PsiElement psiElement : map.getChildren()) {
             PsiElement lastChild = psiElement.getLastChild();
             if (lastChild instanceof GrLiteral && !(lastChild instanceof GrString)) {
-                String string = String.format("'%s'", removeQuotes(lastChild.getText()));
+                String stringWithoutQuotes = removeQuotes(lastChild.getText());
+                String unescaped = GrStringUtil.escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
+                String string = String.format("'%s'", unescaped);
                 lastChild.replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(string));
             }
         }

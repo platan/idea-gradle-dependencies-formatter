@@ -1,6 +1,10 @@
 package com.github.platan.idea.dependencies.intentions
 
 class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
+    @Override
+    protected String getBasePath() {
+        '../src/test/resources/intentions/stringNotationToMapNotation/'
+    }
 
     StringNotationToMapNotationIntentionTest() {
         super('Convert to map notation')
@@ -24,13 +28,8 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
-    void test_convert_string_with_spacial_characters() {
-        doTextTest('''dependencies {
-    compile 'com.google.<caret>guava:guava:$guavaVersion'
-}''',
-                '''dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '$guavaVersion'
-}''')
+    void test_convert_string_with_special_characters() {
+        doTest()
     }
 
     void test_convert_string_notation_with_single_quote_and_brackets() {
@@ -56,12 +55,7 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     }
 
     void test_convert_interpolated_string() {
-        doTextTest('''dependencies {
-    compile "com.google.<caret>guava:guava:$guavaVersion"
-}''',
-                '''dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
-}''')
+        doTest()
     }
 
     void test_do_not_find_intention() {
@@ -82,4 +76,7 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_gstring_with_escaped_character() {
+        doTest()
+    }
 }

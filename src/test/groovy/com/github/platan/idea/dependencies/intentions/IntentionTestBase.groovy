@@ -26,4 +26,12 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
         assert !myFixture.filterAvailableIntentions(intention), "An intention '$intention' should not be applicable to: \n$given\n"
     }
 
+    protected void doTest() {
+        myFixture.configureByFile(getTestName(false).replaceFirst('_', '') + ".gradle")
+        List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
+        myFixture.launchAction(assertOneElement(list))
+        PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
+        myFixture.checkResultByFile(getTestName(false).replaceFirst('_', '') + "_after.gradle")
+    }
+
 }
