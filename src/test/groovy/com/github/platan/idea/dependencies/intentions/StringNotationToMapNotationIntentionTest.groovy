@@ -79,4 +79,12 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     void test_convert_gstring_with_escaped_character() {
         doTest()
     }
+
+    void test_convert_interpolated_triple_double_quoted_string() {
+        doTest()
+    }
+
+    void test_convert_single_quoted_string() {
+        doTest()
+    }
 }

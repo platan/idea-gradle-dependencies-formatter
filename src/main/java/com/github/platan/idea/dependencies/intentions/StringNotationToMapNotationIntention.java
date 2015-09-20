@@ -3,6 +3,8 @@ package com.github.platan.idea.dependencies.intentions;
 import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
 import static org.jetbrains.plugins.groovy.intentions.base.ErrorUtil.containsError;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.isStringLiteral;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
@@ -19,21 +21,26 @@ import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
 
 public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
-        if (!(element instanceof GrLiteral)) return;
+        if (!(element instanceof GrLiteral)) {
+            return;
+        }
         String quote = getStartQuote(element.getText());
         String stringNotation = removeQuotes(element.getText());
         String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);
         GrArgumentList argumentList = GroovyPsiElementFactory.getInstance(project).createArgumentListFromText(mapNotation);
-        if (quote.equals(DOUBLE_QUOTES)) {
+        if (isInterpolableString(quote)) {
             replaceGStringMapValuesToString(argumentList, project);
         }
         element.replace(argumentList);
+    }
+
+    private boolean isInterpolableString(String quote) {
+        return quote.equals(DOUBLE_QUOTES) || quote.equals(TRIPLE_DOUBLE_QUOTES);
     }
 
     private void replaceGStringMapValuesToString(GrArgumentList map, Project project) {
@@ -41,7 +48,7 @@ public class StringNotationToMapNotationIntention extends Intention {
             PsiElement lastChild = psiElement.getLastChild();
             if (lastChild instanceof GrLiteral && !(lastChild instanceof GrString)) {
                 String stringWithoutQuotes = removeQuotes(lastChild.getText());
-                String unescaped = GrStringUtil.escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
+                String unescaped = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
                 String string = String.format("'%s'", unescaped);
                 lastChild.replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(string));
             }
