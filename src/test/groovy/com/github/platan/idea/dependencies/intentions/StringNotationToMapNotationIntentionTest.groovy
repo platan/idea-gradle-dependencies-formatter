@@ -24,7 +24,7 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
-    void test_convert_string_with_escaped_characters() {
+    void test_convert_string_with_spacial_characters() {
         doTextTest('''dependencies {
     compile 'com.google.<caret>guava:guava:$guavaVersion'
 }''',
@@ -52,6 +52,15 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     compile(group: 'com.google.guava', name: 'guava', version: '18.0') {
         transitive = false
     }
+}''')
+    }
+
+    void test_convert_interpolated_string() {
+        doTextTest('''dependencies {
+    compile "com.google.<caret>guava:guava:$guavaVersion"
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
 }''')
     }
 

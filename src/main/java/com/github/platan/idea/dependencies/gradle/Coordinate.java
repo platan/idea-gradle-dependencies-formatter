@@ -18,13 +18,6 @@ public class Coordinate {
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.on(":").limit(4);
     private static final Splitter ON_AT_SPLITTER = Splitter.on("@").limit(2);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
-    private static final Function<Map.Entry<String, String>, String> MAP_ENTRY_TO_STRING =
-            new Function<Map.Entry<String, String>, String>() {
-                @Override
-                public String apply(Map.Entry<String, String> mapEntry) {
-                    return String.format("%s: '%s'", mapEntry.getKey(), mapEntry.getValue());
-                }
-            };
     private final Optional<String> group;
     private final String name;
     private final Optional<String> version;
@@ -95,8 +88,8 @@ public class Coordinate {
         return extension;
     }
 
-    public String toMapNotation() {
-        return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), MAP_ENTRY_TO_STRING));
+    public String toMapNotation(String quote) {
+        return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), new MapEntryToStringFunction(quote)));
     }
 
     private Map<String, String> toMap() {
@@ -153,6 +146,19 @@ public class Coordinate {
 
         public Coordinate build() {
             return new Coordinate(group, name, version, classifier, extension);
+        }
+    }
+
+    private static class MapEntryToStringFunction implements Function<Map.Entry<String, String>, String> {
+        private final String quotationMark;
+
+        private MapEntryToStringFunction(String quotationMark) {
+            this.quotationMark = quotationMark;
+        }
+
+        @Override
+        public String apply(Map.Entry<String, String> mapEntry) {
+            return String.format("%s: %s%s%s", mapEntry.getKey(), quotationMark, mapEntry.getValue(), quotationMark);
         }
     }
 }

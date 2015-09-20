@@ -142,7 +142,7 @@ class CoordinateTest extends Specification {
                 .withExtension('jar').build()
 
         expect:
-        coordinate.toMapNotation() == "group: 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'"
+        coordinate.toMapNotation("'") == "group: 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'"
     }
 
 }

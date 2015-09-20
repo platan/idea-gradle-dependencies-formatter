@@ -1,27 +1,48 @@
 package com.github.platan.idea.dependencies.intentions;
 
+import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
+import static org.jetbrains.plugins.groovy.intentions.base.ErrorUtil.containsError;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.isStringLiteral;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
+
 import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.intentions.base.ErrorUtil;
 import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 
 public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
         if (!(element instanceof GrLiteral)) return;
-        String stringNotation = GrStringUtil.removeQuotes(element.getText());
-        String mapNotation = Coordinate.parse(stringNotation).toMapNotation();
-        element.replace(GroovyPsiElementFactory.getInstance(project).createArgumentListFromText(mapNotation));
+        String quote = getStartQuote(element.getText());
+        String stringNotation = removeQuotes(element.getText());
+        String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);
+        GrArgumentList argumentList = GroovyPsiElementFactory.getInstance(project).createArgumentListFromText(mapNotation);
+        if (quote.equals(DOUBLE_QUOTES)) {
+            replaceGStringMapValuesToString(argumentList, project);
+        }
+        element.replace(argumentList);
+    }
+
+    private void replaceGStringMapValuesToString(GrArgumentList map, Project project) {
+        for (PsiElement psiElement : map.getChildren()) {
+            PsiElement lastChild = psiElement.getLastChild();
+            if (lastChild instanceof GrLiteral && !(lastChild instanceof GrString)) {
+                String string = String.format("'%s'", removeQuotes(lastChild.getText()));
+                lastChild.replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(string));
+            }
+        }
     }
 
     @NotNull
@@ -32,9 +53,9 @@ public class StringNotationToMapNotationIntention extends Intention {
             public boolean satisfiedBy(PsiElement element) {
                 return element.getParent() instanceof GrArgumentList
                         && element instanceof GrLiteral
-                        && !ErrorUtil.containsError(element)
-                        && GrStringUtil.isStringLiteral((GrLiteral) element)
-                        && Coordinate.isStringNotationCoordinate(GrStringUtil.removeQuotes(element.getText()));
+                        && !containsError(element)
+                        && isStringLiteral((GrLiteral) element)
+                        && isStringNotationCoordinate(removeQuotes(element.getText()));
             }
         };
     }
