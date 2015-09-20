@@ -87,4 +87,8 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     void test_convert_single_quoted_string() {
         doTest()
     }
+
+    void test_convert_interpolated_string_dollar_brackets() {
+        doTest()
+    }
 }
