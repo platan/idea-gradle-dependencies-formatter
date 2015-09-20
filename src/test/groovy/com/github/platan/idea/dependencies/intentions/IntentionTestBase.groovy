@@ -23,7 +23,7 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
 
     protected void doAntiTest(String given) {
         myFixture.configureByText("build.gradle", given)
-        assertEmpty(myFixture.filterAvailableIntentions(intention))
+        assert !myFixture.filterAvailableIntentions(intention), "An intention '$intention' should not be applicable to: \n$given\n"
     }
 
 }

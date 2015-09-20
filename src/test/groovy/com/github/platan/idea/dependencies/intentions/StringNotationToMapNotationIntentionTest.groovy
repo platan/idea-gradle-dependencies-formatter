@@ -24,6 +24,15 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_string_with_escaped_characters() {
+        doTextTest('''dependencies {
+    compile 'com.google.<caret>guava:guava:$guavaVersion'
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '$guavaVersion'
+}''')
+    }
+
     void test_convert_string_notation_with_single_quote_and_brackets() {
         doTextTest('''dependencies {
     compile('com.google.<caret>guava:guava:18.0')
@@ -55,6 +64,12 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     void test_do_not_find_intention_for_variable_with_dependency() {
         doAntiTest('''dependencies {
     def guava = 'com.google.<caret>guava:guava:18.0'
+}''')
+    }
+
+    void test_do_not_find_intention_for_string_with_errors() {
+        doAntiTest('''dependencies {
+    compile "com.google.<caret>guava:guava:$"
 }''')
     }
 
