@@ -1,9 +1,14 @@
 language: java
 
-jdk:
-  - openjdk6
-  - oraclejdk8
+matrix:
+  include:
+    - jdk: openjdk6
+      env: IDEA_VERSION="13.0.4"
+    - jdk: oraclejdk8
+      env: IDEA_VERSION="13.0.4"
+    - jdk: openjdk6
+      env: IDEA_VERSION="14.1.4"
 
-before_install: ./gradlew -b downloadIdea.gradle extractIdeaSdk
+before_install: ./gradlew -b downloadIdea.gradle -P ideaVersion=$IDEA_VERSION extractIdeaSdk
 
-script: ./gradlew build
+script: ./gradlew -P ideaVersion=$IDEA_VERSION build
