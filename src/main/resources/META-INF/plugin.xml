@@ -24,7 +24,7 @@
       </p>
     ]]>
     </change-notes>
-    <idea-version since-build="133"/>
+    <idea-version since-build="133.000"/>
     <depends>org.jetbrains.plugins.gradle</depends>
     <extensions defaultExtensionNs="com.intellij">
         <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
