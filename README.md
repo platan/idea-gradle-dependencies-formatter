@@ -3,7 +3,7 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ## Features
 
-- Paste a Maven dependency as a Gradle dependency
+- Paste a Maven dependency as a Gradle dependency (on the fly conversion)
 
 ## Installation
 
