@@ -4,6 +4,7 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 ## Features
 
 - Paste a Maven dependency as a Gradle dependency
+- Convert a string notation to a map notation
 
 ## Installation
 
