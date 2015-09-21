@@ -37,7 +37,7 @@ If you need to paste XML with maven dependency into gradle file without modifica
 
 In order to build plugin against specific IntelliJ IDEA version (e.g. 13.1.6) use this commands:
 `./gradlew -b downloadIdea.gradle -P ideaVersion=13.1.6 extractIdeaSdk`  
-`./gradlew -PideaVersion=13.1.6 build`
+`./gradlew -P ideaVersion=13.1.6 build`
 
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
