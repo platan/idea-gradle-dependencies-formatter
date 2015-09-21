@@ -91,7 +91,6 @@ task runIdea(type: JavaExec, dependsOn: copyIntoIdea) {
     systemProperty 'idea.launcher.port', '8998'
 }
 
-
 idea {
     module {
         scopes.TEST.plus += [configurations.jmh]
@@ -110,6 +109,10 @@ jacoco {
 checkstyle {
     toolVersion = checkstyleToolVersion
     configFile = file("${project.rootDir}/config/checkstyle/checks.xml")
+}
+
+test {
+    jvmArgs '-XX:MaxPermSize=256m'
 }
 
 task wrapper(type: Wrapper) {
