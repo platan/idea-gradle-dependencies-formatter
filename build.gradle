@@ -12,7 +12,7 @@ sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
 group 'com.github.platan'
-project.version = '0.3.0-SNAPSHOT'
+project.version = '0.3.0'
 
 repositories {
     mavenCentral()
