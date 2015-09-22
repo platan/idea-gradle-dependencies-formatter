@@ -6,12 +6,17 @@
     <description><![CDATA[
       <h3>Features</h3>
       <ul>
+        <li>Convert a string notation to a map notation</li>
         <li>Paste a Maven dependency as a Gradle dependency</li>
       </ul>
     ]]>
     </description>
     <change-notes><![CDATA[
       <p>
+        <b>0.3.0</b>
+        <ul>
+            <li>Convert a string notation to a map notation</li>
+        </ul>
         <b>0.2.0</b>
         <ul>
             <li>Paste a Maven dependency as a Gradle dependency - added support for elements `classifier` and `optional`</li>
