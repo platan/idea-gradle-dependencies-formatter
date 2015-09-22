@@ -27,6 +27,12 @@ Optional dependencies are coded using syntax defined by [Nebula Extra Configurat
 
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
+### Convert a string notation to a map notation
+
+Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Convert to map notation`.
+
+![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/to_map_notation.gif)
+
 ## Development
 
 1. Download and extract IntelliJ IDEA distribution:  
