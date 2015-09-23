@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        maven { url 'http://dl.bintray.com/platan/maven' }
+    }
+
+    dependencies {
+        classpath 'com.github.platan:coveralls-gradle-plugin:2.4.0x:jdk6'
+    }
+}
+
 plugins {
     id 'java'
     id 'groovy'
@@ -7,6 +17,8 @@ plugins {
     id 'codenarc'
     id 'me.champeau.gradle.jmh' version '0.2.0'
 }
+
+apply plugin: 'com.github.kt3k.coveralls'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -104,6 +116,13 @@ codenarc {
 
 jacoco {
     toolVersion = jacocoToolVersion
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
 
 checkstyle {
