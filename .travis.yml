@@ -15,4 +15,4 @@ install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 
 script: ./gradlew -P ideaVersion=$IDEA_VERSION build
 
-after_success: ./gradlew -P ideaVersion=$IDEA_VERSION jacocoTestReport coveralls
+after_success: ./gradlew -P ideaVersion=$IDEA_VERSION --stacktrace jacocoTestReport coveralls
