@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        maven { url 'http://dl.bintray.com/platan/maven' }
+        maven { url 'https://dl.bintray.com/platan/gradle-plugins' }
     }
 
     dependencies {
-        classpath 'com.github.platan:coveralls-gradle-plugin:2.4.0x:jdk6'
+        classpath 'com.github.platan.gradle.plugin:coveralls-gradle-plugin:2.4.0x:jdk6'
     }
 }
 
