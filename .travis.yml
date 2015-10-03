@@ -8,6 +8,8 @@ matrix:
       env: IDEA_VERSION="13.0.4"
     - jdk: openjdk6
       env: IDEA_VERSION="14.1.4"
+    - jdk: openjdk6
+      env: IDEA_VERSION="15-PublicPreview"
 
 before_install: ./gradlew -b downloadIdea.gradle -P ideaVersion=$IDEA_VERSION extractIdeaSdk
 
