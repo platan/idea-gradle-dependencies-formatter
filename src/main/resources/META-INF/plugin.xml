@@ -35,6 +35,7 @@
         <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
 
         <intentionAction>
+            <category>Gradle</category>
             <className>com.github.platan.idea.dependencies.intentions.StringNotationToMapNotationIntention</className>
         </intentionAction>
     </extensions>

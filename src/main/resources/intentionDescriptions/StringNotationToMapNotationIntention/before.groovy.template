@@ -1,0 +1,3 @@
+dependencies {
+    testCompile <spot>'junit:junit:4.12'</spot>
+}
