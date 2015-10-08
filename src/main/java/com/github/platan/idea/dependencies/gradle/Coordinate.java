@@ -7,6 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import java.util.LinkedHashMap;
@@ -15,6 +16,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Coordinate {
+    private static final String NAME_KEY = "name";
+    private static final String GROUP_KEY = "group";
+    private static final String VERSION_KEY = "version";
+    private static final String CLASSIFIER_KEY = "classifier";
+    private static final String EXT_KEY = "ext";
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.on(":").limit(4);
     private static final Splitter ON_AT_SPLITTER = Splitter.on("@").limit(2);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
@@ -92,13 +98,68 @@ public class Coordinate {
         return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), new MapEntryToStringFunction(quote)));
     }
 
+    public String toStringNotation() {
+        StringBuilder stringBuilder = new StringBuilder();
+        appendIfPresent(stringBuilder, group, ":");
+        stringBuilder.append(name);
+        if (version.isPresent() || classifier.isPresent() || extension.isPresent()) {
+            stringBuilder.append(":");
+        }
+        appendIfPresent(stringBuilder, version);
+        if (classifier.isPresent() || extension.isPresent()) {
+            stringBuilder.append(":");
+        }
+        appendIfPresent(stringBuilder, classifier);
+        appendIfPresent(stringBuilder, "@", extension);
+        return stringBuilder.toString();
+    }
+
+    private void appendIfPresent(StringBuilder stringBuilder, Optional<String> optionalValue, String separator) {
+        if (optionalValue.isPresent()) {
+            stringBuilder.append(optionalValue.get());
+            stringBuilder.append(separator);
+        }
+    }
+
+    private void appendIfPresent(StringBuilder stringBuilder, Optional<String> optionalValue) {
+        if (optionalValue.isPresent()) {
+            stringBuilder.append(optionalValue.get());
+        }
+    }
+
+    private void appendIfPresent(StringBuilder stringBuilder, String separator, Optional<String> optionalValue) {
+        if (optionalValue.isPresent()) {
+            stringBuilder.append(separator);
+            stringBuilder.append(optionalValue.get());
+        }
+    }
+
+    public static Coordinate fromMap(Map<String, String> map) {
+        String name = map.get(NAME_KEY);
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(name), "'name' element is required. ");
+        CoordinateBuilder coordinateBuilder = CoordinateBuilder.aCoordinate(name);
+        if (!Strings.isNullOrEmpty(map.get(GROUP_KEY))) {
+            coordinateBuilder.withGroup(map.get(GROUP_KEY));
+        }
+        if (!Strings.isNullOrEmpty(map.get(VERSION_KEY))) {
+            coordinateBuilder.withVersion(map.get(VERSION_KEY));
+        }
+        if (!Strings.isNullOrEmpty(map.get(CLASSIFIER_KEY))) {
+            coordinateBuilder.withClassifier(map.get(CLASSIFIER_KEY));
+        }
+        if (!Strings.isNullOrEmpty(map.get(EXT_KEY))) {
+            coordinateBuilder.withExtension(map.get(EXT_KEY));
+        }
+        return coordinateBuilder.build();
+    }
+
     private Map<String, String> toMap() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        putIfPresent(map, group, "group");
-        map.put("name", name);
-        putIfPresent(map, version, "version");
-        putIfPresent(map, classifier, "classifier");
-        putIfPresent(map, extension, "ext");
+        putIfPresent(map, group, GROUP_KEY);
+        map.put(NAME_KEY, name);
+        putIfPresent(map, version, VERSION_KEY);
+        putIfPresent(map, classifier, CLASSIFIER_KEY);
+        putIfPresent(map, extension, EXT_KEY);
         return map;
     }
 
@@ -106,6 +167,17 @@ public class Coordinate {
         if (value.isPresent()) {
             map.put(key, value.get());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinate{"
+                + "group=" + group
+                + ", name='" + name + '\''
+                + ", version=" + version
+                + ", classifier=" + classifier
+                + ", extension=" + extension
+                + '}';
     }
 
     public static class CoordinateBuilder {

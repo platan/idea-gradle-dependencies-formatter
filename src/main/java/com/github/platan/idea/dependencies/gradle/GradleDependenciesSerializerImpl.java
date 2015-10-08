@@ -1,5 +1,7 @@
 package com.github.platan.idea.dependencies.gradle;
 
+import static com.google.common.collect.Iterables.transform;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import org.jetbrains.annotations.NotNull;
@@ -7,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Iterables.transform;
 
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
 

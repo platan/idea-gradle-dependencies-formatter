@@ -1,7 +1,6 @@
 package com.github.platan.idea.dependencies.intentions;
 
 import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
-
 import static com.github.platan.idea.dependencies.intentions.ErrorUtil.containsError;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
@@ -27,9 +26,6 @@ public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
-        if (!(element instanceof GrLiteral)) {
-            return;
-        }
         String quote = getStartQuote(element.getText());
         String stringNotation = removeQuotes(element.getText());
         String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);

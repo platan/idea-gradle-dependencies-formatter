@@ -29,7 +29,7 @@
       </p>
     ]]>
     </change-notes>
-    <idea-version since-build="133.000"/>
+    <idea-version since-build="133.0"/>
     <depends>org.jetbrains.plugins.gradle</depends>
     <extensions defaultExtensionNs="com.intellij">
         <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
@@ -37,6 +37,10 @@
         <intentionAction>
             <category>Gradle</category>
             <className>com.github.platan.idea.dependencies.intentions.StringNotationToMapNotationIntention</className>
+        </intentionAction>
+        <intentionAction>
+            <category>Gradle</category>
+            <className>com.github.platan.idea.dependencies.intentions.MapNotationToStringNotationIntention</className>
         </intentionAction>
     </extensions>
     <application-components>

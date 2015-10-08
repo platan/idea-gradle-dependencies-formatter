@@ -1,5 +1,7 @@
 package com.github.platan.idea.dependencies;
 
+import static com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_PASTE;
+
 import com.intellij.codeInsight.editorActions.PasteHandler;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -14,8 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.Component;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-
-import static com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_PASTE;
 
 public class MavenToGradleDependenciesCopyPasteProcessorTest extends LightPlatformCodeInsightFixtureTestCase {
 

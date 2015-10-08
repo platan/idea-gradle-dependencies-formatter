@@ -1,5 +1,7 @@
 package com.github.platan.idea.dependencies.gradle
 
+import static com.github.platan.idea.dependencies.gradle.Coordinate.CoordinateBuilder.aCoordinate
+
 import com.google.common.base.Optional
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -135,7 +137,7 @@ class CoordinateTest extends Specification {
 
     def 'convert to map notation'() {
         given:
-        def coordinate = Coordinate.CoordinateBuilder.aCoordinate('guava')
+        def coordinate = aCoordinate('guava')
                 .withGroup('com.google.guava')
                 .withVersion('18.0')
                 .withClassifier('sources')
@@ -145,4 +147,58 @@ class CoordinateTest extends Specification {
         coordinate.toMapNotation("'") == "group: 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'"
     }
 
+    def "build from map"() {
+        given:
+        def coordinateMap = [group: 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar']
+
+        when:
+        def coordinate = Coordinate.fromMap(coordinateMap)
+
+        then:
+        with(coordinate) {
+            name == 'guava'
+            group == Optional.of('com.google.guava')
+            version == Optional.of('18.0')
+            classifier == Optional.of('sources')
+            extension == Optional.of('jar')
+        }
+    }
+
+    @Unroll
+    def "format #coordinate to string notation #stringNotation"() {
+        expect:
+        coordinate.toStringNotation() == stringNotation
+
+        where:
+        coordinate                                                 || stringNotation
+        aCoordinate('guava').withGroup('com.google.guava').build() || 'com.google.guava:guava'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withVersion('18.0')
+                .build()                                           || 'com.google.guava:guava:18.0'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withVersion('18.0')
+                .withClassifier('sources')
+                .build()                                           || 'com.google.guava:guava:18.0:sources'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withClassifier('sources')
+                .build()                                           || 'com.google.guava:guava::sources'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withVersion('18.0')
+                .withClassifier('sources')
+                .withExtension('jar')
+                .build()                                           || 'com.google.guava:guava:18.0:sources@jar'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withVersion('18.0')
+                .withExtension('jar')
+                .build()                                           || 'com.google.guava:guava:18.0:@jar'
+        aCoordinate('guava')
+                .withGroup('com.google.guava')
+                .withExtension('jar')
+                .build()                                           || 'com.google.guava:guava::@jar'
+    }
 }

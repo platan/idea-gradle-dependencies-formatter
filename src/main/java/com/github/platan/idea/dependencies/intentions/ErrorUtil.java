@@ -21,8 +21,8 @@
 package com.github.platan.idea.dependencies.intentions;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 
 public class ErrorUtil {
 
