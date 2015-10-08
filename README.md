@@ -8,11 +8,8 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ## Installation
 
-- Install using the JetBrains Plugin Repository:  
+Install using the JetBrains Plugin Repository:  
 `File` > `Settings` > `Plugins` > `Browse repositories...` > type `gradle dependencies formatter` in search form > `Install plugin`
-
-- Or download from [releases page](https://github.com/platan/idea-gradle-dependencies-formatter/releases) and install from disk:  
-`File` > `Settings` > `Plugins` > `Install plugin from disk...` > Choose plugin file in `Choose Plugin File` window > `OK`
 
 ## Usage
 
