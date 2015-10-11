@@ -28,9 +28,14 @@ public class MapNotationToStringNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
-        GrNamedArgument[] namedArguments = ((GrArgumentListImpl) element.getParent().getParent()).getNamedArguments();
+        GrArgumentListImpl argumentList = (GrArgumentListImpl) element.getParent().getParent();
+        GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
         String stringNotation = toStringNotation(namedArguments);
-        element.getParent().getParent().replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(stringNotation));
+        for (GrNamedArgument namedArgument : namedArguments) {
+            namedArgument.delete();
+        }
+        GrExpression expressionFromText = GroovyPsiElementFactory.getInstance(project).createExpressionFromText(stringNotation);
+        argumentList.add(expressionFromText);
     }
 
     private String toStringNotation(GrNamedArgument[] namedArguments) {

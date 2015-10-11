@@ -132,4 +132,8 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
         doTest()
     }
 
+    void test_convert_dependency_with_closure() {
+        doTest()
+    }
+
 }

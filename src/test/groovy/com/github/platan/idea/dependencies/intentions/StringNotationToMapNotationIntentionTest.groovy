@@ -43,12 +43,12 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 
     void test_convert_string_notation_with_single_quote_and_brackets_and_closure() {
         doTextTest('''dependencies {
-    compile('com.google.<caret>guava:guava:18.0') {
+    compile ('com.google.<caret>guava:guava:18.0') {
         transitive = false
     }
 }''',
                 '''dependencies {
-    compile(group: 'com.google.guava', name: 'guava', version: '18.0') {
+    compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
         transitive = false
     }
 }''')
