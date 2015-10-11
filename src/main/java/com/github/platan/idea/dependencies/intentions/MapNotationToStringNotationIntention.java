@@ -34,10 +34,10 @@ public class MapNotationToStringNotationIntention extends Intention {
     }
 
     private String toStringNotation(GrNamedArgument[] namedArguments) {
-        boolean containsGstringValue = containsGstringValue(namedArguments);
         Map<String, String> map = toMap(namedArguments);
-        char quote = containsGstringValue ? '"' : '\'';
         Coordinate coordinate = Coordinate.fromMap(map);
+        boolean containsGstringValue = containsGstringValue(namedArguments);
+        char quote = containsGstringValue ? '"' : '\'';
         return String.format("%c%s%c", quote, coordinate.toStringNotation(), quote);
     }
 

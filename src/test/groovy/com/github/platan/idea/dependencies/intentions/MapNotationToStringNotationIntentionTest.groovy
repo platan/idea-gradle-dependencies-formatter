@@ -10,6 +10,42 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
         super('Convert to string notation')
     }
 
+    void test_convert_map_notation_without_version() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava'
+}''')
+    }
+
+    void test_convert_map_notation_with_classifier() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0:sources'
+}''')
+    }
+
+    void test_convert_map_notation_with_classifier_and_ext() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0:sources@jar'
+}''')
+    }
+
+    void test_convert_map_notation_with_ext() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', ext: 'jar'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0:@jar'
+}''')
+    }
+
     void test_convert_map_notation_with_caret_after_group_semicolon() {
         doTextTest('''dependencies {
     compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0'
@@ -89,6 +125,10 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
     }
 
     void test_convert_gstring_with_special_characters() {
+        doTest()
+    }
+
+    void test_convert_interpolated_triple_quote_string() {
         doTest()
     }
 
