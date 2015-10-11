@@ -1,5 +1,9 @@
 package com.github.platan.idea.dependencies.intentions;
 
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
 
 import com.github.platan.idea.dependencies.gradle.Coordinate;
@@ -12,6 +16,9 @@ import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 import org.jetbrains.plugins.groovy.lang.psi.impl.statements.arguments.GrArgumentListImpl;
 
 import java.util.LinkedHashMap;
@@ -22,10 +29,16 @@ public class MapNotationToStringNotationIntention extends Intention {
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
         GrNamedArgument[] namedArguments = ((GrArgumentListImpl) element.getParent().getParent()).getNamedArguments();
-        Map<String, String> map = toMap(namedArguments);
-        Coordinate coordinate = Coordinate.fromMap(map);
-        String stringNotation = String.format("'%s'", coordinate.toStringNotation());
+        String stringNotation = toStringNotation(namedArguments);
         element.getParent().getParent().replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(stringNotation));
+    }
+
+    private String toStringNotation(GrNamedArgument[] namedArguments) {
+        boolean containsGstringValue = containsGstringValue(namedArguments);
+        Map<String, String> map = toMap(namedArguments);
+        char quote = containsGstringValue ? '"' : '\'';
+        Coordinate coordinate = Coordinate.fromMap(map);
+        return String.format("%c%s%c", quote, coordinate.toStringNotation(), quote);
     }
 
     @NotNull
@@ -33,10 +46,37 @@ public class MapNotationToStringNotationIntention extends Intention {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (GrNamedArgument namedArgument : namedArguments) {
             String key = namedArgument.getLabel().getText();
-            String value = removeQuotes(namedArgument.getExpression().getText());
+            GrExpression expression = namedArgument.getExpression();
+            String quote = getStartQuote(expression.getText());
+            String value = removeQuotes(expression.getText());
+            if (isInterpolableString(quote) && !isGstring(expression)) {
+                String stringWithoutQuotes = removeQuotes(expression.getText());
+                value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
+            }
             map.put(key, value);
         }
         return map;
+    }
+
+    private boolean containsGstringValue(GrNamedArgument[] namedArguments) {
+        boolean containsGstringValue = false;
+        for (GrNamedArgument namedArgument : namedArguments) {
+            GrExpression expression = namedArgument.getExpression();
+            String quote = getStartQuote(expression.getText());
+            if (isInterpolableString(quote) && isGstring(expression)) {
+                containsGstringValue = true;
+                break;
+            }
+        }
+        return containsGstringValue;
+    }
+
+    private boolean isGstring(PsiElement element) {
+        return element instanceof GrLiteral && element instanceof GrString;
+    }
+
+    private boolean isInterpolableString(String quote) {
+        return quote.equals(DOUBLE_QUOTES) || quote.equals(TRIPLE_DOUBLE_QUOTES);
     }
 
     @NotNull

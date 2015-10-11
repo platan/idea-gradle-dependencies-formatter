@@ -10,7 +10,7 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
         super('Convert to string notation')
     }
 
-    void test_convert_map_notation_with_single_quote() {
+    void test_convert_map_notation_with_caret_after_group_semicolon() {
         doTextTest('''dependencies {
     compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0'
 }''',
@@ -19,10 +19,77 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_map_notation_with_caret_before_group_semicolon() {
+        doTextTest('''dependencies {
+    compile group<caret>: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_caret_on_group() {
+        doTextTest('''dependencies {
+    compile gro<caret>up: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_caret_on_group_value() {
+        doTextTest('''dependencies {
+    compile group: 'com.go<caret>ogle.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_caret_before_group() {
+        doTextTest('''dependencies {
+    compile <caret>group: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_unknown_property() {
+        doTextTest('''dependencies {
+    compile <caret>group: 'com.google.guava', name: 'guava', version: '18.0', unknownProperty: 'cat'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_intention_not_applicable_to_map_notation_and_caret_after_configuration() {
+        doAntiTest('''dependencies {
+    compile<caret> group: 'com.google.guava', name: 'guava', version: '18.0'
+}''')
+    }
+
     void test_do_not_find_intention_for_single_argument() {
         doAntiTest('''dependencies {
     compile 'gu<caret>ava'
 }''')
+    }
+
+    void test_convert_interpolated_string() {
+        doTest()
+    }
+
+    void test_convert_string_with_special_characters() {
+        doTest()
+    }
+
+    void test_convert_interpolated_string_dollar_brackets() {
+        doTest()
+    }
+
+    void test_convert_gstring_with_special_characters() {
+        doTest()
     }
 
 }

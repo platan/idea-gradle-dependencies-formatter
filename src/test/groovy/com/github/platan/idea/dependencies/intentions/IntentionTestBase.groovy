@@ -16,7 +16,7 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
     protected void doTextTest(String given, String expected) {
         myFixture.configureByText("build.gradle", given)
         List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
-        assert list.size() == 1
+        assert list.size() == 1, "An intention '$intention' should be applicable to: \n$given\n"
         myFixture.launchAction(list)
         PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
         myFixture.checkResult(expected)
@@ -28,9 +28,10 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
     }
 
     protected void doTest() {
-        myFixture.configureByFile(getTestName(false).replaceFirst('_', '') + ".gradle")
+        def file = getTestName(false).replaceFirst('_', '') + ".gradle"
+        myFixture.configureByFile(file)
         List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
-        assert list.size() == 1
+        assert list.size() == 1, "An intention '$intention' should be applicable to test case from file: $file\n"
         myFixture.launchAction(list)
         PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
         myFixture.checkResultByFile(getTestName(false).replaceFirst('_', '') + "_after.gradle")
