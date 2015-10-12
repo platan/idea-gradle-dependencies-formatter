@@ -91,15 +91,6 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
-    void test_convert_map_notation_with_unknown_property() {
-        doTextTest('''dependencies {
-    compile <caret>group: 'com.google.guava', name: 'guava', version: '18.0', unknownProperty: 'cat'
-}''',
-                '''dependencies {
-    compile 'com.google.guava:guava:18.0'
-}''')
-    }
-
     void test_intention_not_applicable_to_map_notation_and_caret_after_configuration() {
         doAntiTest('''dependencies {
     compile<caret> group: 'com.google.guava', name: 'guava', version: '18.0'
@@ -109,6 +100,18 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
     void test_do_not_find_intention_for_single_argument() {
         doAntiTest('''dependencies {
     compile 'gu<caret>ava'
+}''')
+    }
+
+    void test_do_not_find_intention_for_map_notation_without_required_elements() {
+        doAntiTest('''dependencies {
+    compile name: '<caret>guava', version: '18.0'
+}''')
+    }
+
+    void test_do_not_find_intention_for_map_notation_with_unknown_property() {
+        doAntiTest('''dependencies {
+    compile <caret>group: 'com.google.guava', name: 'guava', version: '18.0', unknownProperty: 'cat'
 }''')
     }
 

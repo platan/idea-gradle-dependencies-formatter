@@ -50,8 +50,11 @@ public class MapNotationToStringNotationIntention extends Intention {
     private Map<String, String> toMap(GrNamedArgument[] namedArguments) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (GrNamedArgument namedArgument : namedArguments) {
-            String key = namedArgument.getLabel().getText();
             GrExpression expression = namedArgument.getExpression();
+            if (namedArgument.getLabel() == null || expression == null) {
+                continue;
+            }
+            String key = namedArgument.getLabel().getText();
             String quote = getStartQuote(expression.getText());
             String value = removeQuotes(expression.getText());
             if (isInterpolableString(quote) && !isGstring(expression)) {
@@ -98,7 +101,8 @@ public class MapNotationToStringNotationIntention extends Intention {
                 if (namedArguments.length == 0) {
                     return false;
                 }
-                return true;
+                Map<String, String> map = toMap(namedArguments);
+                return Coordinate.isValidMap(map);
             }
         };
     }

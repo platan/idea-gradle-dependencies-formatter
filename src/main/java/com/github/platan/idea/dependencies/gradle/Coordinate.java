@@ -8,11 +8,14 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Coordinate {
@@ -21,6 +24,8 @@ public class Coordinate {
     private static final String VERSION_KEY = "version";
     private static final String CLASSIFIER_KEY = "classifier";
     private static final String EXT_KEY = "ext";
+    private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
+    private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.on(":").limit(4);
     private static final Splitter ON_AT_SPLITTER = Splitter.on("@").limit(2);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
@@ -167,6 +172,10 @@ public class Coordinate {
         if (value.isPresent()) {
             map.put(key, value.get());
         }
+    }
+
+    public static boolean isValidMap(Map<String, String> map) {
+        return Sets.difference(map.keySet(), ALL_KEYS).isEmpty() && map.keySet().containsAll(REQUIRED_KEYS);
     }
 
     @Override
