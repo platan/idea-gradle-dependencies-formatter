@@ -19,6 +19,15 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_optional_dependency() {
+        doTextTest('''dependencies {
+    compile 'com.google.<caret>guava:guava:18.0', optional
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '18.0', optional
+}''')
+    }
+
     void test_convert_string_notation_with_double_quote() {
         doTextTest('''dependencies {
     compile "com.google.<caret>guava:guava:18.0"
