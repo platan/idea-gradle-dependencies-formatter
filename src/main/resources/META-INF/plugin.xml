@@ -7,6 +7,7 @@
       <h3>Features</h3>
       <ul>
         <li>Convert a string notation to a map notation</li>
+        <li>Convert a map notation to a string notation</li>
         <li>Paste a Maven dependency as a Gradle dependency</li>
       </ul>
     ]]>
