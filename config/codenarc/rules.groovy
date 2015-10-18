@@ -1,5 +1,6 @@
 ruleset {
     ruleset('file:config/codenarc/StarterRuleSet-AllRulesByCategory.groovy') {
+        AbcMetric(enabled: false)
         AbstractClassWithoutAbstractMethod(enabled: false)
         AbstractClassWithPublicConstructor(enabled: false)
         ClassJavadoc(enabled: false)
