@@ -8,11 +8,8 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ## Installation
 
-- Install using the JetBrains Plugin Repository:  
+Install using the JetBrains Plugin Repository:  
 `File` > `Settings` > `Plugins` > `Browse repositories...` > type `gradle dependencies formatter` in search form > `Install plugin`
-
-- Or download from [releases page](https://github.com/platan/idea-gradle-dependencies-formatter/releases) and install from disk:  
-`File` > `Settings` > `Plugins` > `Install plugin from disk...` > Choose plugin file in `Choose Plugin File` window > `OK`
 
 ## Usage
 
@@ -48,6 +45,8 @@ In order to build plugin against specific IntelliJ IDEA version (e.g. 13.1.6) us
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
 ## Changelog
+
+- Bugfix: convert string notation of a dependency with ext to a map notation
 
 ### 0.3.0 (2015-09-22)
 - Convert a string notation to a map notation

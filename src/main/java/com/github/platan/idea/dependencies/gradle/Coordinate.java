@@ -4,6 +4,7 @@ import static com.google.common.collect.Iterables.transform;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -11,6 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,8 +28,7 @@ public class Coordinate {
     private static final String EXT_KEY = "ext";
     private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
-    private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.on(":").limit(4);
-    private static final Splitter ON_AT_SPLITTER = Splitter.on("@").limit(2);
+    private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
     private final Optional<String> group;
     private final String name;
@@ -48,34 +49,40 @@ public class Coordinate {
         Preconditions.checkArgument(!stringNotation.trim().isEmpty(), "Coordinate is empty!");
         List<String> parts = Lists.newArrayList(ON_SEMICOLON_SPLITTER.split(stringNotation));
         int numberOfParts = parts.size();
-        CoordinateBuilder coordinateBuilder = null;
-        if (numberOfParts == 1) {
-            coordinateBuilder = CoordinateBuilder.aCoordinate(getAt(parts, 0));
-        } else if (numberOfParts == 2) {
-            coordinateBuilder = CoordinateBuilder.aCoordinate(getAt(parts, 1)).withGroup(getAt(parts, 0));
-        } else if (numberOfParts >= 3) {
-            coordinateBuilder = CoordinateBuilder.aCoordinate(getAt(parts, 1)).withGroup(getAt(parts, 0)).withVersion(getAt(parts, 2));
+        Preconditions.checkArgument(numberOfParts > 1, "Cannot parse coordinate!");
+        CoordinateBuilder coordinateBuilder = CoordinateBuilder.aCoordinate(getNotEmptyAt(parts, 1)).withGroup(getAt(parts, 0));
+        if (numberOfParts >= 3) {
+            coordinateBuilder.withVersion(getAt(parts, 2));
         }
         if (numberOfParts == 4) {
-            List<String> classifierPlusExtension = Lists.newArrayList(ON_AT_SPLITTER.split(getAt(parts, 3)));
-            if (classifierPlusExtension.size() >= 1) {
-                coordinateBuilder.withClassifier(getAt(classifierPlusExtension, 0));
-            }
-            if (classifierPlusExtension.size() == 2) {
-                coordinateBuilder.withExtension(getAt(classifierPlusExtension, 1));
-            }
+            coordinateBuilder.withClassifier(getAt(parts, 3));
+        }
+        String last = parts.get(parts.size() - 1);
+        if (last.contains("@")) {
+            coordinateBuilder.withExtension(last.split("@", 2)[1]);
         }
         return coordinateBuilder.build();
     }
 
     public static boolean isStringNotationCoordinate(String stringNotation) {
-        return Pattern.compile("[^:\\s]+:[^:\\s]+(:[^:\\s]*)?(:[^:\\s]+)?(@[^:\\s]+)?").matcher(stringNotation).matches();
+        return Pattern.compile("[^:\\s]*:[^:\\s]+(:[^:\\s]*)?(:[^:\\s]+)?(@[^:\\s]+)?").matcher(stringNotation).matches();
+    }
+
+    private static String getNotEmptyAt(List<String> list, int index) {
+        Preconditions.checkArgument(!list.get(index).trim().isEmpty(), "Cannot parse coordinate!");
+        return getAt(list, index);
     }
 
     private static String getAt(List<String> list, int index) {
         String element = list.get(index);
-        Preconditions.checkArgument(!element.trim().isEmpty(), "Cannot parse coordinate!");
+        if (isLast(list, index) && element.contains("@")) {
+            return element.split("@", 2)[0];
+        }
         return element;
+    }
+
+    private static boolean isLast(List<String> list, int index) {
+        return list.size() == index + 1;
     }
 
     public Optional<String> getGroup() {
@@ -179,6 +186,27 @@ public class Coordinate {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(group, name, version, classifier, extension);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Coordinate other = (Coordinate) obj;
+        return Objects.equal(this.group, other.group)
+                && Objects.equal(this.name, other.name)
+                && Objects.equal(this.version, other.version)
+                && Objects.equal(this.classifier, other.classifier)
+                && Objects.equal(this.extension, other.extension);
+    }
+
+    @Override
     public String toString() {
         return "Coordinate{"
                 + "group=" + group
@@ -206,22 +234,27 @@ public class Coordinate {
         }
 
         public CoordinateBuilder withGroup(String group) {
-            this.group = Optional.of(group);
+            this.group = optionalOf(group);
             return this;
         }
 
+        @NotNull
+        private Optional<String> optionalOf(String group) {
+            return group.isEmpty() ? Optional.<String>absent() : Optional.of(group);
+        }
+
         public CoordinateBuilder withVersion(String version) {
-            this.version = Optional.of(version);
+            this.version = optionalOf(version);
             return this;
         }
 
         public CoordinateBuilder withClassifier(String classifier) {
-            this.classifier = Optional.of(classifier);
+            this.classifier = optionalOf(classifier);
             return this;
         }
 
         public CoordinateBuilder withExtension(String extension) {
-            this.extension = Optional.of(extension);
+            this.extension = optionalOf(extension);
             return this;
         }
 

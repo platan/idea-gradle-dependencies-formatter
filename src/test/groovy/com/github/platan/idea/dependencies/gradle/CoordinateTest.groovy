@@ -8,115 +8,59 @@ import spock.lang.Unroll
 
 class CoordinateTest extends Specification {
 
-    def 'parse coordinate with group, name and version'() {
-        given:
-        def stringCoordinate = 'com.google.guava:guava:18.0'
-
-        when:
-        def coordinate = Coordinate.parse(stringCoordinate)
-
-        then:
-        with(coordinate) {
-            group == Optional.of('com.google.guava')
-            name == 'guava'
-            version == Optional.of('18.0')
-        }
-    }
-
-    def 'parse coordinate with group and name'() {
-        given:
-        def stringCoordinate = 'com.google.guava:guava'
-
-        when:
-        def coordinate = Coordinate.parse(stringCoordinate)
-
-        then:
-        with(coordinate) {
-            group == Optional.of('com.google.guava')
-            name == 'guava'
-        }
-    }
-
-    def 'parse coordinate with name'() {
-        given:
-        def stringCoordinate = 'guava'
-
-        when:
-        def coordinate = Coordinate.parse(stringCoordinate)
-
-        then:
-        with(coordinate) {
-            name == 'guava'
-        }
-    }
-
-    def 'parse coordinate with group, name, version, classifier and extension'() {
-        given:
-        def stringCoordinate = 'com.google.guava:guava:18.0:sources@jar'
-
-        when:
-        def coordinate = Coordinate.parse(stringCoordinate)
-
-        then:
-        with(coordinate) {
-            group == Optional.of('com.google.guava')
-            name == 'guava'
-            version == Optional.of('18.0')
-            classifier == Optional.of('sources')
-            extension == Optional.of('jar')
-        }
-    }
-
-    def 'parse coordinate with group, name, version and classifier'() {
-        given:
-        def stringCoordinate = 'com.google.guava:guava:18.0:sources'
-
-        when:
-        def coordinate = Coordinate.parse(stringCoordinate)
-
-        then:
-        with(coordinate) {
-            group == Optional.of('com.google.guava')
-            name == 'guava'
-            version == Optional.of('18.0')
-            classifier == Optional.of('sources')
-        }
-    }
-
     @Unroll
-    def 'cannot create coordinate from empty string representation'() {
-        when:
-        Coordinate.parse(stringCoordinate)
-
-        then:
-        thrown IllegalArgumentException
-
-        where:
-        stringCoordinate << ['', ' ', ':']
-    }
-
-    def 'cannot create coordinate from string representation with empty element'() {
-        when:
-        Coordinate.parse('com.google.guava:guava: ')
-
-        then:
-        thrown IllegalArgumentException
-    }
-
-    @Unroll
-    def '#dependency is parsable'() {
+    def 'parse #stringNotation'() {
         expect:
-        Coordinate.isStringNotationCoordinate(dependency)
+        Coordinate.isStringNotationCoordinate(stringNotation)
+
+        and:
+        Coordinate.parse(stringNotation) == dependency
 
         where:
-        dependency                                | _
-        'com.google.guava:guava'                  | _
-        'com.google.guava:guava:18.0'             | _
-        'com.google.guava:guava:18.0:sources'     | _
-        'com.google.guava:guava::sources'         | _
-        'com.google.guava:guava:18.0:sources@jar' | _
-        'com.google.guava:guava:18.0:@jar'        | _
-        'com.google.guava:guava::@jar'            | _
+        stringNotation                            | dependency
+        ':guava'                                  | aCoordinate('guava').build()
+        ':guava:'                                 | aCoordinate('guava').build()
+        'com.google.guava:guava'                  | aCoordinate('guava').withGroup('com.google.guava').build()
+        'com.google.guava:guava:'                 | aCoordinate('guava').withGroup('com.google.guava').build()
+        ':guava:18.0'                             | aCoordinate('guava').withVersion('18.0').build()
+        'com.google.guava:guava:18.0'             | aCoordinate('guava').withGroup('com.google.guava')
+                .withVersion('18.0').build()
+        ':guava:18.0'                             | aCoordinate('guava').withVersion('18.0').build()
+        'com.google.guava:guava:18.0:sources'     | aCoordinate('guava').withGroup('com.google.guava')
+                .withVersion('18.0').withClassifier('sources').build()
+        'com.google.guava:guava::sources'         | aCoordinate('guava').withGroup('com.google.guava')
+                .withClassifier('sources').build()
+        ':guava::sources'                         | aCoordinate('guava').withClassifier('sources').build()
+        'com.google.guava:guava:18.0:sources@jar' | aCoordinate('guava').withGroup('com.google.guava')
+                .withVersion('18.0').withClassifier('sources').withExtension('jar').build()
+        'com.google.guava:guava:18.0:@jar'        | aCoordinate('guava').withGroup('com.google.guava')
+                .withVersion('18.0').withExtension('jar').build()
+        'com.google.guava:guava:18.0@jar'         | aCoordinate('guava').withGroup('com.google.guava')
+                .withVersion('18.0').withExtension('jar').build()
+        ':guava:18.0@jar'                         | aCoordinate('guava').withVersion('18.0').withExtension('jar').build()
+        ':guava@jar'                              | aCoordinate('guava').withExtension('jar').build()
+        ':guava:@jar'                             | aCoordinate('guava').withExtension('jar').build()
+        ':guava:18.0:@jar'                        | aCoordinate('guava').withVersion('18.0').withExtension('jar').build()
+        'com.google.guava:guava::@jar'            | aCoordinate('guava').withGroup('com.google.guava')
+                .withExtension('jar').build()
+    }
+
+    @Unroll
+    def 'cannot create coordinate from "#invalidStringCoordinate"'() {
+        when:
+        Coordinate.parse(invalidStringCoordinate)
+
+        then:
+        thrown IllegalArgumentException
+
+        where:
+        invalidStringCoordinate  | _
+        ' '                      | _
+        ':'                      | _
+        'guava'                  | _
+        'com.google.guava::18.0' | _
+        'com.google.guava::'     | _
+        '::18.0'                 | _
     }
 
     @Unroll
@@ -132,7 +76,6 @@ class CoordinateTest extends Specification {
         'com.google.guava::18.0' | _
         'com.google.guava::'     | _
         '::18.0'                 | _
-        ':guava:'                | _
     }
 
     def 'convert to map notation'() {
