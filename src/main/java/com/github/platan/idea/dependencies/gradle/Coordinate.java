@@ -112,34 +112,21 @@ public class Coordinate {
 
     public String toStringNotation() {
         StringBuilder stringBuilder = new StringBuilder();
-        appendIfPresent(stringBuilder, group, ":");
+        if (group.isPresent()) {
+            stringBuilder.append(group.get());
+        }
+        stringBuilder.append(':');
         stringBuilder.append(name);
-        if (version.isPresent() || classifier.isPresent() || extension.isPresent()) {
-            stringBuilder.append(":");
+        appendIfPresent(stringBuilder, ':', version);
+        if (!version.isPresent() && classifier.isPresent()) {
+            stringBuilder.append(':');
         }
-        appendIfPresent(stringBuilder, version);
-        if (classifier.isPresent() || extension.isPresent()) {
-            stringBuilder.append(":");
-        }
-        appendIfPresent(stringBuilder, classifier);
-        appendIfPresent(stringBuilder, "@", extension);
+        appendIfPresent(stringBuilder, ':', classifier);
+        appendIfPresent(stringBuilder, '@', extension);
         return stringBuilder.toString();
     }
 
-    private void appendIfPresent(StringBuilder stringBuilder, Optional<String> optionalValue, String separator) {
-        if (optionalValue.isPresent()) {
-            stringBuilder.append(optionalValue.get());
-            stringBuilder.append(separator);
-        }
-    }
-
-    private void appendIfPresent(StringBuilder stringBuilder, Optional<String> optionalValue) {
-        if (optionalValue.isPresent()) {
-            stringBuilder.append(optionalValue.get());
-        }
-    }
-
-    private void appendIfPresent(StringBuilder stringBuilder, String separator, Optional<String> optionalValue) {
+    private void appendIfPresent(StringBuilder stringBuilder, char separator, Optional<String> optionalValue) {
         if (optionalValue.isPresent()) {
             stringBuilder.append(separator);
             stringBuilder.append(optionalValue.get());

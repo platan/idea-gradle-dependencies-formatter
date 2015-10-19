@@ -51,7 +51,7 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
     compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', ext: 'jar'
 }''',
                 '''dependencies {
-    compile 'com.google.guava:guava:18.0:@jar'
+    compile 'com.google.guava:guava:18.0@jar'
 }''')
     }
 
