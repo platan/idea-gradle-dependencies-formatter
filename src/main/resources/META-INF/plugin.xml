@@ -14,6 +14,11 @@
     </description>
     <change-notes><![CDATA[
       <p>
+        <b>0.4.0</b>
+        <ul>
+            <li>(feature) Convert a map notation to a string notation</li>
+            <li>(bugfix) Convert string notation of a dependency with ext to a map notation</li>
+        </ul>
         <b>0.3.0</b>
         <ul>
             <li>Convert a string notation to a map notation</li>

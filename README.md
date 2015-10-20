@@ -47,8 +47,9 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-- Feature: Convert a map notation to a string notation
-- Bugfix: Convert string notation of a dependency with ext to a map notation
+### 0.4.0 (2015-10-20)
+- (feature) Convert a map notation to a string notation
+- (bugfix) Convert string notation of a dependency with ext to a map notation
 
 ### 0.3.0 (2015-09-22)
 - Convert a string notation to a map notation
