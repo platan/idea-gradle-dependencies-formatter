@@ -3,8 +3,9 @@ IntelliJ IDEA plugin for formatting Gradle dependencies.
 
 ## Features
 
-- Paste a Maven dependency as a Gradle dependency (on the fly conversion)
 - Convert a string notation to a map notation
+- Convert a map notation to a string notation
+- Paste a Maven dependency as a Gradle dependency (on the fly conversion)
 
 ## Installation
 
@@ -12,6 +13,12 @@ Install using the JetBrains Plugin Repository:
 `File` > `Settings` > `Plugins` > `Browse repositories...` > type `gradle dependencies formatter` in search form > `Install plugin`
 
 ## Usage
+
+### Convert between a string notation and a map notation
+
+Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Convert to map notation` or `Convert to string notation`.
+
+![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/to_map_notation.gif)
 
 ### Paste a Maven dependency as a Gradle dependency
 
@@ -23,12 +30,6 @@ Install using the JetBrains Plugin Repository:
 Optional dependencies are coded using syntax defined by [Nebula Extra Configurations](https://github.com/nebula-plugins/gradle-extra-configurations-plugin/). 
 
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
-
-### Convert a string notation to a map notation
-
-Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Convert to map notation`.
-
-![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/to_map_notation.gif)
 
 ## Development
 
@@ -46,7 +47,8 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-- Bugfix: convert string notation of a dependency with ext to a map notation
+- Feature: Convert a map notation to a string notation
+- Bugfix: Convert string notation of a dependency with ext to a map notation
 
 ### 0.3.0 (2015-09-22)
 - Convert a string notation to a map notation
