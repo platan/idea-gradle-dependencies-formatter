@@ -18,7 +18,7 @@ Install using the JetBrains Plugin Repository:
 
 Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Convert to map notation` or `Convert to string notation`.
 
-![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/to_map_notation.gif)
+![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/convert.gif)
 
 ### Paste a Maven dependency as a Gradle dependency
 
