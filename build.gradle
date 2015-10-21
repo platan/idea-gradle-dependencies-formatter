@@ -45,7 +45,7 @@ ext {
 
 def intellijLibs = fileTree(dir: ideaSdkPath, include: 'lib/*.jar')
 
-def spockVersion() {
+String spockVersion() {
     def groovyVersion = getGroovyVersionFromIdea()
     def groovyToSpock = ['2.0': '2.0', '2.1': '2.0', '2.2': '2.0', '2.3': '2.3', '2.4': '2.4']
     def groovyForSpock = groovyToSpock[groovyVersion]
@@ -55,7 +55,7 @@ def spockVersion() {
     "1.0-groovy-${groovyForSpock}"
 }
 
-private getGroovyVersionFromIdea() {
+private String getGroovyVersionFromIdea() {
     def groovyFile = project.configurations.ideaSdk.find { it.name ==~ /groovy-all-.+/ }?.name
     def versionMatcher
     if ((versionMatcher = groovyFile =~ /^groovy-all-(\d\.\d)\..+/)) {
