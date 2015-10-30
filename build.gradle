@@ -5,6 +5,7 @@ buildscript {
 
     dependencies {
         classpath 'com.github.platan.gradle.plugin:coveralls-gradle-plugin:2.4.0x:jdk6'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:0.14.451'
     }
 }
 
@@ -19,6 +20,7 @@ plugins {
 }
 
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'kotlin'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -74,6 +76,8 @@ dependencies {
 
     compile configurations.ideaSdk
     compile files("src/main/resources")
+
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.14.451'
 
     testCompile("org.spockframework:spock-core:${spockVersion()}") {
         exclude module: 'groovy-all'
