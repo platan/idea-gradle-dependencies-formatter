@@ -15,6 +15,12 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
         checkResultByFile("no_sorting_after.gradle")
     }
 
+    void test__simple() {
+        configureByFile("simple.gradle")
+        perform()
+        checkResultByFile("simple_after.gradle")
+    }
+
     private perform() {
         SortDependenciesAction action = new SortDependenciesAction()
         action.handler.invoke(project, editor, file)
