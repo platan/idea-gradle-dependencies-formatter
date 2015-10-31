@@ -6,10 +6,10 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return 'src/test/resources/actions/sort/'
+        'src/test/resources/actions/sort/'
     }
 
-    public void test__no_sorting() {
+    void test__no_sorting() {
         configureByFile("no_sorting.gradle")
         perform()
         checkResultByFile("no_sorting_after.gradle")
@@ -17,7 +17,7 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
 
     private perform() {
         SortDependenciesAction action = new SortDependenciesAction()
-        action.getHandler().invoke(getProject(), getEditor(), getFile())
+        action.handler.invoke(project, editor, file)
     }
 
 }
