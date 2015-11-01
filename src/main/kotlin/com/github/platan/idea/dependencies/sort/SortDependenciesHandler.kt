@@ -8,6 +8,7 @@ import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
+import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes
 
 class SortDependenciesHandler : CodeInsightActionHandler {
 
@@ -21,7 +22,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     val statements = getChildrenOfTypeAsList(closableBlock, GrApplicationStatement::class.java)
                     statements.forEach { it.delete() }
                     val factory = GroovyPsiElementFactory.getInstance(project)
-                    statements.sortedBy { it.text }
+                    statements.sortedBy { removeQuotes(it.lastChild.text) }
                             .forEach { closableBlock.addStatementBefore(factory.createStatementFromText(it.text), null) }
                 }
             }
