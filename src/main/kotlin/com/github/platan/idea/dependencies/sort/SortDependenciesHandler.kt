@@ -1,7 +1,6 @@
 package com.github.platan.idea.dependencies.sort
 
 import com.intellij.codeInsight.CodeInsightActionHandler
-import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Condition
@@ -17,7 +16,7 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethod
 class SortDependenciesHandler : CodeInsightActionHandler {
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
-        object : WriteCommandAction.Simple(project, "Sort dependencies", file) {
+        object : SimpleWriteCommandAction(project, "Sort dependencies", file) {
             override fun run() {
                 val factory = GroovyPsiElementFactory.getInstance(project)
                 val closableBlocks = PsiTreeUtil.getChildrenOfTypeAsList(file, GrMethodCall::class.java)
