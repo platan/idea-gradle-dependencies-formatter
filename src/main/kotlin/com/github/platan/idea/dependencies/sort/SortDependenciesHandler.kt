@@ -22,7 +22,9 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     val statements = getChildrenOfTypeAsList(closableBlock, GrApplicationStatement::class.java)
                     statements.forEach { it.delete() }
                     val factory = GroovyPsiElementFactory.getInstance(project)
-                    statements.sortedBy { removeQuotes(it.lastChild.text) }
+                    val byConfigurationName = compareBy<GrApplicationStatement> ({ it.firstChild.text })
+                    val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.text) })
+                    statements.sortedWith (byConfigurationName.thenComparing(byDependencyValue))
                             .forEach { closableBlock.addStatementBefore(factory.createStatementFromText(it.text), null) }
                 }
             }
