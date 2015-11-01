@@ -5,7 +5,6 @@ buildscript {
 
     dependencies {
         classpath 'com.github.platan.gradle.plugin:coveralls-gradle-plugin:2.4.0x:jdk6'
-
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
