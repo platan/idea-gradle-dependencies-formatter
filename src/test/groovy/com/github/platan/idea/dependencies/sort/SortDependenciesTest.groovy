@@ -9,10 +9,10 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
         'src/test/resources/actions/sort/'
     }
 
-    void test__no_sorting() {
-        configureByFile("no_sorting.gradle")
+    void test__already_sorted() {
+        configureByFile("already_sorted.gradle")
         perform()
-        checkResultByFile("no_sorting_after.gradle")
+        checkResultByFile("already_sorted_after.gradle")
     }
 
     void test__simple() {
