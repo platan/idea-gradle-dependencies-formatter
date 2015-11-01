@@ -1,7 +1,4 @@
 buildscript {
-    ext {
-        kotlinVersion = '1.0.0-beta-1038'
-    }
     repositories {
         maven { url 'https://dl.bintray.com/platan/gradle-plugins' }
     }
