@@ -10,20 +10,19 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
     }
 
     void test__already_sorted() {
-        configureByFile("already_sorted.gradle")
-        perform()
-        checkResultByFile("already_sorted_after.gradle")
+        doTest()
     }
 
     void test__simple() {
-        configureByFile("simple.gradle")
-        perform()
-        checkResultByFile("simple_after.gradle")
+        doTest()
     }
 
-    private perform() {
+    private doTest() {
+        def fileName = getTestName(false).replaceFirst('__', '')
+        configureByFile("${fileName}.gradle")
         SortDependenciesAction action = new SortDependenciesAction()
         action.handler.invoke(project, editor, file)
+        checkResultByFile("${fileName}_after.gradle")
     }
 
 }
