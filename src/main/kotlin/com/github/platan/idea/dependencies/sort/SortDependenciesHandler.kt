@@ -16,7 +16,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
         object : SimpleWriteCommandAction(project, "Sort dependencies", file) {
             override fun run() {
                 val methodCalls = getChildrenOfTypeAsList(file, GrMethodCall::class.java)
-                val dependenciesBlock = methodCalls.find { it.invokedExpression.text == "dependencies" } ?: return
+                val dependenciesBlock = methodCalls.find { it.invokedExpression?.text == "dependencies" } ?: return
                 val closableBlock = dependenciesBlock.closureArguments.first()
                 if (closableBlock != null) {
                     val statements = getChildrenOfTypeAsList(closableBlock, GrApplicationStatement::class.java)
