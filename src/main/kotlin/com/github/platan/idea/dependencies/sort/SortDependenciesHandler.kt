@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlock
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
@@ -28,6 +29,14 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.text) })
                     statements.sortedWith (byConfigurationName.then(byArgumentType).then(byDependencyValue))
                             .forEach { closableBlock.addStatementBefore(factory.createStatementFromText(it.text), null) }
+                    removeEmptyLines(closableBlock, factory)
+                }
+            }
+
+            private fun removeEmptyLines(closableBlock: GrClosableBlock, factory: GroovyPsiElementFactory) {
+                if (StringUtil.containsEmptyLine(closableBlock.text)) {
+                    val noEmptyLines = StringUtil.removeEmptyLines(closableBlock.text)
+                    closableBlock.replace(factory.createClosureFromText(noEmptyLines))
                 }
             }
         }.execute()
