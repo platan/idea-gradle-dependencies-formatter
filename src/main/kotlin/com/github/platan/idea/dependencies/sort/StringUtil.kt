@@ -6,7 +6,7 @@ object StringUtil {
 
     @JvmStatic
     fun removeEmptyLines(string: String): String {
-        return string.replace(Regex("\n[ ]*(?=\n)"), "")
+        return string.replace(Regex("\n[ \t]*(?=\n)"), "")
     }
 
 }

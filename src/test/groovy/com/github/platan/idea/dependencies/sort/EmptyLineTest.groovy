@@ -13,7 +13,6 @@ class EmptyLineTest extends Specification {
         where:
         stringWithEmptyLine | cleared
         '\n   \n'           | '\n'
-        '\n   \n'           | '\n'
         '\n   \n\n'         | '\n'
         '\n   \n \n'        | '\n'
         '    \n   \n'       | '    \n'
@@ -21,10 +20,12 @@ class EmptyLineTest extends Specification {
         '\n\n'              | '\n'
         '   \n\n'           | '   \n'
         '\n\n   '           | '\n   '
+        '\n\t\n'            | '\n'
+        '\n\t\n\t'          | '\n\t'
     }
 
     @Unroll
-    def "does not contain empty line"() {
+    def "do not modify text without empty line"() {
         expect:
         StringUtil.removeEmptyLines(stringWithEmptyLine) == stringWithEmptyLine
 
