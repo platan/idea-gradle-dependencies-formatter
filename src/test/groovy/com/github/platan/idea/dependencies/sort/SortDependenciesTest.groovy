@@ -41,6 +41,10 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
         doTest()
     }
 
+    void test__with_variable() {
+        doTest()
+    }
+
     private doTest() {
         def fileName = getTestName(false).replaceFirst('__', '')
         configureByFile("${fileName}.gradle")
