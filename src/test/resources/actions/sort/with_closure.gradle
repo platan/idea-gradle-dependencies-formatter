@@ -3,8 +3,9 @@ dependencies {
         // disable all transitive dependencies of this dependency
         transitive = false
     }
-    compile 'junit:junit:4.11' {
-        transitive = false
-    }
+    compile 'junit:junit:4.11'
+            {
+                transitive = false
+            }
     compile 'com.google.guava:guava:17.0' { transitive = false }
 }
