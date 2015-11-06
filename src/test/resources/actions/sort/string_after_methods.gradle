@@ -2,4 +2,6 @@ dependencies {
     compile 'com.google.truth:truth:0.27'
     compile 'org.springframework:spring-web:4.2.2.RELEASE'
     compile fileTree('lib')
+    compile gradleApi()
+    compile project(":core")
 }
