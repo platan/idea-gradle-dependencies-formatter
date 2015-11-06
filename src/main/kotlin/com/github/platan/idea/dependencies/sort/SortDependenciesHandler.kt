@@ -17,20 +17,28 @@ class SortDependenciesHandler : CodeInsightActionHandler {
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
         object : SimpleWriteCommandAction(project, "Sort dependencies", file) {
             override fun run() {
-                val methodCalls = getChildrenOfTypeAsList(file, GrMethodCall::class.java)
-                val dependenciesBlock = methodCalls.find { it.invokedExpression?.text == "dependencies" } ?: return
-                val closableBlock = dependenciesBlock.closureArguments.first()
+                val closableBlock = findDependenciesClosure(file)
                 if (closableBlock != null) {
-                    val statements = getChildrenOfTypeAsList(closableBlock, GrApplicationStatement::class.java)
-                    statements.forEach { it.delete() }
                     val factory = GroovyPsiElementFactory.getInstance(project)
-                    val byConfigurationName = compareBy<GrApplicationStatement> ({ it.firstChild.text })
-                    val byArgumentType = compareBy<GrApplicationStatement> ({ it.lastChild?.firstChild is GrLiteral })
-                    val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.text) })
-                    statements.sortedWith (byConfigurationName.then(byArgumentType).then(byDependencyValue))
-                            .forEach { closableBlock.addStatementBefore(factory.createStatementFromText(it.text), null) }
+                    sortDependencies(closableBlock, factory)
                     removeEmptyLines(closableBlock, factory)
                 }
+            }
+
+            private fun findDependenciesClosure(psiFile: PsiFile): GrClosableBlock? {
+                val methodCalls = getChildrenOfTypeAsList(psiFile, GrMethodCall::class.java)
+                val dependenciesBlock = methodCalls.find { it.invokedExpression?.text == "dependencies" } ?: return null
+                return dependenciesBlock.closureArguments.first()
+            }
+
+            private fun sortDependencies(closableBlock: GrClosableBlock, factory: GroovyPsiElementFactory) {
+                val statements = getChildrenOfTypeAsList(closableBlock, GrApplicationStatement::class.java)
+                statements.forEach { it.delete() }
+                val byConfigurationName = compareBy<GrApplicationStatement> ({ it.firstChild.text })
+                val byArgumentType = compareBy<GrApplicationStatement> ({ it.lastChild?.firstChild is GrLiteral })
+                val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.text) })
+                statements.sortedWith (byConfigurationName.then(byArgumentType).then(byDependencyValue))
+                        .forEach { closableBlock.addStatementBefore(factory.createStatementFromText(it.text), null) }
             }
 
             private fun removeEmptyLines(closableBlock: GrClosableBlock, factory: GroovyPsiElementFactory) {
