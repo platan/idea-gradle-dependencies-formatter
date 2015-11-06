@@ -6,21 +6,6 @@ import spock.lang.Unroll
 class EmptyLineTest extends Specification {
 
     @Unroll
-    def "contains empty line"() {
-        expect:
-        StringUtil.containsEmptyLine(stringWithEmptyLine)
-
-        where:
-        stringWithEmptyLine | _
-        '\n   \n'           | _
-        '    \n   \n'       | _
-        '\n   \n    '       | _
-        '\n\n'              | _
-        '   \n\n'           | _
-        '\n\n   '           | _
-    }
-
-    @Unroll
     def "remove empty line"() {
         expect:
         StringUtil.removeEmptyLines(stringWithEmptyLine) == cleared
@@ -41,7 +26,7 @@ class EmptyLineTest extends Specification {
     @Unroll
     def "does not contain empty line"() {
         expect:
-        !StringUtil.containsEmptyLine(stringWithEmptyLine)
+        StringUtil.removeEmptyLines(stringWithEmptyLine) == stringWithEmptyLine
 
         where:
         stringWithEmptyLine | _
