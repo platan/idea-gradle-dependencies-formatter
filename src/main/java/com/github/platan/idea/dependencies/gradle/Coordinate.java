@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Coordinate {
+public class Coordinate implements Comparable<Coordinate> {
     private static final String NAME_KEY = "name";
     private static final String GROUP_KEY = "group";
     private static final String VERSION_KEY = "version";
@@ -203,6 +204,13 @@ public class Coordinate {
                 + ", extension=" + extension
                 + '}';
     }
+
+    @Override
+    public int compareTo(Coordinate that) {
+        return ComparisonChain.start()
+                .compare(this.group.orNull(), that.group.orNull()).result();
+    }
+
 
     public static class CoordinateBuilder {
         private Optional<String> group = Optional.absent();

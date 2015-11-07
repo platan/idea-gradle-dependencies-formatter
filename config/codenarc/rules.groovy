@@ -8,6 +8,7 @@ ruleset {
         CrapMetric(enabled: false)
         DuplicateNumberLiteral(enabled: false)
         DuplicateStringLiteral(enabled: false)
+        ExplicitCallToEqualsMethod(enabled: false)
         FactoryMethodName(enabled: false)
         GStringExpressionWithinString(enabled: false)
         JUnitPublicNonTestMethod(enabled: false)

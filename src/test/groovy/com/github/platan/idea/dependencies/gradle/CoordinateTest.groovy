@@ -14,7 +14,7 @@ class CoordinateTest extends Specification {
         Coordinate.isStringNotationCoordinate(stringNotation)
 
         and:
-        Coordinate.parse(stringNotation) == dependency
+        Coordinate.parse(stringNotation).equals(dependency)
 
         where:
         stringNotation                            | dependency
