@@ -208,7 +208,9 @@ public class Coordinate implements Comparable<Coordinate> {
     @Override
     public int compareTo(Coordinate that) {
         return ComparisonChain.start()
-                .compare(this.group.orNull(), that.group.orNull()).result();
+                .compare(this.group.orNull(), that.group.orNull())
+                .compare(this.name, that.name)
+                .result();
     }
 
 

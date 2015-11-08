@@ -14,4 +14,15 @@ class CoordinateComparatorTest extends Specification {
         and:
         Coordinate.parse('c:b') > Coordinate.parse('a:b')
     }
+
+    def "compare by name after group"() {
+        expect:
+        Coordinate.parse('a:b') == Coordinate.parse('a:b')
+
+        and:
+        Coordinate.parse('a:b') < Coordinate.parse('a:c')
+
+        and:
+        Coordinate.parse('a:c') > Coordinate.parse('a:b')
+    }
 }
