@@ -218,7 +218,7 @@ public class Coordinate implements Comparable<Coordinate> {
                 .result();
     }
 
-    private static final class NaturalAbsentFirstOptionalOrdering<T extends Comparable> implements Comparator<Optional<T>> {
+    private static final class NaturalAbsentFirstOptionalOrdering<T extends Comparable<? super T>> implements Comparator<Optional<T>> {
 
         @Override
         public int compare(Optional<T> o1, Optional<T> o2) {
