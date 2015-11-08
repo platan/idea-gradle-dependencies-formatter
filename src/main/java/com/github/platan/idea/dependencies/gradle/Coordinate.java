@@ -212,6 +212,7 @@ public class Coordinate implements Comparable<Coordinate> {
                 .compare(this.group.orNull(), that.group.orNull(), Ordering.natural().nullsFirst())
                 .compare(this.name, that.name)
                 .compare(this.version.orNull(), that.version.orNull(), Ordering.natural().nullsFirst())
+                .compare(this.classifier.orNull(), that.classifier.orNull(), Ordering.natural().nullsFirst())
                 .result();
     }
 

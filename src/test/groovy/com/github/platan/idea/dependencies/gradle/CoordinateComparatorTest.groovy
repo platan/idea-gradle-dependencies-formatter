@@ -38,4 +38,15 @@ class CoordinateComparatorTest extends Specification {
         Coordinate.parse('a:b:3') > Coordinate.parse('a:b:2')
     }
 
+    def "compare by classifier after version"() {
+        expect:
+        Coordinate.parse('g:n:1:a') == Coordinate.parse('g:n:1:a')
+
+        and:
+        Coordinate.parse('g:n:1:a') < Coordinate.parse('g:n:1:b')
+
+        and:
+        Coordinate.parse('g:n:1:c') > Coordinate.parse('g:n:1:b')
+    }
+
 }
