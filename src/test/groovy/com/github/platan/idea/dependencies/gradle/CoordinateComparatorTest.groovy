@@ -52,15 +52,15 @@ class CoordinateComparatorTest extends Specification {
     def "compare by extension after classifier"() {
         expect:
         Coordinate.parse('g:n:1:e@a') == Coordinate.parse('g:n:1:e@a')
-        Coordinate.parse('g:n:1:@a') == Coordinate.parse('g:n:1:@a')
+        Coordinate.parse('g:n:1:e') == Coordinate.parse('g:n:1:e')
 
         and:
         Coordinate.parse('g:n:1:e@a') < Coordinate.parse('g:n:1:e@b')
-        Coordinate.parse('g:n:1:@a') < Coordinate.parse('g:n:1:@b')
+        Coordinate.parse('g:n:1:e@') < Coordinate.parse('g:n:1:e@b')
 
         and:
         Coordinate.parse('g:n:1:e@d') > Coordinate.parse('g:n:1:e@c')
-        Coordinate.parse('g:n:1:@d') > Coordinate.parse('g:n:1:@c')
+        Coordinate.parse('g:n:1:e@d') > Coordinate.parse('g:n:1:e@')
     }
 
 }

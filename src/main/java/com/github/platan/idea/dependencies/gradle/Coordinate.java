@@ -12,10 +12,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,7 @@ public class Coordinate implements Comparable<Coordinate> {
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
+    private static final Comparator<Optional<String>> OPTIONAL_COMPARATOR = new NaturalAbsentFirstOptionalOrdering<String>();
     private final Optional<String> group;
     private final String name;
     private final Optional<String> version;
@@ -209,12 +210,30 @@ public class Coordinate implements Comparable<Coordinate> {
     @Override
     public int compareTo(Coordinate that) {
         return ComparisonChain.start()
-                .compare(this.group.orNull(), that.group.orNull(), Ordering.natural().nullsFirst())
+                .compare(this.group, that.group, OPTIONAL_COMPARATOR)
                 .compare(this.name, that.name)
-                .compare(this.version.orNull(), that.version.orNull(), Ordering.natural().nullsFirst())
-                .compare(this.classifier.orNull(), that.classifier.orNull(), Ordering.natural().nullsFirst())
-                .compare(this.extension.orNull(), that.extension.orNull(), Ordering.natural().nullsFirst())
+                .compare(this.version, that.version, OPTIONAL_COMPARATOR)
+                .compare(this.classifier, that.classifier, OPTIONAL_COMPARATOR)
+                .compare(this.extension, that.extension, OPTIONAL_COMPARATOR)
                 .result();
+    }
+
+    private static final class NaturalAbsentFirstOptionalOrdering<T extends Comparable> implements Comparator<Optional<T>> {
+
+        @Override
+        public int compare(Optional<T> o1, Optional<T> o2) {
+            if (o1.isPresent() && o2.isPresent()) {
+                return o1.get().compareTo(o2.get());
+            }
+            if (!o1.isPresent() && !o2.isPresent()) {
+                return 0;
+            }
+            if (o1.isPresent()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
     }
 
     public static class CoordinateBuilder {
@@ -222,6 +241,7 @@ public class Coordinate implements Comparable<Coordinate> {
         private String name;
         private Optional<String> version = Optional.absent();
         private Optional<String> classifier = Optional.absent();
+
         private Optional<String> extension = Optional.absent();
 
         private CoordinateBuilder() {
@@ -261,9 +281,11 @@ public class Coordinate implements Comparable<Coordinate> {
         public Coordinate build() {
             return new Coordinate(group, name, version, classifier, extension);
         }
+
     }
 
     private static class MapEntryToStringFunction implements Function<Map.Entry<String, String>, String> {
+
         private final String quotationMark;
 
         private MapEntryToStringFunction(String quotationMark) {
@@ -274,5 +296,6 @@ public class Coordinate implements Comparable<Coordinate> {
         public String apply(Map.Entry<String, String> mapEntry) {
             return String.format("%s: %s%s%s", mapEntry.getKey(), quotationMark, mapEntry.getValue(), quotationMark);
         }
+
     }
 }
