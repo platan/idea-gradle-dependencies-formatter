@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 
@@ -208,11 +209,11 @@ public class Coordinate implements Comparable<Coordinate> {
     @Override
     public int compareTo(Coordinate that) {
         return ComparisonChain.start()
-                .compare(this.group.orNull(), that.group.orNull())
+                .compare(this.group.orNull(), that.group.orNull(), Ordering.natural().nullsFirst())
                 .compare(this.name, that.name)
+                .compare(this.version.orNull(), that.version.orNull(), Ordering.natural().nullsFirst())
                 .result();
     }
-
 
     public static class CoordinateBuilder {
         private Optional<String> group = Optional.absent();
