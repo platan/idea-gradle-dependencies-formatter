@@ -36,7 +36,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                 statements.forEach { it.delete() }
                 val byConfigurationName = compareBy<GrApplicationStatement> ({ it.firstChild.text })
                 val byArgumentType = compareBy<GrApplicationStatement> ({ it.lastChild?.firstChild is GrLiteral })
-                val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.text) })
+                val byDependencyValue = compareBy<GrApplicationStatement> ({ removeQuotes(it.lastChild.firstChild.text) })
                 statements.sortedWith (byConfigurationName.then(byArgumentType).then(byDependencyValue))
                         .forEach { dependenciesClosure.addStatementBefore(factory.createStatementFromText(it.text), null) }
             }
