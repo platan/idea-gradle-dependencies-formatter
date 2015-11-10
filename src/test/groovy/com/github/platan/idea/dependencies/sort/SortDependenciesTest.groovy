@@ -49,7 +49,7 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
         doTest()
     }
 
-    void _test__map_notation() {
+    void test__map_notation() {
         doTest()
     }
 

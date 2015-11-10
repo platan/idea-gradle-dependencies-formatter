@@ -4,15 +4,19 @@ import com.github.platan.idea.dependencies.gradle.Coordinate
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlock
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrCommandArgumentList
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString
+import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.*
+import java.util.*
 
 class SortDependenciesHandler : CodeInsightActionHandler {
 
@@ -35,13 +39,28 @@ class SortDependenciesHandler : CodeInsightActionHandler {
 
             private fun sortDependencies(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
                 val statements = getChildrenOfTypeAsList(dependenciesClosure, GrApplicationStatement::class.java)
-                        .filter { isDependencyNotation(it) }
                 statements.forEach { it.delete() }
                 val byConfigurationName = compareBy<GrApplicationStatement>({ it.firstChild.text })
-                val byArgumentType = compareBy<GrApplicationStatement>({ it.lastChild?.firstChild is GrLiteral })
-                val byDependencyValue = compareBy<GrApplicationStatement>({ removeQuotes(it.lastChild.firstChild.text) })
+                val byArgumentType = compareBy<GrApplicationStatement>({ isDependencyNotation(it) })
+                val byDependencyValue = compareBy<GrApplicationStatement>({ getCoordinate(it) })
                 statements.sortedWith(byConfigurationName.then(byArgumentType).then(byDependencyValue))
                         .forEach { dependenciesClosure.addStatementBefore(factory.createStatementFromText(it.text), null) }
+            }
+
+            private fun getCoordinate(it: GrApplicationStatement): Coordinate? {
+                if (it.lastChild is GrCommandArgumentList && (it.lastChild.firstChild is GrLiteral
+                        && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.text) )) {
+                    return Coordinate.parse(removeQuotes(it.lastChild.firstChild.text))
+                }
+                if (it.lastChild.firstChild is GrMethodCall
+                        && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.firstChild.text)) {
+                    return Coordinate.parse(removeQuotes(it.lastChild.firstChild.firstChild.text))
+                }
+                if (it.lastChild is GrCommandArgumentList
+                        && Coordinate.isValidMap(toMap((it.lastChild as GrCommandArgumentList).namedArguments))) {
+                    return Coordinate.fromMap(toMap((it.lastChild as GrCommandArgumentList).namedArguments))
+                }
+                return null
             }
 
             private fun isDependencyNotation(it: GrApplicationStatement): Boolean {
@@ -49,7 +68,37 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                         && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.text) )
                         || (it.lastChild.firstChild is GrMethodCall
                         && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.firstChild.text))
+                        || (it.lastChild is GrCommandArgumentList
+                        && Coordinate.isValidMap(toMap((it.lastChild as GrCommandArgumentList).namedArguments)))
             }
+
+            private fun toMap(namedArguments: Array<GrNamedArgument>): Map<String, String> {
+                val map = LinkedHashMap<String, String>()
+                for (namedArgument in namedArguments) {
+                    val expression = namedArgument.expression
+                    if (namedArgument.label == null || expression == null) {
+                        continue
+                    }
+                    val key = namedArgument.label!!.text
+                    val quote = getStartQuote(expression.text)
+                    var value = removeQuotes(expression.text)
+                    if (isInterpolableString(quote) && !isGstring(expression)) {
+                        val stringWithoutQuotes = removeQuotes(expression.text)
+                        value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", StringBuilder())
+                    }
+                    map.put(key, value)
+                }
+                return map
+            }
+
+            private fun isGstring(element: PsiElement): Boolean {
+                return element is GrLiteral && element is GrString
+            }
+
+            private fun isInterpolableString(quote: String): Boolean {
+                return quote == DOUBLE_QUOTES || quote == TRIPLE_DOUBLE_QUOTES
+            }
+
 
             private fun removeEmptyLines(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
                 val dependenciesClosureText = dependenciesClosure.text
