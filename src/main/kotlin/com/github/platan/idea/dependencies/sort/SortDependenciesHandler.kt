@@ -1,5 +1,6 @@
 package com.github.platan.idea.dependencies.sort
 
+import com.github.platan.idea.dependencies.gradle.Coordinate
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -8,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlock
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrCommandArgumentList
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
 import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes
@@ -33,12 +35,20 @@ class SortDependenciesHandler : CodeInsightActionHandler {
 
             private fun sortDependencies(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
                 val statements = getChildrenOfTypeAsList(dependenciesClosure, GrApplicationStatement::class.java)
+                        .filter { isDependencyNotation(it) }
                 statements.forEach { it.delete() }
                 val byConfigurationName = compareBy<GrApplicationStatement>({ it.firstChild.text })
                 val byArgumentType = compareBy<GrApplicationStatement>({ it.lastChild?.firstChild is GrLiteral })
                 val byDependencyValue = compareBy<GrApplicationStatement>({ removeQuotes(it.lastChild.firstChild.text) })
                 statements.sortedWith(byConfigurationName.then(byArgumentType).then(byDependencyValue))
                         .forEach { dependenciesClosure.addStatementBefore(factory.createStatementFromText(it.text), null) }
+            }
+
+            private fun isDependencyNotation(it: GrApplicationStatement): Boolean {
+                return it.lastChild is GrCommandArgumentList && (it.lastChild.firstChild is GrLiteral
+                        && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.text) )
+                        || (it.lastChild.firstChild is GrMethodCall
+                        && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.firstChild.text))
             }
 
             private fun removeEmptyLines(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
