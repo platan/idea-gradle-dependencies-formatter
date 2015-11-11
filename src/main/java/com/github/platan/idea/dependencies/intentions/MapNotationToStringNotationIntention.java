@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
@@ -27,7 +28,7 @@ public class MapNotationToStringNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
-        GrArgumentListImpl argumentList = (GrArgumentListImpl) element.getParent().getParent();
+        GrArgumentList argumentList = (GrArgumentList) element.getParent().getParent();
         GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
         String stringNotation = toStringNotation(namedArguments);
         for (GrNamedArgument namedArgument : namedArguments) {
