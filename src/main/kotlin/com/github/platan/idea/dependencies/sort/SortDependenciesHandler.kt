@@ -4,23 +4,14 @@ import com.github.platan.idea.dependencies.gradle.Coordinate
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlock
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrCommandArgumentList
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote
-import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes
-import java.util.*
 
 class SortDependenciesHandler : CodeInsightActionHandler {
 
@@ -56,7 +47,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                 return argument is GrCommandArgumentList &&
                         (argument.firstChild is GrLiteral && Coordinate.isStringNotationCoordinate(argument.firstChild.text) ||
                                 argument.firstChild is GrMethodCall && Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text) ||
-                                Coordinate.isValidMap(toMap(argument.namedArguments)))
+                                Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments)))
             }
 
             private fun getCoordinate(it: GrApplicationStatement): Coordinate? {
@@ -64,49 +55,17 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                 if (argument is GrCommandArgumentList) {
                     if (argument.firstChild is GrLiteral &&
                             Coordinate.isStringNotationCoordinate(argument.firstChild.text)) {
-                        return Coordinate.parse(removeQuotesAndUnescape(argument.firstChild))
+                        return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild))
                     }
                     if (argument.firstChild is GrMethodCall &&
                             Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text)) {
-                        return Coordinate.parse(removeQuotesAndUnescape(argument.firstChild.firstChild))
+                        return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild.firstChild))
                     }
-                    if (Coordinate.isValidMap(toMap(argument.namedArguments))) {
-                        return Coordinate.fromMap(toMap(argument.namedArguments))
+                    if (Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))) {
+                        return Coordinate.fromMap(DependencyUtil.toMap(argument.namedArguments))
                     }
                 }
                 return null
-            }
-
-            private fun removeQuotesAndUnescape(expression: PsiElement): String {
-                val quote = getStartQuote(expression.text)
-                var value = removeQuotes(expression.text)
-                if (isInterpolableString(quote) && !isGstring(expression)) {
-                    val stringWithoutQuotes = removeQuotes(expression.text)
-                    value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", StringBuilder())
-                }
-                return value
-            }
-
-            private fun isGstring(element: PsiElement): Boolean {
-                return element is GrString
-            }
-
-            private fun isInterpolableString(quote: String): Boolean {
-                return quote == DOUBLE_QUOTES || quote == TRIPLE_DOUBLE_QUOTES
-            }
-
-            private fun toMap(namedArguments: Array<GrNamedArgument>): Map<String, String> {
-                val map = LinkedHashMap<String, String>()
-                for (namedArgument in namedArguments) {
-                    val expression = namedArgument.expression
-                    if (namedArgument.label == null || expression == null) {
-                        continue
-                    }
-                    val key = namedArgument.label!!.text
-                    var value = removeQuotesAndUnescape(expression)
-                    map.put(key, value)
-                }
-                return map
             }
 
             private fun removeEmptyLines(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {

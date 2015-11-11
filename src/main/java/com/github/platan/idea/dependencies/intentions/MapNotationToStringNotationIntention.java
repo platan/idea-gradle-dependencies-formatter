@@ -1,10 +1,9 @@
 package com.github.platan.idea.dependencies.intentions;
 
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.isGstring;
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.isInterpolableString;
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMap;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
 
 import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.intellij.openapi.editor.Editor;
@@ -18,10 +17,8 @@ import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 import org.jetbrains.plugins.groovy.lang.psi.impl.statements.arguments.GrArgumentListImpl;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MapNotationToStringNotationIntention extends Intention {
@@ -46,26 +43,6 @@ public class MapNotationToStringNotationIntention extends Intention {
         return String.format("%c%s%c", quote, coordinate.toStringNotation(), quote);
     }
 
-    @NotNull
-    private Map<String, String> toMap(GrNamedArgument[] namedArguments) {
-        Map<String, String> map = new LinkedHashMap<String, String>();
-        for (GrNamedArgument namedArgument : namedArguments) {
-            GrExpression expression = namedArgument.getExpression();
-            if (namedArgument.getLabel() == null || expression == null) {
-                continue;
-            }
-            String key = namedArgument.getLabel().getText();
-            String quote = getStartQuote(expression.getText());
-            String value = removeQuotes(expression.getText());
-            if (isInterpolableString(quote) && !isGstring(expression)) {
-                String stringWithoutQuotes = removeQuotes(expression.getText());
-                value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
-
     private boolean containsGstringValue(GrNamedArgument[] namedArguments) {
         boolean containsGstringValue = false;
         for (GrNamedArgument namedArgument : namedArguments) {
@@ -77,14 +54,6 @@ public class MapNotationToStringNotationIntention extends Intention {
             }
         }
         return containsGstringValue;
-    }
-
-    private boolean isGstring(PsiElement element) {
-        return element instanceof GrString;
-    }
-
-    private boolean isInterpolableString(String quote) {
-        return quote.equals(DOUBLE_QUOTES) || quote.equals(TRIPLE_DOUBLE_QUOTES);
     }
 
     @NotNull
