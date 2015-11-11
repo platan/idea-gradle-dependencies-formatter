@@ -50,11 +50,11 @@ class SortDependenciesHandler : CodeInsightActionHandler {
             private fun getCoordinate(it: GrApplicationStatement): Coordinate? {
                 if (it.lastChild is GrCommandArgumentList && (it.lastChild.firstChild is GrLiteral
                         && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.text) )) {
-                    return Coordinate.parse(removeQuotes(it.lastChild.firstChild.text))
+                    return Coordinate.parse(removeQuotesAndUnescape(it.lastChild.firstChild))
                 }
                 if (it.lastChild.firstChild is GrMethodCall
                         && Coordinate.isStringNotationCoordinate(it.lastChild.firstChild.firstChild.text)) {
-                    return Coordinate.parse(removeQuotes(it.lastChild.firstChild.firstChild.text))
+                    return Coordinate.parse(removeQuotesAndUnescape(it.lastChild.firstChild.firstChild))
                 }
                 if (it.lastChild is GrCommandArgumentList
                         && Coordinate.isValidMap(toMap((it.lastChild as GrCommandArgumentList).namedArguments))) {
@@ -80,19 +80,24 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                         continue
                     }
                     val key = namedArgument.label!!.text
-                    val quote = getStartQuote(expression.text)
-                    var value = removeQuotes(expression.text)
-                    if (isInterpolableString(quote) && !isGstring(expression)) {
-                        val stringWithoutQuotes = removeQuotes(expression.text)
-                        value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", StringBuilder())
-                    }
+                    var value = removeQuotesAndUnescape(expression)
                     map.put(key, value)
                 }
                 return map
             }
 
+            private fun removeQuotesAndUnescape(expression: PsiElement): String {
+                val quote = getStartQuote(expression.text)
+                var value = removeQuotes(expression.text)
+                if (isInterpolableString(quote) && !isGstring(expression)) {
+                    val stringWithoutQuotes = removeQuotes(expression.text)
+                    value = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", StringBuilder())
+                }
+                return value
+            }
+
             private fun isGstring(element: PsiElement): Boolean {
-                return element is GrLiteral && element is GrString
+                return element is GrString
             }
 
             private fun isInterpolableString(quote: String): Boolean {

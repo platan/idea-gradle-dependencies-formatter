@@ -17,7 +17,6 @@ import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 import org.jetbrains.plugins.groovy.lang.psi.impl.statements.arguments.GrArgumentListImpl;
 
@@ -80,7 +79,7 @@ public class MapNotationToStringNotationIntention extends Intention {
     }
 
     private boolean isGstring(PsiElement element) {
-        return element instanceof GrLiteral && element instanceof GrString;
+        return element instanceof GrString;
     }
 
     private boolean isInterpolableString(String quote) {

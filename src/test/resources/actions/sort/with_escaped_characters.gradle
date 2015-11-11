@@ -1,0 +1,11 @@
+dependencies {
+    compile 'group$:name:2'
+    compile "group\$:name:3"
+    compile 'group$:name:4'
+    compile 'group$:name:6' { transitive = false }
+    compile "group\$:name:7" { transitive = false }
+    compile group: 'group$', name: 'name', version: '1'
+    compile group: "group\$", name: 'name', version: '5'
+    compile "group\$:name:9" { transitive = false }
+    compile 'group$:name:8' { transitive = false }
+}
