@@ -29,10 +29,6 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
         doTest()
     }
 
-    void test__string_after_methods() {
-        doTest()
-    }
-
     void test__remove_empty_lines() {
         doTest()
     }
