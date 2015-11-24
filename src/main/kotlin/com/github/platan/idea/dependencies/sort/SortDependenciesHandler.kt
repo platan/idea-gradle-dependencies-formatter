@@ -11,6 +11,7 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlo
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrCommandArgumentList
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrReferenceExpression
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
 
 class SortDependenciesHandler : CodeInsightActionHandler {
@@ -36,13 +37,13 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                 val statements = getChildrenOfTypeAsList(dependenciesClosure, GrApplicationStatement::class.java)
                 statements.forEach { it.delete() }
                 val byConfigurationName = compareBy<GrApplicationStatement> { it.firstChild.text }
-                val byArgumentType = compareBy<GrApplicationStatement> { isDependencyNotation(it) }
-                val byDependencyValue = compareBy<GrApplicationStatement> { getCoordinate(it) }
+                val byArgumentType = compareBy<GrApplicationStatement> { isCoordinate(it) }
+                val byDependencyValue = compareBy<GrApplicationStatement> { getComparableValue(it) }
                 statements.sortedWith(byConfigurationName.then(byArgumentType).then(byDependencyValue))
                         .forEach { dependenciesClosure.addStatementBefore(factory.createStatementFromText(it.text), null) }
             }
 
-            private fun isDependencyNotation(it: GrApplicationStatement): Boolean {
+            private fun isCoordinate(it: GrApplicationStatement): Boolean {
                 val argument = it.lastChild
                 return argument is GrCommandArgumentList &&
                         (argument.firstChild is GrLiteral && Coordinate.isStringNotationCoordinate(argument.firstChild.text) ||
@@ -50,7 +51,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                                 Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments)))
             }
 
-            private fun getCoordinate(it: GrApplicationStatement): Coordinate? {
+            private fun getComparableValue(it: GrApplicationStatement): Comparable<*>? {
                 val argument = it.lastChild
                 if (argument is GrCommandArgumentList) {
                     if (argument.firstChild is GrLiteral &&
@@ -60,6 +61,9 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     if (argument.firstChild is GrMethodCall &&
                             Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text)) {
                         return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild.firstChild))
+                    }
+                    if (argument.firstChild is GrReferenceExpression) {
+                        return argument.firstChild.text;
                     }
                     if (Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))) {
                         return Coordinate.fromMap(DependencyUtil.toMap(argument.namedArguments))
