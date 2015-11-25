@@ -13,6 +13,8 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrComman
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrReferenceExpression
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.path.GrMethodCallExpression
+import java.util.*
 
 class SortDependenciesHandler : CodeInsightActionHandler {
 
@@ -61,6 +63,9 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     if (argument.firstChild is GrMethodCall &&
                             Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text)) {
                         return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild.firstChild))
+                    }
+                    if (argument.firstChild is GrMethodCallExpression) {
+                        return argument.firstChild.text.toLowerCase(Locale.ENGLISH)
                     }
                     if (argument.firstChild is GrReferenceExpression) {
                         return argument.firstChild.text;
