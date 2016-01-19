@@ -7,7 +7,7 @@ matrix:
     - jdk: oraclejdk8
       env: IDEA_VERSION="13.0.4"
     - jdk: openjdk6
-      env: IDEA_VERSION="14.1.4"
+      env: IDEA_VERSION="14.1.6"
     - jdk: openjdk6
       env: IDEA_VERSION="15.0.1"
 
