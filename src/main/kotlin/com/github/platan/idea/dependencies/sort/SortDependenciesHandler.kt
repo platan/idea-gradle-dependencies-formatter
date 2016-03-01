@@ -15,6 +15,8 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrRefere
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.path.GrMethodCallExpression
 import java.util.*
+import kotlin.comparisons.compareBy
+import kotlin.comparisons.then
 
 class SortDependenciesHandler : CodeInsightActionHandler {
 
