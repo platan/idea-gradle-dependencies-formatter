@@ -60,7 +60,13 @@ class SortDependenciesHandler : CodeInsightActionHandler {
             }
 
             private fun isCoordinate(it: GrMethodCallExpression): Boolean {
-                return it is GrMethodCallExpression && Coordinate.isStringNotationCoordinate(it.expressionArguments[0].text)
+                if (!it.namedArguments.isEmpty()) {
+                    return Coordinate.isValidMap(DependencyUtil.toMap(it.namedArguments))
+                }
+                if (!it.expressionArguments.isEmpty()) {
+                    return Coordinate.isStringNotationCoordinate(it.expressionArguments[0].text)
+                }
+                return false
             }
 
             private fun isCoordinate(it: GrApplicationStatement): Boolean {
@@ -95,7 +101,12 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                     }
                 }
                 if (it is GrMethodCallExpression) {
-                    return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(it.expressionArguments[0]))
+                    if (!it.namedArguments.isEmpty()) {
+                        return Coordinate.fromMap(DependencyUtil.toMap(it.namedArguments))
+                    }
+                    if (!it.expressionArguments.isEmpty()) {
+                        return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(it.expressionArguments[0]))
+                    }
                 }
                 return null
             }

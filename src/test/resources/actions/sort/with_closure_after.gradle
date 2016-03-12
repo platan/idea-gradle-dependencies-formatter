@@ -4,8 +4,9 @@ dependencies {
         // disable all transitive dependencies of this dependency
         transitive = false
     }
-    compile 'junit:junit:4.11'
+    compile(group: 'junit', name: 'junit', version: '4.11')
             {
                 transitive = false
             }
+    compile 'org.slf4j:slf4j-api:1.7.10'
 }
