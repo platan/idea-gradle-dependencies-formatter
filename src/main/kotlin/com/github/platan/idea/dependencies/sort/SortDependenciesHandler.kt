@@ -38,43 +38,64 @@ class SortDependenciesHandler : CodeInsightActionHandler {
             }
 
             private fun sortDependencies(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
-                val statements = getChildrenOfTypeAsList(dependenciesClosure, GrApplicationStatement::class.java)
+                val statements = getChildrenOfTypeAsList(dependenciesClosure, GrMethodCall::class.java)
                 statements.forEach { it.delete() }
-                val byConfigurationName = compareBy<GrApplicationStatement> { it.firstChild.text }
-                val byArgumentType = compareBy<GrApplicationStatement> { isCoordinate(it) }
-                val byDependencyValue = compareBy<GrApplicationStatement> { getComparableValue(it) }
+                val byConfigurationName = compareBy<GrMethodCall> { it.firstChild.text }
+                val byArgumentType = compareBy<GrMethodCall> { isCoordinate(it) }
+                val byDependencyValue = compareBy<GrMethodCall> { getComparableValue(it) }
                 statements.sortedWith(byConfigurationName.then(byArgumentType).then(byDependencyValue))
                         .forEach { dependenciesClosure.addStatementBefore(factory.createStatementFromText(it.text), null) }
             }
 
-            private fun isCoordinate(it: GrApplicationStatement): Boolean {
-                val argument = it.lastChild
-                return argument is GrCommandArgumentList &&
-                        (argument.firstChild is GrLiteral && Coordinate.isStringNotationCoordinate(argument.firstChild.text) ||
-                                argument.firstChild is GrMethodCall && Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text) ||
-                                Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments)))
+            private fun isCoordinate(it: GrMethodCall): Boolean {
+                when (it) {
+                    is GrApplicationStatement -> {
+                        return isCoordinate(it)
+                    }
+                    is GrMethodCallExpression -> {
+                        return isCoordinate(it)
+                    }
+                    else -> return false
+                }
             }
 
-            private fun getComparableValue(it: GrApplicationStatement): Comparable<*>? {
+            private fun isCoordinate(it: GrMethodCallExpression): Boolean {
+                return it is GrMethodCallExpression && Coordinate.isStringNotationCoordinate(it.expressionArguments[0].text)
+            }
+
+            private fun isCoordinate(it: GrApplicationStatement): Boolean {
                 val argument = it.lastChild
-                if (argument is GrCommandArgumentList) {
-                    if (argument.firstChild is GrLiteral &&
-                            Coordinate.isStringNotationCoordinate(argument.firstChild.text)) {
-                        return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild))
+                return (argument is GrCommandArgumentList &&
+                        (argument.firstChild is GrLiteral && Coordinate.isStringNotationCoordinate(argument.firstChild.text) ||
+                                argument.firstChild is GrMethodCall && Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text) ||
+                                Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))))
+            }
+
+            private fun getComparableValue(it: GrMethodCall): Comparable<*>? {
+                if (it is GrApplicationStatement) {
+                    val argument = it.lastChild
+                    if (argument is GrCommandArgumentList) {
+                        if (argument.firstChild is GrLiteral &&
+                                Coordinate.isStringNotationCoordinate(argument.firstChild.text)) {
+                            return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild))
+                        }
+                        if (argument.firstChild is GrMethodCall &&
+                                Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text)) {
+                            return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild.firstChild))
+                        }
+                        if (argument.firstChild is GrMethodCallExpression) {
+                            return argument.firstChild.text.toLowerCase(Locale.ENGLISH)
+                        }
+                        if (argument.firstChild is GrReferenceExpression) {
+                            return argument.firstChild.text;
+                        }
+                        if (Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))) {
+                            return Coordinate.fromMap(DependencyUtil.toMap(argument.namedArguments))
+                        }
                     }
-                    if (argument.firstChild is GrMethodCall &&
-                            Coordinate.isStringNotationCoordinate(argument.firstChild.firstChild.text)) {
-                        return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(argument.firstChild.firstChild))
-                    }
-                    if (argument.firstChild is GrMethodCallExpression) {
-                        return argument.firstChild.text.toLowerCase(Locale.ENGLISH)
-                    }
-                    if (argument.firstChild is GrReferenceExpression) {
-                        return argument.firstChild.text;
-                    }
-                    if (Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))) {
-                        return Coordinate.fromMap(DependencyUtil.toMap(argument.namedArguments))
-                    }
+                }
+                if (it is GrMethodCallExpression) {
+                    return Coordinate.parse(DependencyUtil.removeQuotesAndUnescape(it.expressionArguments[0]))
                 }
                 return null
             }
