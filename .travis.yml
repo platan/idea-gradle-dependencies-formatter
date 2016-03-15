@@ -7,7 +7,7 @@ matrix:
     - jdk: oraclejdk8
       env: IDEA_VERSION="14.0.4"
     - jdk: openjdk6
-      env: IDEA_VERSION="143.249.6"
+      env: IDEA_VERSION="15.0.4"
 
 install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 
