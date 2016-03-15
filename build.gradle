@@ -16,6 +16,7 @@ plugins {
     id 'checkstyle'
     id 'codenarc'
     id 'me.champeau.gradle.jmh' version '0.2.0'
+    id 'org.jetbrains.intellij' version '0.0.43'
 }
 
 apply plugin: 'com.github.kt3k.coveralls'
@@ -29,78 +30,46 @@ project.version = '0.5.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
-configurations {
-    ideaSdk
-}
-
 ext {
     ideaVersion = project.hasProperty('ideaVersion') ? project.getProperty('ideaVersion') : ideaVersion
-    ideaSdkPath = "${projectDir}/lib/sdk-${ideaVersion}"
-    if (!System.env.JAVA_HOME) {
-        throw new GradleException('JAVA_HOME is not set')
-    }
-    jdkToolsJar = "${System.env.JAVA_HOME}/lib/tools.jar"
 }
 
-def intellijLibs = fileTree(dir: ideaSdkPath, include: 'lib/*.jar')
+intellij {
+    version = ideaVersion
+    type = 'IC'
+    plugins = ['Groovy', 'gradle', 'properties', 'junit']
+    downloadSources = false
+    updateSinceUntilBuild = false
+}
 
 String spockVersion() {
-    def groovyVersion = getGroovyVersionFromIdea()
+    def ideaVersion = getIdeaMainVersion()
+    def ideaToGroovy = ['14.0': '2.2', '14.1': '2.3', '15.0': '2.3', 'LATEST': '2.4']
     def groovyToSpock = ['2.0': '2.0', '2.1': '2.0', '2.2': '2.0', '2.3': '2.3', '2.4': '2.4']
-    def groovyForSpock = groovyToSpock[groovyVersion]
+    def groovyForSpock = groovyToSpock[ideaToGroovy[ideaVersion]]
     if (!groovyForSpock) {
-        throw new GradleException("Cannot resolve spock version for groovy ${groovyVersion}!")
+        throw new GradleException("Cannot resolve spock version for Intellij IDEA version ${ideaVersion}!")
     }
     "1.0-groovy-${groovyForSpock}"
 }
 
-private String getGroovyVersionFromIdea() {
-    def groovyFile = project.configurations.ideaSdk.find { it.name ==~ /groovy-all-.+/ }?.name
+private String getIdeaMainVersion() {
+    String version = ideaVersion
+    if (version.startsWith('LATEST'))
+        return 'LATEST'
     def versionMatcher
-    if ((versionMatcher = groovyFile =~ /^groovy-all-(\d\.\d)\..+/)) {
+    if ((versionMatcher = version =~ /^(?:(?:IU|UC)-)?(\d+\.\d+)\.\d+/)) {
         return versionMatcher.group(1)
     }
-    throw new GradleException('File groovy-all-x.x.x.jar not found in IntelliJ IDEA distribution')
+    throw new GradleException('Cannot parse IntelliJ IDEA version: ' + version)
 }
 
 dependencies {
-    compile files(jdkToolsJar)
-    ideaSdk intellijLibs
-    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/Groovy/lib/**/*.jar')
-    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/gradle/lib/**/*.jar')
-    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/properties/lib/**/*.jar')
-    ideaSdk fileTree(dir: ideaSdkPath, include: 'plugins/junit/lib/**/*.jar')
-
-    compile configurations.ideaSdk
     compile files("src/main/resources")
 
     testCompile("org.spockframework:spock-core:${spockVersion()}") {
         exclude module: 'groovy-all'
     }
-}
-
-import org.apache.tools.ant.filters.ReplaceTokens
-
-processResources {
-    filter ReplaceTokens, tokens: [
-            'plugin.version': project.version
-    ]
-}
-
-task copyIntoIdea(dependsOn: build, type: Copy) {
-    into 'build/run/plugins/'
-    from jar.archivePath
-}
-
-task runIdea(type: JavaExec, dependsOn: copyIntoIdea) {
-    main = 'com.intellij.idea.Main'
-    classpath = intellijLibs.plus(files(jdkToolsJar))
-
-    systemProperty 'idea.config.path', 'build/run/config'
-    systemProperty 'idea.system.path', 'build/run/system'
-    systemProperty 'idea.plugins.path', 'build/run/plugins'
-    systemProperty 'idea.launcher.port', '8998'
 }
 
 idea {
@@ -137,3 +106,4 @@ test {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.8'
 }
+
