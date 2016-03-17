@@ -10,8 +10,6 @@ matrix:
       env: IDEA_VERSION="15.0.4"
     - jdk: oraclejdk8
       env: IDEA_VERSION="15.0.4"
-    - jdk: openjdk6
-      env: IDEA_VERSION="2016.1"
     - jdk: oraclejdk8
       env: IDEA_VERSION="2016.1"
 
