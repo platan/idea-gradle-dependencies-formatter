@@ -3,17 +3,13 @@ language: java
 matrix:
   include:
     - jdk: openjdk6
-      env: IDEA_VERSION="13.0.4" COVERALLS=true
+      env: IDEA_VERSION="14.0.4" COVERALLS=true
     - jdk: oraclejdk8
-      env: IDEA_VERSION="13.0.4"
-    - jdk: openjdk6
-      env: IDEA_VERSION="14.1.6"
+      env: IDEA_VERSION="14.0.4"
     - jdk: openjdk6
       env: IDEA_VERSION="15.0.4"
     - jdk: oraclejdk8
-      env: IDEA_VERSION="16-Preview"
-
-before_install: ./gradlew -b downloadIdea.gradle -P ideaVersion=$IDEA_VERSION extractIdeaSdk
+      env: IDEA_VERSION="15.0.4"
 
 install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 

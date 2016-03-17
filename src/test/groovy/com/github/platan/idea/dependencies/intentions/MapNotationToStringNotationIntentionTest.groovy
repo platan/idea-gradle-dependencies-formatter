@@ -1,9 +1,10 @@
 package com.github.platan.idea.dependencies.intentions
 
 class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
+
     @Override
-    protected String getBasePath() {
-        '../src/test/resources/intentions/mapNotationToStringNotation/'
+    protected String getTestDataPath() {
+        this.getClass().getResource('/intentions/mapNotationToStringNotation/').path
     }
 
     MapNotationToStringNotationIntentionTest() {
