@@ -44,11 +44,11 @@ intellij {
 
 String spockVersion() {
     def ideaVersion = getIdeaMainVersion()
-    def ideaToGroovy = ['14.0': '2.2', '14.1': '2.3', '15.0': '2.3', 'LATEST': '2.4']
+    def ideaToGroovy = ['14.0': '2.2', '14.1': '2.3', '15.0': '2.3', '2016.1': '2.4', 'LATEST': '2.4']
     def groovyToSpock = ['2.0': '2.0', '2.1': '2.0', '2.2': '2.0', '2.3': '2.3', '2.4': '2.4']
     def groovyForSpock = groovyToSpock[ideaToGroovy[ideaVersion]]
     if (!groovyForSpock) {
-        throw new GradleException("Cannot resolve spock version for Intellij IDEA version ${ideaVersion}!")
+        throw new GradleException("Cannot resolve Spock version for Intellij IDEA version ${ideaVersion}!")
     }
     "1.0-groovy-${groovyForSpock}"
 }
@@ -59,6 +59,9 @@ private String getIdeaMainVersion() {
         return 'LATEST'
     def versionMatcher
     if ((versionMatcher = version =~ /^(?:(?:IU|UC)-)?(\d+\.\d+)\.\d+/)) {
+        return versionMatcher.group(1)
+    }
+    if ((versionMatcher = version =~ /^(?:(?:IU|UC)-)?(\d+\.\d+)/)) {
         return versionMatcher.group(1)
     }
     throw new GradleException('Cannot parse IntelliJ IDEA version: ' + version)
