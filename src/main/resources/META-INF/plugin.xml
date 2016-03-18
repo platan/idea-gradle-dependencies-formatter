@@ -66,4 +66,14 @@
             <implementation-class>com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializerImpl</implementation-class>
         </component>
     </application-components>
+    <actions>
+        <group id="sortGradleDependenciesActionGroup">
+            <separator/>
+            <action class="com.github.platan.idea.dependencies.sort.SortDependenciesAction"
+                    id="sortGradleDependenciesAction" text="Sort Gradle dependencies"
+                    description="Sort Gradle dependencies">
+            </action>
+            <add-to-group group-id="CodeMenu" anchor="last"/>
+        </group>
+    </actions>
 </idea-plugin>
