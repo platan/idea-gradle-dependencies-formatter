@@ -33,7 +33,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
 
             private fun findDependenciesClosure(psiFile: PsiFile): GrClosableBlock? {
                 val methodCalls = getChildrenOfTypeAsList(psiFile, GrMethodCall::class.java)
-                val dependenciesBlock = methodCalls.find { it.invokedExpression?.text == "dependencies" } ?: return null
+                val dependenciesBlock = methodCalls.find { it.invokedExpression.text == "dependencies" } ?: return null
                 return dependenciesBlock.closureArguments.first()
             }
 
