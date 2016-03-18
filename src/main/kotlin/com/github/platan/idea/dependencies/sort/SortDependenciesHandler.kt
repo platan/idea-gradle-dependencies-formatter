@@ -21,7 +21,7 @@ import kotlin.comparisons.then
 class SortDependenciesHandler : CodeInsightActionHandler {
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
-        object : SimpleWriteCommandAction(project, "Sort dependencies", file) {
+        object : SimpleWriteCommandAction(project, file) {
             override fun run() {
                 val dependenciesClosure = findDependenciesClosure(file)
                 if (dependenciesClosure != null) {
