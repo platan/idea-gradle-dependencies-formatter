@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url 'https://dl.bintray.com/platan/gradle-plugins' }
+        mavenCentral()
     }
 
     dependencies {
@@ -110,7 +111,10 @@ test {
     jvmArgs '-XX:MaxPermSize=256m'
 }
 
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.11'
 }
-
