@@ -17,7 +17,7 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
         myFixture.configureByText("build.gradle", given)
         List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
         assert list.size() == 1, "An intention '$intention' should be applicable to: \n$given\n"
-        myFixture.launchAction(list)
+        myFixture.launchAction(list.first())
         PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
         myFixture.checkResult(expected)
     }
@@ -32,7 +32,7 @@ abstract class IntentionTestBase extends LightCodeInsightFixtureTestCase {
         myFixture.configureByFile(file)
         List<IntentionAction> list = myFixture.filterAvailableIntentions(intention)
         assert list.size() == 1, "An intention '$intention' should be applicable to test case from file: $file\n"
-        myFixture.launchAction(list)
+        myFixture.launchAction(list.first())
         PostprocessReformattingAspect.getInstance(project).doPostponedFormatting()
         myFixture.checkResultByFile(getTestName(false).replaceFirst('_', '') + "_after.gradle")
     }
