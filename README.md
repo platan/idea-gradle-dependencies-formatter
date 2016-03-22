@@ -20,6 +20,10 @@ Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Conver
 
 ![Convert a string notation to a map notation](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/convert.gif)
 
+### Sort dependencies
+
+In order to sort dependencies open a `.gradle` file and use `Sort Gradle dependencies` action from `Code` menu. 
+
 ### Paste a Maven dependency as a Gradle dependency
 
 1. Copy a declaration of a Maven dependency in any editor.
@@ -42,6 +46,9 @@ In order to build plugin against specific IntelliJ IDEA version (e.g. 13.1.6) us
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
 ## Changelog
+
+### 0.5.0
+- (feature) Sort dependencies
 
 ### 0.4.0 (2015-10-20)
 - (feature) Convert a map notation to a string notation
