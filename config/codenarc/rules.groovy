@@ -18,6 +18,7 @@ ruleset {
         NoDef(enabled: false)
         PrivateFieldCouldBeFinal(enabled: false)
         SpaceAroundMapEntryColon(enabled: false)
+        TrailingComma(enabled: false)
         UnnecessaryBooleanExpression(enabled: false)
         UnnecessaryGString(enabled: false)
         UnusedObject(enabled: false)
