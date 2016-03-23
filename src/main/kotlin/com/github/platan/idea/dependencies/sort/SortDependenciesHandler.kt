@@ -2,6 +2,7 @@ package com.github.platan.idea.dependencies.sort
 
 import com.github.platan.idea.dependencies.gradle.Coordinate
 import com.intellij.codeInsight.CodeInsightActionHandler
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
@@ -21,7 +22,7 @@ import kotlin.comparisons.then
 class SortDependenciesHandler : CodeInsightActionHandler {
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
-        object : SimpleWriteCommandAction(project, file) {
+        object : WriteCommandAction.Simple<Any>(project, file) {
             override fun run() {
                 val dependenciesClosure = findDependenciesClosure(file)
                 if (dependenciesClosure != null) {
