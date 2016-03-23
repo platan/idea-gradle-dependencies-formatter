@@ -1,7 +1,7 @@
 package com.github.platan.idea.dependencies.intentions;
 
 import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
-import static com.github.platan.idea.dependencies.intentions.ErrorUtil.containsError;
+import static org.jetbrains.plugins.groovy.lang.psi.util.ErrorUtil.containsError;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
