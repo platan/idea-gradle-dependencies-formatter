@@ -5,7 +5,7 @@ import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 
 class SortDependenciesActionTest extends LightCodeInsightFixtureTestCase {
 
-    void test__action_is_not_active_for_setting_gradle() {
+    void test__action_is_not_active_for_settings_gradle() {
         myFixture.configureByText("settings.gradle", """dependencies {
     compile 'junit:junit:4.11'
     compile 'com.google.guava:guava:17.0'
