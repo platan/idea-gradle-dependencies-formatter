@@ -6,7 +6,7 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
 
     @Override
     protected String getTestDataPath() {
-        'src/test/resources/actions/sort/'
+        this.getClass().getResource('/actions/sort/').path
     }
 
     void test__already_sorted() {
