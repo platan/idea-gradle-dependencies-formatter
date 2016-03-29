@@ -25,6 +25,8 @@ Use `Show Intention Actions` action (`Alt + Enter` or ⌥⏎) and choose `Conver
 
 In order to sort dependencies open a `.gradle` file and use `Sort Gradle dependencies` action from `Code` menu. 
 
+![Sort dependencies](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/sort.gif)
+
 ### Paste a Maven dependency as a Gradle dependency
 
 1. Copy a declaration of a Maven dependency in any editor.
