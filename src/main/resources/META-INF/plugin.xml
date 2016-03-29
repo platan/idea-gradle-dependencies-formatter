@@ -72,13 +72,10 @@
         </component>
     </application-components>
     <actions>
-        <group id="sortGradleDependenciesActionGroup">
-            <separator/>
-            <action class="com.github.platan.idea.dependencies.sort.SortDependenciesAction"
-                    id="sortGradleDependenciesAction" text="Sort Gradle dependencies"
-                    description="Sort Gradle dependencies">
-            </action>
+        <action class="com.github.platan.idea.dependencies.sort.SortDependenciesAction"
+                id="sortGradleDependenciesAction" text="Sort Gradle dependencies"
+                description="Sort Gradle dependencies">
             <add-to-group group-id="CodeMenu" anchor="last"/>
-        </group>
+        </action>
     </actions>
 </idea-plugin>
