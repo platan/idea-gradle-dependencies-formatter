@@ -50,7 +50,7 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-### 0.5.0
+### 0.5.0 (2016-03-29)
 - (feature) Sort dependencies
 
 ### 0.4.0 (2015-10-20)
