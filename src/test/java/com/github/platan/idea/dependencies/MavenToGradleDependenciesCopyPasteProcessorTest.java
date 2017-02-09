@@ -20,16 +20,24 @@ import java.awt.datatransfer.Transferable;
 public class MavenToGradleDependenciesCopyPasteProcessorTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void test__convert_maven_to_gradle_while_pasting_to_build_gradle() {
-        myFixture.configureByText("build.gradle", "//\n<caret>\n//");
+        myFixture.configureByText("build.gradle", "<caret>");
         String toPaste = "<dependency>\n"
-                + "\t<groupId>org.spockframework</groupId>\n"
-                + "\t<artifactId>spock-core</artifactId>\n"
-                + "\t<version>1.0-groovy-2.4</version>\n"
+                + " <groupId>org.apache.maven</groupId>\n"
+                + " <artifactId>maven-embedder</artifactId>\n"
+                + " <version>2.0</version>\n"
+                + " <exclusions>\n"
+                + "  <exclusion>\n"
+                + "   <groupId>org.apache.maven</groupId>\n"
+                + "   <artifactId>maven-core</artifactId>\n"
+                + "  </exclusion>\n"
+                + " </exclusions>\n"
                 + "</dependency>";
 
         runPasteAction(toPaste);
 
-        myFixture.checkResult("//\ncompile 'org.spockframework:spock-core:1.0-groovy-2.4'\n//");
+        myFixture.checkResult("compile('org.apache.maven:maven-embedder:2.0') {\n"
+                + "    exclude group: 'org.apache.maven', module: 'maven-core'\n"
+                + "}");
     }
 
     public void test__convert_maven_to_gradle_while_pasting_to_any_gradle_file() {
