@@ -38,6 +38,8 @@ Optional dependencies are coded using syntax defined by [Nebula Extra Configurat
 
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
+Note: This feature was added to IntelliJ IDEA in version 2016.3. It converts a single maven dependency at once and handles only simple cases. 
+
 ## Development
 
 Build:  
