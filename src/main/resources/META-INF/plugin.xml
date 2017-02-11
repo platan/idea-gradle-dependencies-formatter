@@ -43,7 +43,7 @@
     <idea-version since-build="139.0"/>
     <depends>org.jetbrains.plugins.gradle</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor"/>
+        <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor" order="first"/>
 
         <intentionAction>
             <category>Gradle</category>
