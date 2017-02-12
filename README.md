@@ -49,8 +49,8 @@ Note: This feature was added to IntelliJ IDEA in version 2016.3. It converts a s
 Build:  
 `./gradlew build`
 
-In order to build plugin against specific IntelliJ IDEA version (e.g. 13.1.6) use this commands:  
-`./gradlew -P ideaVersion=13.1.6 build`
+In order to run tests with specific IntelliJ IDEA version (e.g. 2016.3) use this command:  
+`./gradlew -P ideaVersion=2016.3 test`
 
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
