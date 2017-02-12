@@ -34,7 +34,11 @@ In order to sort dependencies open a `.gradle` file and use `Sort Gradle depende
 
 ![Paste a Maven dependency as a Gradle dependency](https://raw.githubusercontent.com/platan/idea-gradle-dependencies-formatter/master/readme/paste.gif)
 
-Optional dependencies are coded using syntax defined by [Nebula Extra Configurations](https://github.com/nebula-plugins/gradle-extra-configurations-plugin/). 
+Features:
+- converts Maven dependency with `groupId` (required), `artifactId` (required), `version`, `classifier`, `optional` and `exclusions` fields
+- handles scopes: `compile`, `provided`, `runtime`, `test`
+- optional dependencies are coded using syntax defined by [Nebula Extra Configurations] (https://github.com/nebula-plugins/gradle-extra-configurations-plugin/)
+- can convert several dependencies at once
 
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
