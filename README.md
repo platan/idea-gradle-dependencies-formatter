@@ -56,6 +56,9 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### 0.5.1 (2017-02-12)
+- (improvement) Run `MavenToGradleDependenciesCopyPasteProcessor` before built-in `CopyPasteProcessor`s
+
 ### 0.5.0 (2016-03-29)
 - (feature) Sort dependencies
 

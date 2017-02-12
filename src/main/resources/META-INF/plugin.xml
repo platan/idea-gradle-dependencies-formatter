@@ -15,6 +15,10 @@
     </description>
     <change-notes><![CDATA[
       <p>
+          <b>0.5.1</b>
+        <ul>
+            <li>(improvement) Run `MavenToGradleDependenciesCopyPasteProcessor` before built-in `CopyPastePreProcessor`s</li>
+        </ul>
         <b>0.5.0</b>
         <ul>
             <li>(feature) Sort dependencies</li>
