@@ -80,6 +80,10 @@ dependencies {
     }
 }
 
+configurations {
+    all*.exclude group: 'org.gmetrics', module: 'GMetrics'
+}
+
 idea {
     module {
         scopes.TEST.plus += [configurations.jmh]
