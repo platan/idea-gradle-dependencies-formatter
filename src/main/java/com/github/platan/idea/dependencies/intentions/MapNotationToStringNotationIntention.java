@@ -62,7 +62,7 @@ public class MapNotationToStringNotationIntention extends Intention {
         return new PsiElementPredicate() {
             @Override
             public boolean satisfiedBy(PsiElement element) {
-                if (!(element.getParent().getParent() instanceof GrArgumentListImpl)) {
+                if (element == null || element.getParent() == null || !(element.getParent().getParent() instanceof GrArgumentListImpl)) {
                     return false;
                 }
                 GrArgumentListImpl parent = (GrArgumentListImpl) element.getParent().getParent();
