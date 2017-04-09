@@ -56,6 +56,9 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### 0.5.2 (2017-04-09)
+- (bugfix) fixed NPE in `MapNotationToStringNotationIntention#getElementPredicate`
+
 ### 0.5.1 (2017-02-12)
 - (improvement) Run `MavenToGradleDependenciesCopyPasteProcessor` before built-in `CopyPasteProcessor`s
 

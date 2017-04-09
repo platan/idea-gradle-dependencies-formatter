@@ -15,7 +15,11 @@
     </description>
     <change-notes><![CDATA[
       <p>
-          <b>0.5.1</b>
+        <b>0.5.2</b>
+        <ul>
+            <li>(bugfix) fixed NPE in `MapNotationToStringNotationIntention#getElementPredicate`</li>
+        </ul>
+        <b>0.5.1</b>
         <ul>
             <li>(improvement) Run `MavenToGradleDependenciesCopyPasteProcessor` before built-in `CopyPastePreProcessor`s</li>
         </ul>
