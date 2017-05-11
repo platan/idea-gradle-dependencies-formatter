@@ -3,9 +3,9 @@ language: java
 matrix:
   include:
     - jdk: openjdk6
-      env: IDEA_VERSION="14.0.4" COVERALLS=true
-    - jdk: oraclejdk8
       env: IDEA_VERSION="14.0.4"
+    - jdk: oraclejdk8
+      env: IDEA_VERSION="14.0.4" COVERALLS=true
     - jdk: openjdk6
       env: IDEA_VERSION="15.0.4"
     - jdk: oraclejdk8
@@ -25,4 +25,4 @@ install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 
 script: ./gradlew -P ideaVersion=$IDEA_VERSION build
 
-after_success: if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION jacocoTestReport coveralls; fi
+after_success: if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION cobertura coveralls; fi

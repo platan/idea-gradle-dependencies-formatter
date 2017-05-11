@@ -1,28 +1,29 @@
 buildscript {
     repositories {
-        maven { url 'https://dl.bintray.com/platan/gradle-plugins' }
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.github.platan.gradle.plugin:coveralls-gradle-plugin:2.4.0x:jdk6'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
     }
 }
 
 plugins {
     id 'java'
     id 'groovy'
-    id 'jacoco'
     id 'idea'
     id 'checkstyle'
     id 'codenarc'
     id 'me.champeau.gradle.jmh' version '0.2.0'
     id 'org.jetbrains.intellij' version '0.0.43'
+    id 'net.saliman.cobertura' version '2.4.0'
 }
 
-apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'kotlin'
+if (JavaVersion.current().isJava8Compatible()) {
+    apply plugin: 'com.github.kt3k.coveralls'
+}
 
 group 'com.github.platan'
 project.version = '0.5.2'
@@ -92,16 +93,7 @@ codenarc {
     toolVersion = codenarcToolVersion
 }
 
-jacoco {
-    toolVersion = jacocoToolVersion
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
+cobertura.coverageFormats = ['html', 'xml']
 
 checkstyle {
     toolVersion = checkstyleToolVersion
