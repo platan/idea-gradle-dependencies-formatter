@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2524f23e9b49538760cdce6368bf8e)](https://www.codacy.com/app/platan/idea-gradle-dependencies-formatter?utm_source=github.com&utm_medium=referral&utm_content=platan/idea-gradle-dependencies-formatter&utm_campaign=badger)
 # Gradle dependencies formatter [![Build Status](https://travis-ci.org/platan/idea-gradle-dependencies-formatter.svg?branch=master)](https://travis-ci.org/platan/idea-gradle-dependencies-formatter) [![Coverage Status](https://coveralls.io/repos/platan/idea-gradle-dependencies-formatter/badge.svg?branch=master&service=github)](https://coveralls.io/github/platan/idea-gradle-dependencies-formatter?branch=master)
 IntelliJ IDEA plugin for formatting Gradle dependencies. 
 
