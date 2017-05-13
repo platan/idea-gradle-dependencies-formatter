@@ -27,10 +27,6 @@ public class MavenDependency {
     @XmlElementWrapper(name = "exclusions")
     private List<MavenExclusion> exclusionList = new ArrayList<MavenExclusion>();
 
-
-    public MavenDependency() {
-    }
-
     public String getGroupId() {
         return groupId;
     }

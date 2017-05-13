@@ -8,10 +8,10 @@ import org.jetbrains.plugins.gradle.util.GradleConstants;
 
 public final class GradleFileUtil {
 
+    private static final String DOT_GRADLE = "." + GradleConstants.EXTENSION;
+
     private GradleFileUtil() {
     }
-
-    private static final String DOT_GRADLE = "." + GradleConstants.EXTENSION;
 
     public static boolean isGradleFile(@NotNull PsiFile file) {
         return file.getName().endsWith(DOT_GRADLE);
