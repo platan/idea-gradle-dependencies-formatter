@@ -5,7 +5,7 @@ matrix:
     - jdk: openjdk6
       env: IDEA_VERSION="14.0.4"
     - jdk: oraclejdk8
-      env: IDEA_VERSION="14.0.4" COVERALLS=true
+      env: IDEA_VERSION="14.0.4" COVERALLS=true SONARQUBE=true
     - jdk: openjdk6
       env: IDEA_VERSION="15.0.4"
     - jdk: oraclejdk8
@@ -27,4 +27,4 @@ script: ./gradlew -P ideaVersion=$IDEA_VERSION build
 
 after_success:
   - if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION cobertura coveralls; fi
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./gradlew sonarqube -Dsonar.login=$SONAR_TOKEN; fi
+  - if [ "$SONARQUBE" == "true" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./gradlew sonarqube -Dsonar.login=$SONAR_TOKEN; fi
