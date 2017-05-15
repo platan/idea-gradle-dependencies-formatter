@@ -56,40 +56,40 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
             return !exclusions.isEmpty() || !dependency.isTransitive();
         }
 
-    };
-
-    private static String getClosureContent(Dependency dependency) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Exclusion exclusion : dependency.getExclusions()) {
-            stringBuilder.append(String.format("\texclude group: '%s', module: '%s'", exclusion.getGroup(), exclusion.getModule()));
-            stringBuilder.append(NEW_LINE);
-        }
-        if (!dependency.isTransitive()) {
-            stringBuilder.append("\ttransitive = false");
-            stringBuilder.append(NEW_LINE);
-        }
-        return stringBuilder.toString();
-    }
-
-    private static String toStringNotation(Dependency dependency) {
-        char quotationMark = dependency.getVersion() != null && dependency.getVersion().contains("${") ? '"' : '\'';
-        StringBuilder result = new StringBuilder();
-        result.append(quotationMark);
-        result.append(dependency.getGroup());
-        result.append(':');
-        result.append(dependency.getName());
-        appendIf(dependency.getVersion(), result, dependency.hasVersion());
-        appendIf(dependency.getClassifier(), result, dependency.hasClassifier());
-        result.append(quotationMark);
-        return result.toString();
-    }
-
-    private static void appendIf(String value, StringBuilder result, boolean shouldAppend) {
-        if (shouldAppend) {
+        private String toStringNotation(Dependency dependency) {
+            char quotationMark = dependency.getVersion() != null && dependency.getVersion().contains("${") ? '"' : '\'';
+            StringBuilder result = new StringBuilder();
+            result.append(quotationMark);
+            result.append(dependency.getGroup());
             result.append(':');
-            result.append(value);
+            result.append(dependency.getName());
+            appendIf(dependency.getVersion(), result, dependency.hasVersion());
+            appendIf(dependency.getClassifier(), result, dependency.hasClassifier());
+            result.append(quotationMark);
+            return result.toString();
         }
-    }
+
+        private String getClosureContent(Dependency dependency) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Exclusion exclusion : dependency.getExclusions()) {
+                stringBuilder.append(String.format("\texclude group: '%s', module: '%s'", exclusion.getGroup(), exclusion.getModule()));
+                stringBuilder.append(NEW_LINE);
+            }
+            if (!dependency.isTransitive()) {
+                stringBuilder.append("\ttransitive = false");
+                stringBuilder.append(NEW_LINE);
+            }
+            return stringBuilder.toString();
+        }
+
+        private void appendIf(String value, StringBuilder result, boolean shouldAppend) {
+            if (shouldAppend) {
+                result.append(':');
+                result.append(value);
+            }
+        }
+
+    };
 
     @NotNull
     @Override

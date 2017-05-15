@@ -13,7 +13,6 @@ import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
@@ -25,7 +24,7 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals
 public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) throws IncorrectOperationException {
+    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) {
         String quote = getStartQuote(element.getText());
         String stringNotation = removeQuotes(element.getText());
         String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);
