@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.4"
     }
 }
 
@@ -18,16 +19,23 @@ plugins {
     id 'me.champeau.gradle.jmh' version '0.2.0'
     id 'org.jetbrains.intellij' version '0.0.43'
     id 'net.saliman.cobertura' version '2.4.0'
-    id 'org.sonarqube' version '2.2'
 }
 
 apply plugin: 'kotlin'
 if (JavaVersion.current().isJava8Compatible()) {
     apply plugin: 'com.github.kt3k.coveralls'
+    apply plugin: 'org.sonarqube'
+
+    sonarqube {
+        properties {
+            property 'sonar.java.source', '1.6'
+        }
+    }
 }
 
+
 group 'com.github.platan'
-project.version = '0.5.2'
+project.version = '0.5.3-SNAPSHOT'
 
 repositories {
     mavenCentral()
