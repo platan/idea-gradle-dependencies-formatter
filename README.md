@@ -52,7 +52,10 @@ Build:
 In order to run tests with specific IntelliJ IDEA version (e.g. 2016.3) use this command:  
 `./gradlew -P ideaVersion=2016.3 test`
 
-This project uses [gradle-intellij-plugin](https://github.com/JetBrains/gradle-intellij-plugin). 
+Run IntelliJ IDEA with the plugin intalled in:
+`./gradlew runIde`
+
+This project uses [gradle-intellij-plugin](https://github.com/JetBrains/gradle-intellij-plugin). Please refer to it's documentation for information about configuration. 
 
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
