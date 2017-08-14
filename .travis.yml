@@ -21,6 +21,8 @@ matrix:
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-TRUNK-SNAPSHOT"
 
+before_install: sudo apt-get remove ca-certificates
+
 install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 
 script: ./gradlew -P ideaVersion=$IDEA_VERSION build
