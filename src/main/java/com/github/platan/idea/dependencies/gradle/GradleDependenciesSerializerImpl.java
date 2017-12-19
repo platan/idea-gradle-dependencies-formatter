@@ -12,7 +12,10 @@ import java.util.Map;
 
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
 
-    private static final String NEW_LINE = System.getProperty("line.separator");
+    // https://github.com/platan/idea-gradle-dependencies-formatter/issues/3
+    // We should use \n as a new line separator in texts passed to a editor
+    // See: http://www.jetbrains.org/intellij/sdk/docs/basics/architectural_overview/documents.html
+    private static final char NEW_LINE = '\n';
     private static final Joiner NEW_LINE_JOINER = Joiner.on(NEW_LINE);
     private static final Joiner COMMA_JOINER = Joiner.on(", ");
     private static final Function<Map.Entry<String, String>, String> EXTRA_OPTION_FORMATTER =
@@ -36,8 +39,8 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
                 if (dependency.isOptional()) {
                     comment += prepareComment(comment, "optional = true (optional is not supported for dependency with closure)");
                 }
-                return String.format("%s(%s) {%s%n%s}",
-                        dependency.getConfiguration(), toStringNotation(dependency), comment, getClosureContent(dependency));
+                return String.format("%s(%s) {%s%s%s}",
+                        dependency.getConfiguration(), toStringNotation(dependency), comment, NEW_LINE, getClosureContent(dependency));
             }
             String optional = dependency.isOptional() ? ", optional" : "";
             return String.format("%s %s%s%s", dependency.getConfiguration(), toStringNotation(dependency), optional, comment);
