@@ -15,6 +15,10 @@
     </description>
     <change-notes><![CDATA[
       <p>
+        <b>0.5.3</b>
+        <ul>
+            <li>(bugfix) Unable to paste multiple Maven dependencies at once <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/3">#3</a></li>
+        </ul>
         <b>0.5.2</b>
         <ul>
             <li>(bugfix) fixed NPE in `MapNotationToStringNotationIntention#getElementPredicate`</li>

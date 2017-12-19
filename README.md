@@ -65,6 +65,9 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### 0.5.3 (2017-12-19)
+- (bugfix) Unable to paste multiple Maven dependencies at once [#3](https://github.com/platan/idea-gradle-dependencies-formatter/issues/3)
+
 ### 0.5.2 (2017-04-09)
 - (bugfix) fixed NPE in `MapNotationToStringNotationIntention#getElementPredicate`
 
