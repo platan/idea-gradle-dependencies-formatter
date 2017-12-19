@@ -35,7 +35,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 
 group 'com.github.platan'
-project.version = '0.5.3'
+project.version = '0.5.4-SNAPSHOT'
 
 repositories {
     mavenCentral()
