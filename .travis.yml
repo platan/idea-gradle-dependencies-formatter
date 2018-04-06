@@ -20,6 +20,9 @@ matrix:
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-TRUNK-SNAPSHOT"
+  allow_failures:
+    - jdk: oraclejdk8
+      env: IDEA_VERSION="LATEST-TRUNK-SNAPSHOT"
 
 install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
 
