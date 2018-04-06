@@ -9,13 +9,11 @@ matrix:
     - jdk: oraclejdk8
       env: IDEA_VERSION="15.0.6"
     - jdk: oraclejdk8
-      env: IDEA_VERSION="2016.3.7"
+      env: IDEA_VERSION="2016.3.8"
     - jdk: oraclejdk8
-      env: IDEA_VERSION="2017.1.5"
+      env: IDEA_VERSION="2017.3.5"
     - jdk: oraclejdk8
-      env: IDEA_VERSION="2017.2.5"
-    - jdk: oraclejdk8
-      env: IDEA_VERSION="2017.3.2"
+      env: IDEA_VERSION="2018.1"
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: oraclejdk8
