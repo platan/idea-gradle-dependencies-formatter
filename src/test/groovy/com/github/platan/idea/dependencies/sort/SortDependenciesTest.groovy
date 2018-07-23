@@ -83,10 +83,10 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
 
     private doTest() {
         def fileName = getTestName(false).replaceFirst('__', '')
-        configureByFile("${fileName}.gradle")
+        configureByFile("${fileName}.groovy")
         SortDependenciesAction action = new SortDependenciesAction()
         action.handler.invoke(project, editor, file)
-        checkResultByFile("${fileName}_after.gradle")
+        checkResultByFile("${fileName}_after.groovy")
     }
 
 }
