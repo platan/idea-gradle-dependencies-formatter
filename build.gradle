@@ -16,8 +16,8 @@ plugins {
     id 'idea'
     id 'checkstyle'
     id 'codenarc'
-    id 'me.champeau.gradle.jmh' version '0.2.0'
-    id 'org.jetbrains.intellij' version '0.0.43'
+    id 'me.champeau.gradle.jmh' version '0.4.6'
+    id 'org.jetbrains.intellij' version '0.3.4'
     id 'net.saliman.cobertura' version '2.4.0'
 }
 
@@ -50,6 +50,7 @@ intellij {
     plugins = ['Groovy', 'gradle', 'properties', 'junit']
     downloadSources = false
     updateSinceUntilBuild = false
+    instrumentCode = false
 }
 
 String spockVersion() {
@@ -82,6 +83,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
+    compile 'com.intellij:annotations:12.0'
     testCompile("org.spockframework:spock-core:${spockVersion()}") {
         exclude module: 'groovy-all'
     }
@@ -117,6 +119,19 @@ sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }
 
+if (JavaVersion.current().isJava10Compatible()) {
+    compileJava {
+        options.compilerArgs += ["--add-modules", "java.xml.bind"]
+    }
+
+    compileTestJava {
+        options.compilerArgs += ["--add-modules", "java.xml.bind"]
+    }
+
+    test {
+        jvmArgs += ["--add-modules", "java.xml.bind"]
+    }
+}
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
+    gradleVersion = '4.9'
 }
