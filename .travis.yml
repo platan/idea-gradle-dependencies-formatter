@@ -20,7 +20,7 @@ matrix:
       env: IDEA_VERSION="2018.2.5"
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
-    - jdk: oraclejdk10
+    - jdk: openjdk10
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-TRUNK-SNAPSHOT"
