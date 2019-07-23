@@ -7,12 +7,6 @@ matrix:
     - jdk: oraclejdk8
       env: IDEA_VERSION="14.0.5" COVERALLS=true SONARQUBE=true
     - jdk: oraclejdk8
-      env: IDEA_VERSION="15.0.6"
-    - jdk: oraclejdk8
-      env: IDEA_VERSION="2016.3.8"
-    - jdk: oraclejdk8
-      env: IDEA_VERSION="2017.3.6"
-    - jdk: oraclejdk8
       env: IDEA_VERSION="2018.3.6"
     - jdk: oraclejdk8
       env: IDEA_VERSION="2019.1.3"
