@@ -10,6 +10,8 @@ matrix:
       env: IDEA_VERSION="2018.3.6"
     - jdk: oraclejdk8
       env: IDEA_VERSION="2019.1.3"
+    - jdk: oraclejdk8
+      env: IDEA_VERSION="2019.2"
     - jdk: openjdk10
       env: IDEA_VERSION="2019.1.3"
     - jdk: oraclejdk8
