@@ -48,7 +48,7 @@ ext {
 intellij {
     version = ideaVersion
     type = 'IC'
-    plugins = ['Groovy', 'gradle', 'properties', 'junit']
+    plugins = ['java', 'Groovy', 'gradle', 'properties', 'junit']
     downloadSources = false
     updateSinceUntilBuild = false
     instrumentCode = false
