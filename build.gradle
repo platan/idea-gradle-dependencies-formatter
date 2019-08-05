@@ -48,10 +48,14 @@ ext {
 intellij {
     version = ideaVersion
     type = 'IC'
-    plugins = ['java', 'Groovy', 'gradle', 'properties', 'junit']
+    plugins = ['Groovy', 'gradle', 'properties', 'junit'] + javaPlugin()
     downloadSources = false
     updateSinceUntilBuild = false
     instrumentCode = false
+}
+
+List<String> javaPlugin() {
+    ideaVersion.contains('2019.2') || ideaVersion == 'LATEST-EAP-SNAPSHOT' ? ['java'] : []
 }
 
 String spockVersion() {
