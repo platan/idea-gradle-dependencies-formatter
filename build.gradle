@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.4"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
     }
 }
 
@@ -136,7 +136,4 @@ if (JavaVersion.current().isJava10Compatible()) {
     test {
         jvmArgs += ["--add-modules", "java.xml.bind"]
     }
-}
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.3'
 }
