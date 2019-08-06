@@ -7,6 +7,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
+        classpath 'com.vdurmont:semver4j:2.2.0'
     }
 }
 
@@ -54,8 +55,11 @@ intellij {
     instrumentCode = false
 }
 
+import com.vdurmont.semver4j.Semver
+
 List<String> javaPlugin() {
-    ideaVersion.contains('2019.2') || ideaVersion == 'LATEST-EAP-SNAPSHOT' ? ['java'] : []
+    def ideaMainVersion = getIdeaMainVersion()
+    ideaVersion == 'LATEST-EAP-SNAPSHOT' || new Semver(ideaMainVersion, Semver.SemverType.LOOSE).isGreaterThanOrEqualTo('2019.2') ? ['java'] : []
 }
 
 String spockVersion() {
