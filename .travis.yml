@@ -12,16 +12,16 @@ matrix:
       env: IDEA_VERSION="2019.1.3"
     - jdk: oraclejdk8
       env: IDEA_VERSION="2019.2"
-    - jdk: openjdk10
+    - jdk: openjdk11
       env: IDEA_VERSION="2019.2"
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
-    - jdk: openjdk10
+    - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
   allow_failures:
     - jdk: oraclejdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
-    - jdk: openjdk10
+    - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
 
 install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
