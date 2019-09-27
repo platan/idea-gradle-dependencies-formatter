@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.3.10'
+        kotlinVersion = '1.3.50'
     }
 
     repositories {
@@ -49,7 +49,7 @@ repositories {
 
 ext {
     ideaVersion = project.hasProperty('ideaVersion') ? project.getProperty('ideaVersion') : ideaVersion
-    kotlinVersion = '1.3.10'
+    kotlinVersion = '1.3.50'
 }
 
 intellij {
