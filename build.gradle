@@ -101,7 +101,7 @@ dependencies {
     // workaround from https://baijifeilong.github.io/2018/06/27/kotlin/
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
 
-    compile 'javax.xml.bind:jaxb-api:2.2.11'
+    compile 'javax.xml.bind:jaxb-api:2.3.1'
     compile 'com.sun.xml.bind:jaxb-core:2.3.0.1'
     compile 'com.sun.xml.bind:jaxb-impl:2.3.2'
     compile 'javax.activation:activation:1.1.1'
