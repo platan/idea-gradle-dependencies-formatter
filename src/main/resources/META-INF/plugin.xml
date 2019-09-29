@@ -89,5 +89,10 @@
                 description="Sort Gradle dependencies">
             <add-to-group group-id="CodeMenu" anchor="last"/>
         </action>
+        <action class="com.github.platan.idea.dependencies.sort.FormatDependenciesAction"
+                id="formatGradleDependenciesAction" text="Format Gradle dependencies"
+                description="Format Gradle dependencies">
+            <add-to-group group-id="CodeMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
