@@ -1,4 +1,4 @@
-package com.github.platan.idea.dependencies.sort
+package com.github.platan.idea.dependencies.format
 
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.openapi.editor.Editor

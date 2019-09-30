@@ -1,4 +1,4 @@
-package com.github.platan.idea.dependencies.sort
+package com.github.platan.idea.dependencies.format
 
 import com.intellij.codeInsight.actions.CodeInsightAction
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase

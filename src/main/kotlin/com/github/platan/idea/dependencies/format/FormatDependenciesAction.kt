@@ -1,4 +1,4 @@
-package com.github.platan.idea.dependencies.sort
+package com.github.platan.idea.dependencies.format
 
 import com.github.platan.idea.dependencies.gradle.GradleFileUtil.isGradleFile
 import com.github.platan.idea.dependencies.gradle.GradleFileUtil.isSettingGradle
