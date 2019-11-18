@@ -10,7 +10,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8.0.1969"
         classpath 'com.vdurmont:semver4j:3.1.0'
     }
 }
