@@ -54,6 +54,7 @@
     </change-notes>
     <idea-version since-build="139.0"/>
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.intellij.groovy</depends>
     <extensions defaultExtensionNs="com.intellij">
         <copyPastePreProcessor implementation="com.github.platan.idea.dependencies.MavenToGradleDependenciesCopyPasteProcessor" order="first"/>
 
