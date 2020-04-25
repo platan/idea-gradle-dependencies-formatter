@@ -52,7 +52,7 @@
       </p>
     ]]>
     </change-notes>
-    <idea-version since-build="139.0"/>
+    <idea-version since-build="191"/>
     <depends>com.intellij.modules.platform</depends>
     <depends>org.intellij.groovy</depends>
     <extensions defaultExtensionNs="com.intellij">

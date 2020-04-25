@@ -24,14 +24,12 @@ plugins {
 }
 
 apply plugin: 'kotlin'
-if (JavaVersion.current().isJava8Compatible()) {
-    apply plugin: 'com.github.kt3k.coveralls'
-    apply plugin: 'org.sonarqube'
+apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'org.sonarqube'
 
-    sonarqube {
-        properties {
-            property 'sonar.java.source', '1.6'
-        }
+sonarqube {
+    properties {
+        property 'sonar.java.source', '1.8'
     }
 }
 
@@ -44,7 +42,7 @@ repositories {
 }
 
 ext {
-    ideaVersion = project.hasProperty('ideaVersion') ? project.getProperty('ideaVersion') : ideaVersion
+    String ideaVersion = project.hasProperty('ideaVersion') ? project.getProperty('ideaVersion') : ideaVersion
 }
 
 intellij {
@@ -61,17 +59,6 @@ import com.vdurmont.semver4j.Semver
 List<String> javaPlugin() {
     def ideaMainVersion = getIdeaMainVersion()
     ideaVersion == 'LATEST-EAP-SNAPSHOT' || new Semver(ideaMainVersion, Semver.SemverType.LOOSE).isGreaterThanOrEqualTo('2019.2') ? ['java'] : []
-}
-
-String spockVersion() {
-    def ideaVersion = getIdeaMainVersion()
-    def ideaToGroovy = ['14.0': '2.2', '14.1': '2.3', '15.0': '2.3']
-    def groovyToSpock = ['2.0': '2.0', '2.1': '2.0', '2.2': '2.0', '2.3': '2.3', '2.4': '2.4']
-    def groovyForSpock = groovyToSpock.get(ideaToGroovy[ideaVersion], '2.4')
-    if (!groovyForSpock) {
-        throw new GradleException("Cannot resolve Spock version for Intellij IDEA version ${ideaVersion}!")
-    }
-    "1.0-groovy-${groovyForSpock}"
 }
 
 private String getIdeaMainVersion() {
@@ -94,7 +81,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     compile 'com.intellij:annotations:12.0'
-    testCompile("org.spockframework:spock-core:${spockVersion()}") {
+    testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
         exclude module: 'groovy-all'
     }
     // without this dependency I get java.lang.NoClassDefFoundError: kotlin/reflect/jvm/ReflectJvmMapping

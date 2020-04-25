@@ -5,9 +5,7 @@ language: java
 matrix:
   include:
     - jdk: oraclejdk8
-      env: IDEA_VERSION="14.0.5" COVERALLS=true SONARQUBE=true
-    - jdk: oraclejdk8
-      env: IDEA_VERSION="2018.3.6"
+      env: IDEA_VERSION="2019.1.4" COVERALLS=true SONARQUBE=true
     - jdk: oraclejdk8
       env: IDEA_VERSION="2019.2.4"
     - jdk: oraclejdk8
