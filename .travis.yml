@@ -9,7 +9,7 @@ matrix:
     - jdk: openjdk8
       env: IDEA_VERSION="2019.2.4"
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.3"
+      env: IDEA_VERSION="2019.3.4"
     - jdk: openjdk8
       env: IDEA_VERSION="2020.1"
     - jdk: openjdk11
