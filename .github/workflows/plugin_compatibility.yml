@@ -15,4 +15,8 @@ jobs:
       with:
         plugin: '/home/runner/work/idea-gradle-dependencies-formatter/idea-gradle-dependencies-formatter/build/distributions/idea-gradle-dependencies-formatter-*'
         versions: |
+          2019.1.4
+          2019.2.4
+          2019.3.4
           2020.1
+          LATEST-EAP-SNAPSHOT
