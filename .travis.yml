@@ -4,22 +4,22 @@ language: java
 
 matrix:
   include:
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="2019.1.4" COVERALLS=true SONARQUBE=true
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="2019.2.4"
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="2019.3"
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="2020.1"
     - jdk: openjdk11
       env: IDEA_VERSION="2020.1"
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
   allow_failures:
-    - jdk: oraclejdk8
+    - jdk: openjdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
