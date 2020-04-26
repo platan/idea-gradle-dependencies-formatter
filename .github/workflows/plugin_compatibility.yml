@@ -8,7 +8,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v1
       with:
-        java-version: 11.x.x
+        java-version: 8
     - name: Build the plugin using Gradle
       run: ./gradlew buildPlugin
     - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.1
