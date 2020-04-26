@@ -1,8 +1,8 @@
 package com.github.platan.idea.dependencies.sort
 
-import com.intellij.testFramework.LightCodeInsightTestCase
+import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 
-class SortDependenciesTest extends LightCodeInsightTestCase {
+class SortDependenciesTest extends LightCodeInsightFixtureTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -83,10 +83,10 @@ class SortDependenciesTest extends LightCodeInsightTestCase {
 
     private doTest() {
         def fileName = getTestName(false).replaceFirst('__', '')
-        configureByFile("${fileName}.groovy")
+        myFixture.configureByFile("${fileName}.groovy")
         SortDependenciesAction action = new SortDependenciesAction()
         action.handler.invoke(project, editor, file)
-        checkResultByFile("${fileName}_after.groovy")
+        myFixture.checkResultByFile("${fileName}_after.groovy")
     }
 
 }
