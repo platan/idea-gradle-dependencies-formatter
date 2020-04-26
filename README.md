@@ -50,7 +50,7 @@ Features:
 
 If you need to paste XML with maven dependency into gradle file without modification, please use `Paste Simple` action.
 
-Note: This feature was added to IntelliJ IDEA in version 2016.3. It converts a single maven dependency at once and handles only simple cases. 
+Note: In version 2016.3 IntelliJ IDEA added a similar feature. It converts a single maven dependency at once and handles only simple cases. This plugin overrides this built-in feature.
 
 ## Development
 
