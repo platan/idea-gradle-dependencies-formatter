@@ -33,16 +33,15 @@ public class Coordinate implements Comparable<Coordinate> {
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
-    private static final Comparator<Optional<String>> OPTIONAL_COMPARATOR = new NaturalAbsentFirstOptionalOrdering<String>();
     private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<String>();
     private final String group;
     private final String name;
-    private final Optional<String> version;
-    private final Optional<String> classifier;
-    private final Optional<String> extension;
+    private final String version;
+    private final String classifier;
+    private final String extension;
 
-    public Coordinate(@Nullable String group, String name, Optional<String> version, Optional<String> classifier, Optional<String>
-            extension) {
+    public Coordinate(@Nullable String group, String name, @Nullable String version, @Nullable String classifier,
+                      @Nullable String extension) {
         this.group = group;
         this.name = name;
         this.version = version;
@@ -100,15 +99,15 @@ public class Coordinate implements Comparable<Coordinate> {
     }
 
     public Optional<String> getVersion() {
-        return version;
+        return Optional.fromNullable(version);
     }
 
     public Optional<String> getClassifier() {
-        return classifier;
+        return Optional.fromNullable(classifier);
     }
 
     public Optional<String> getExtension() {
-        return extension;
+        return Optional.fromNullable(extension);
     }
 
     public String toMapNotation(String quote) {
@@ -122,19 +121,19 @@ public class Coordinate implements Comparable<Coordinate> {
         }
         stringBuilder.append(':');
         stringBuilder.append(name);
-        appendIfPresent(stringBuilder, ':', version);
-        if (!version.isPresent() && classifier.isPresent()) {
+        appendIfNotNull(stringBuilder, ':', version);
+        if (version == null && classifier != null) {
             stringBuilder.append(':');
         }
-        appendIfPresent(stringBuilder, ':', classifier);
-        appendIfPresent(stringBuilder, '@', extension);
+        appendIfNotNull(stringBuilder, ':', classifier);
+        appendIfNotNull(stringBuilder, '@', extension);
         return stringBuilder.toString();
     }
 
-    private void appendIfPresent(StringBuilder stringBuilder, char separator, Optional<String> optionalValue) {
-        if (optionalValue.isPresent()) {
+    private void appendIfNotNull(StringBuilder stringBuilder, char separator, String nullabeValue) {
+        if (nullabeValue != null) {
             stringBuilder.append(separator);
-            stringBuilder.append(optionalValue.get());
+            stringBuilder.append(nullabeValue);
         }
     }
 
@@ -159,21 +158,15 @@ public class Coordinate implements Comparable<Coordinate> {
 
     private Map<String, String> toMap() {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        putIfPresent2(map, group, GROUP_KEY);
+        putIfNotNull(map, group, GROUP_KEY);
         map.put(NAME_KEY, name);
-        putIfPresent(map, version, VERSION_KEY);
-        putIfPresent(map, classifier, CLASSIFIER_KEY);
-        putIfPresent(map, extension, EXT_KEY);
+        putIfNotNull(map, version, VERSION_KEY);
+        putIfNotNull(map, classifier, CLASSIFIER_KEY);
+        putIfNotNull(map, extension, EXT_KEY);
         return map;
     }
 
-    private void putIfPresent(Map<String, String> map, Optional<String> value, String key) {
-        if (value.isPresent()) {
-            map.put(key, value.get());
-        }
-    }
-
-    private void putIfPresent2(Map<String, String> map, String value, String key) {
+    private void putIfNotNull(Map<String, String> map, String value, String key) {
         if (value != null) {
             map.put(key, value);
         }
@@ -220,28 +213,10 @@ public class Coordinate implements Comparable<Coordinate> {
         return ComparisonChain.start()
                 .compare(this.group, that.group, COMPARATOR)
                 .compare(this.name, that.name)
-                .compare(this.version, that.version, OPTIONAL_COMPARATOR)
-                .compare(this.classifier, that.classifier, OPTIONAL_COMPARATOR)
-                .compare(this.extension, that.extension, OPTIONAL_COMPARATOR)
+                .compare(this.version, that.version, COMPARATOR)
+                .compare(this.classifier, that.classifier, COMPARATOR)
+                .compare(this.extension, that.extension, COMPARATOR)
                 .result();
-    }
-
-    private static final class NaturalAbsentFirstOptionalOrdering<T extends Comparable<? super T>> implements Comparator<Optional<T>> {
-
-        @Override
-        public int compare(Optional<T> o1, Optional<T> o2) {
-            if (o1.isPresent() && o2.isPresent()) {
-                return o1.get().compareTo(o2.get());
-            }
-            if (!o1.isPresent() && !o2.isPresent()) {
-                return 0;
-            }
-            if (o1.isPresent()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
     }
 
     private static final class NaturalNullFirstOrdering<T extends Comparable<? super T>> implements Comparator<T> {
@@ -266,10 +241,10 @@ public class Coordinate implements Comparable<Coordinate> {
     public static class CoordinateBuilder {
         private String group = null;
         private String name;
-        private Optional<String> version = Optional.absent();
-        private Optional<String> classifier = Optional.absent();
+        private String version = null;
+        private String classifier = null;
 
-        private Optional<String> extension = Optional.absent();
+        private String extension = null;
 
         private CoordinateBuilder() {
         }
@@ -285,27 +260,22 @@ public class Coordinate implements Comparable<Coordinate> {
             return this;
         }
 
-        @NotNull
-        private Optional<String> optionalOf(String value) {
-            return value.isEmpty() ? Optional.<String>absent() : Optional.of(value);
-        }
-
         private String emptyToNull(String value) {
             return value == null || value.isEmpty() ? null : value;
         }
 
         public CoordinateBuilder withVersion(String version) {
-            this.version = optionalOf(version);
+            this.version = emptyToNull(version);
             return this;
         }
 
         public CoordinateBuilder withClassifier(String classifier) {
-            this.classifier = optionalOf(classifier);
+            this.classifier = emptyToNull(classifier);
             return this;
         }
 
         public CoordinateBuilder withExtension(String extension) {
-            this.extension = optionalOf(extension);
+            this.extension = emptyToNull(extension);
             return this;
         }
 
