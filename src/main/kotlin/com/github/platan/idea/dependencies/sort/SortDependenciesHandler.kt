@@ -1,6 +1,5 @@
 package com.github.platan.idea.dependencies.sort
 
-import com.github.platan.idea.dependencies.gradle.Coordinate
 import com.intellij.codeInsight.CodeInsightActionHandler
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
