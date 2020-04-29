@@ -9,21 +9,18 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Coordinate implements Comparable<Coordinate> {
+public class Coordinate {
     private static final String NAME_KEY = "name";
     private static final String GROUP_KEY = "group";
     private static final String VERSION_KEY = "version";
@@ -33,7 +30,6 @@ public class Coordinate implements Comparable<Coordinate> {
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
-    private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<String>();
     private final String group;
     private final String name;
     private final String version;
@@ -207,36 +203,6 @@ public class Coordinate implements Comparable<Coordinate> {
                 + ", extension=" + extension
                 + '}';
     }
-
-    @Override
-    public int compareTo(Coordinate that) {
-        return ComparisonChain.start()
-                .compare(this.group, that.group, COMPARATOR)
-                .compare(this.name, that.name)
-                .compare(this.version, that.version, COMPARATOR)
-                .compare(this.classifier, that.classifier, COMPARATOR)
-                .compare(this.extension, that.extension, COMPARATOR)
-                .result();
-    }
-
-    private static final class NaturalNullFirstOrdering<T extends Comparable<? super T>> implements Comparator<T> {
-
-        @Override
-        public int compare(T o1, T o2) {
-            if (o1 != null && o2 != null) {
-                return o1.compareTo(o2);
-            }
-            if (o1 == null && o2 == null) {
-                return 0;
-            }
-            if (o1 != null) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-    }
-
 
     public static class CoordinateBuilder {
         private String group = null;

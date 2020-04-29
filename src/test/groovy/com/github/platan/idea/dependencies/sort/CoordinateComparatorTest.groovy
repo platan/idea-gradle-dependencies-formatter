@@ -1,4 +1,4 @@
-package com.github.platan.idea.dependencies.gradle
+package com.github.platan.idea.dependencies.sort
 
 import spock.lang.Specification
 

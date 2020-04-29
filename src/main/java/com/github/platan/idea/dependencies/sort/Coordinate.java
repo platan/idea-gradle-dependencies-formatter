@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.google.common.collect.Iterables.transform;
-
 public class Coordinate implements Comparable<Coordinate> {
     private static final String NAME_KEY = "name";
     private static final String GROUP_KEY = "group";
@@ -23,7 +21,6 @@ public class Coordinate implements Comparable<Coordinate> {
     private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
-    private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
     private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<String>();
     private final String group;
     private final String name;
@@ -99,33 +96,6 @@ public class Coordinate implements Comparable<Coordinate> {
 
     public Optional<String> getExtension() {
         return Optional.fromNullable(extension);
-    }
-
-    public String toMapNotation(String quote) {
-        return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), new MapEntryToStringFunction(quote)));
-    }
-
-    public String toStringNotation() {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (group != null) {
-            stringBuilder.append(group);
-        }
-        stringBuilder.append(':');
-        stringBuilder.append(name);
-        appendIfNotNull(stringBuilder, ':', version);
-        if (version == null && classifier != null) {
-            stringBuilder.append(':');
-        }
-        appendIfNotNull(stringBuilder, ':', classifier);
-        appendIfNotNull(stringBuilder, '@', extension);
-        return stringBuilder.toString();
-    }
-
-    private void appendIfNotNull(StringBuilder stringBuilder, char separator, String nullabeValue) {
-        if (nullabeValue != null) {
-            stringBuilder.append(separator);
-            stringBuilder.append(nullabeValue);
-        }
     }
 
     public static Coordinate fromMap(Map<String, String> map) {
@@ -276,18 +246,4 @@ public class Coordinate implements Comparable<Coordinate> {
 
     }
 
-    private static class MapEntryToStringFunction implements Function<Map.Entry<String, String>, String> {
-
-        private final String quotationMark;
-
-        private MapEntryToStringFunction(String quotationMark) {
-            this.quotationMark = quotationMark;
-        }
-
-        @Override
-        public String apply(Map.Entry<String, String> mapEntry) {
-            return String.format("%s: %s%s%s", mapEntry.getKey(), quotationMark, mapEntry.getValue(), quotationMark);
-        }
-
-    }
 }
