@@ -1,11 +1,9 @@
 package com.github.platan.idea.dependencies.intentions;
 
-import static com.github.platan.idea.dependencies.sort.DependencyUtil.isGstring;
-import static com.github.platan.idea.dependencies.sort.DependencyUtil.isInterpolableString;
-import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMap;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.*;
 
 import com.github.platan.idea.dependencies.gradle.Coordinate;
+import com.github.platan.idea.dependencies.gradle.PsiElementCoordinate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -26,7 +24,7 @@ public class MapNotationToStringNotationIntention extends Intention {
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) {
         GrArgumentList argumentList = (GrArgumentList) element.getParent().getParent();
         GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
-        String stringNotation = toStringNotation(namedArguments);
+        String stringNotation = toStringNotation(namedArguments, project);
         for (GrNamedArgument namedArgument : namedArguments) {
             namedArgument.delete();
         }
@@ -34,25 +32,10 @@ public class MapNotationToStringNotationIntention extends Intention {
         argumentList.add(expressionFromText);
     }
 
-    private String toStringNotation(GrNamedArgument[] namedArguments) {
-        Map<String, String> map = toMap(namedArguments);
-        Coordinate coordinate = Coordinate.fromMap(map);
-        boolean containsGstringValue = containsGstringValue(namedArguments);
-        char quote = containsGstringValue ? '"' : '\'';
-        return String.format("%c%s%c", quote, coordinate.toStringNotation(), quote);
-    }
-
-    private boolean containsGstringValue(GrNamedArgument[] namedArguments) {
-        boolean containsGstringValue = false;
-        for (GrNamedArgument namedArgument : namedArguments) {
-            GrExpression expression = namedArgument.getExpression();
-            String quote = getStartQuote(expression.getText());
-            if (isInterpolableString(quote) && isGstring(expression)) {
-                containsGstringValue = true;
-                break;
-            }
-        }
-        return containsGstringValue;
+    private String toStringNotation(GrNamedArgument[] namedArguments, Project project) {
+        Map<String, PsiElement> map = toMapWithPsiElementValues(namedArguments);
+        PsiElementCoordinate coordinate = PsiElementCoordinate.fromMap(map);
+        return coordinate.toGrStringNotation();
     }
 
     @NotNull
@@ -69,7 +52,7 @@ public class MapNotationToStringNotationIntention extends Intention {
                 if (namedArguments.length == 0) {
                     return false;
                 }
-                Map<String, String> map = toMap(namedArguments);
+                Map<String, String> map = toSimpleMap(namedArguments);
                 return Coordinate.isValidMap(map);
             }
         };

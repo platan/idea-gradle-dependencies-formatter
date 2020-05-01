@@ -13,7 +13,6 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -201,7 +200,7 @@ public class Coordinate implements Comparable<Coordinate> {
     public String toString() {
         return "Coordinate{"
                 + "group=" + group
-                + ", name='" + name + '\''
+                + ", name=" + name
                 + ", version=" + version
                 + ", classifier=" + classifier
                 + ", extension=" + extension

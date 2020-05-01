@@ -23,6 +23,36 @@ object DependencyUtil {
         return map
     }
 
+    @JvmStatic
+    fun toSimpleMap(namedArguments: Array<GrNamedArgument>): Map<String, String> {
+        val map = LinkedHashMap<String, String>()
+        for (namedArgument in namedArguments) {
+            val expression = namedArgument.expression
+            if (namedArgument.label == null || expression == null) {
+                continue
+            }
+            val key = namedArgument.label!!.text
+            var value = expression.text
+            map[key] = value
+        }
+        return map
+    }
+
+    @JvmStatic
+    fun toMapWithPsiElementValues(namedArguments: Array<GrNamedArgument>): Map<String, PsiElement> {
+        val map = LinkedHashMap<String, PsiElement>()
+        for (namedArgument in namedArguments) {
+            val expression = namedArgument.expression
+            if (namedArgument.label == null || expression == null) {
+                continue
+            }
+            val key = namedArgument.label!!.text
+            var value = expression
+            map[key] = value
+        }
+        return map
+    }
+
     fun removeQuotesAndUnescape(expression: PsiElement): String {
         val quote = GrStringUtil.getStartQuote(expression.text)
         var value = GrStringUtil.removeQuotes(expression.text)
