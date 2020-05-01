@@ -60,6 +60,10 @@ public class PsiElementCoordinate {
 
     private String getText(PsiElement element, boolean plainValues) {
         if (element instanceof GrLiteral) {
+            GrLiteral grLiteral = (GrLiteral) element;
+            if (grLiteral.getValue() != null) {
+                return grLiteral.getValue().toString();
+            }
             return GrStringUtil.removeQuotes(element.getText());
         }
         return element.getText();

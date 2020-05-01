@@ -146,7 +146,7 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
         doTest()
     }
 
-    void ignore_test_convert_gstring_with_special_characters() {
+    void test_convert_gstring_with_special_characters() {
         doTest()
     }
 
