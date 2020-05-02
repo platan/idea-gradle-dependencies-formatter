@@ -65,6 +65,24 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_map_notation_with_primitive_value_as_a_version() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava', version: 19.0
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:19.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_static_method_call_as_a_version() {
+        doTextTest('''dependencies {
+    compile group:<caret> 'com.google.guava', name: 'guava', version: String.valueOf(19.0)
+}''',
+                '''dependencies {
+    compile "com.google.guava:guava:${String.valueOf(19.0)}"
+}''')
+    }
+
     void test_convert_map_notation_with_classifier_and_ext() {
         doTextTest('''dependencies {
     compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', classifier: 'sources', ext: 'jar'
