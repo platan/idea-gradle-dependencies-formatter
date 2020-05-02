@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.groovy.lang.psi.GrReferenceElement;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
@@ -66,7 +67,15 @@ public class PsiElementCoordinate {
             }
             return GrStringUtil.removeQuotes(element.getText());
         }
-        return element.getText();
+        if (element instanceof GrReferenceElement) {
+            GrReferenceElement referenceElement = (GrReferenceElement) element;
+            if (referenceElement.getQualifiedReferenceName().equals(referenceElement.getReferenceName())) {
+                return String.format("$%s", element.getText());
+            } else {
+                return String.format("${%s}", element.getText());
+            }
+        }
+        return String.format("${%s}", element.getText());
     }
 
     private void appendIfNotNull(StringBuilder stringBuilder, char separator, PsiElement nullabeValue, boolean plainValues) {
