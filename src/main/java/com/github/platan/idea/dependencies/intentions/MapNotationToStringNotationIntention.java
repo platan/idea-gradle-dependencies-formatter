@@ -24,7 +24,7 @@ public class MapNotationToStringNotationIntention extends Intention {
     protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) {
         GrArgumentList argumentList = (GrArgumentList) element.getParent().getParent();
         GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
-        String stringNotation = toStringNotation(namedArguments, project);
+        String stringNotation = toStringNotation(namedArguments);
         for (GrNamedArgument namedArgument : namedArguments) {
             namedArgument.delete();
         }
@@ -32,7 +32,7 @@ public class MapNotationToStringNotationIntention extends Intention {
         argumentList.add(expressionFromText);
     }
 
-    private String toStringNotation(GrNamedArgument[] namedArguments, Project project) {
+    private String toStringNotation(GrNamedArgument[] namedArguments) {
         Map<String, PsiElement> map = toMapWithPsiElementValues(namedArguments);
         PsiElementCoordinate coordinate = PsiElementCoordinate.fromMap(map);
         return coordinate.toGrStringNotation();
