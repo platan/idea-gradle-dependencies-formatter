@@ -41,16 +41,16 @@ public class PsiElementCoordinate {
         boolean plainValues = allElements.stream().allMatch(this::isPlainValue);
         StringBuilder stringBuilder = new StringBuilder();
         if (group != null) {
-            stringBuilder.append(getText(group, plainValues));
+            stringBuilder.append(getText(group));
         }
         stringBuilder.append(':');
-        stringBuilder.append(getText(name, plainValues));
-        appendIfNotNull(stringBuilder, ':', version, plainValues);
+        stringBuilder.append(getText(name));
+        appendIfNotNull(stringBuilder, ':', version);
         if (version == null && classifier != null) {
             stringBuilder.append(':');
         }
-        appendIfNotNull(stringBuilder, ':', classifier, plainValues);
-        appendIfNotNull(stringBuilder, '@', extension, plainValues);
+        appendIfNotNull(stringBuilder, ':', classifier);
+        appendIfNotNull(stringBuilder, '@', extension);
         char quote = plainValues ? '\'' : '"';
         return String.format("%c%s%c", quote, stringBuilder.toString(), quote);
     }
@@ -59,7 +59,7 @@ public class PsiElementCoordinate {
         return element instanceof GrLiteral && !(element instanceof GrString);
     }
 
-    private String getText(PsiElement element, boolean plainValues) {
+    private String getText(PsiElement element) {
         if (element instanceof GrLiteral) {
             GrLiteral grLiteral = (GrLiteral) element;
             if (grLiteral.getValue() != null) {
@@ -78,10 +78,10 @@ public class PsiElementCoordinate {
         return String.format("${%s}", element.getText());
     }
 
-    private void appendIfNotNull(StringBuilder stringBuilder, char separator, PsiElement nullabeValue, boolean plainValues) {
-        if (nullabeValue != null) {
+    private void appendIfNotNull(StringBuilder stringBuilder, char separator, PsiElement nullableValue) {
+        if (nullableValue != null) {
             stringBuilder.append(separator);
-            stringBuilder.append(getText(nullabeValue, plainValues));
+            stringBuilder.append(getText(nullableValue));
         }
     }
 
@@ -141,7 +141,6 @@ public class PsiElementCoordinate {
         private PsiElement name;
         private PsiElement version = null;
         private PsiElement classifier = null;
-
         private PsiElement extension = null;
 
         private CoordinateBuilder() {
@@ -154,26 +153,22 @@ public class PsiElementCoordinate {
         }
 
         public CoordinateBuilder withGroup(PsiElement group) {
-            this.group = emptyToNull(group);
+            this.group = group;
             return this;
         }
 
-        private PsiElement emptyToNull(PsiElement value) {
-            return value == null ? null : value;
-        }
-
         public CoordinateBuilder withVersion(PsiElement version) {
-            this.version = emptyToNull(version);
+            this.version = version;
             return this;
         }
 
         public CoordinateBuilder withClassifier(PsiElement classifier) {
-            this.classifier = emptyToNull(classifier);
+            this.classifier = classifier;
             return this;
         }
 
         public CoordinateBuilder withExtension(PsiElement extension) {
-            this.extension = emptyToNull(extension);
+            this.extension = extension;
             return this;
         }
 
