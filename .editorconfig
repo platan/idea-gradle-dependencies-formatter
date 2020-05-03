@@ -1,0 +1,13 @@
+root = true
+
+[*.java]
+ij_java_class_count_to_use_import_on_demand = 50
+ij_java_names_count_to_use_import_on_demand = 30
+
+[{*.gant,*.gradle,*.groovy,*.gy}]
+ij_groovy_class_count_to_use_import_on_demand = 50
+ij_groovy_names_count_to_use_import_on_demand = 30
+
+[{*.kt,*.kts}]
+ij_kotlin_name_count_to_use_star_import = 50
+ij_kotlin_name_count_to_use_star_import_for_members = 30

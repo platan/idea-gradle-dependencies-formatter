@@ -1,7 +1,5 @@
 package com.github.platan.idea.dependencies.intentions;
 
-import static com.github.platan.idea.dependencies.sort.DependencyUtil.*;
-
 import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.github.platan.idea.dependencies.gradle.PsiElementCoordinate;
 import com.intellij.openapi.editor.Editor;
@@ -17,6 +15,9 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpres
 import org.jetbrains.plugins.groovy.lang.psi.impl.statements.arguments.GrArgumentListImpl;
 
 import java.util.Map;
+
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMapWithPsiElementValues;
+import static com.github.platan.idea.dependencies.sort.DependencyUtil.toSimpleMap;
 
 public class MapNotationToStringNotationIntention extends Intention {
 
