@@ -2,7 +2,6 @@ package com.github.platan.idea.dependencies.gradle
 
 import static com.github.platan.idea.dependencies.gradle.Coordinate.CoordinateBuilder.aCoordinate
 
-import com.google.common.base.Optional
 import spock.lang.Specification
 import spock.lang.Unroll
 

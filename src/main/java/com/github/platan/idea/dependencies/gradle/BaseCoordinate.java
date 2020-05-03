@@ -1,8 +1,9 @@
 package com.github.platan.idea.dependencies.gradle;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public abstract class BaseCoordinate<T> {
     protected static final String NAME_KEY = "name";
@@ -27,7 +28,7 @@ public abstract class BaseCoordinate<T> {
     }
 
     public Optional<T> getGroup() {
-        return Optional.fromNullable(group);
+        return Optional.ofNullable(group);
     }
 
     public T getName() {
@@ -35,15 +36,15 @@ public abstract class BaseCoordinate<T> {
     }
 
     public Optional<T> getVersion() {
-        return Optional.fromNullable(version);
+        return Optional.ofNullable(version);
     }
 
     public Optional<T> getClassifier() {
-        return Optional.fromNullable(classifier);
+        return Optional.ofNullable(classifier);
     }
 
     public Optional<T> getExtension() {
-        return Optional.fromNullable(extension);
+        return Optional.ofNullable(extension);
     }
 
     @Override
