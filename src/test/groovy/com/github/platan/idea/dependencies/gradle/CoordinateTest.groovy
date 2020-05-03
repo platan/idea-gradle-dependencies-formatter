@@ -107,33 +107,4 @@ class CoordinateTest extends Specification {
         }
     }
 
-    @Unroll
-    def "format #coordinate to string notation #stringNotation"() {
-        expect:
-        coordinate.toStringNotation() == stringNotation
-
-        where:
-        coordinate                                                     || stringNotation
-        aCoordinate('guava').withGroup('com.google.guava').build()     || 'com.google.guava:guava'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withVersion('18.0').build()                           || 'com.google.guava:guava:18.0'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withVersion('18.0').withClassifier('sources').build() || 'com.google.guava:guava:18.0:sources'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withClassifier('sources').build()                     || 'com.google.guava:guava::sources'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withVersion('18.0').withClassifier('sources')
-                .withExtension('jar').build()                          || 'com.google.guava:guava:18.0:sources@jar'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withVersion('18.0').withExtension('jar')
-                .build()                                               || 'com.google.guava:guava:18.0@jar'
-        aCoordinate('guava').withGroup('com.google.guava')
-                .withExtension('jar').build()                          || 'com.google.guava:guava@jar'
-        aCoordinate('guava').build()                                   || ':guava'
-        aCoordinate('guava').withVersion('18.0').build()               || ':guava:18.0'
-        aCoordinate('guava').withClassifier('sources').build()         || ':guava::sources'
-        aCoordinate('guava').withVersion('18.0').withExtension('jar')
-                .build()                                               || ':guava:18.0@jar'
-        aCoordinate('guava').withExtension('jar').build()              || ':guava@jar'
-    }
 }

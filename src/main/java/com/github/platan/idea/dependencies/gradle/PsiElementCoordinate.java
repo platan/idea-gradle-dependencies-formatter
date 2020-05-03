@@ -1,6 +1,5 @@
 package com.github.platan.idea.dependencies.gradle;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
@@ -14,25 +13,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PsiElementCoordinate {
-    private static final String NAME_KEY = "name";
-    private static final String GROUP_KEY = "group";
-    private static final String VERSION_KEY = "version";
-    private static final String CLASSIFIER_KEY = "classifier";
-    private static final String EXT_KEY = "ext";
-    private final PsiElement group;
-    private final PsiElement name;
-    private final PsiElement version;
-    private final PsiElement classifier;
-    private final PsiElement extension;
+public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
 
-    public PsiElementCoordinate(@Nullable PsiElement group, PsiElement name, @Nullable PsiElement version, @Nullable PsiElement classifier,
-                                @Nullable PsiElement extension) {
-        this.group = group;
-        this.name = name;
-        this.version = version;
-        this.classifier = classifier;
-        this.extension = extension;
+    public PsiElementCoordinate(@Nullable PsiElement group, PsiElement name, @Nullable PsiElement version,
+                                @Nullable PsiElement classifier, @Nullable PsiElement extension) {
+        super(group, name, version, classifier, extension);
     }
 
     public String toGrStringNotation() {
@@ -102,38 +87,6 @@ public class PsiElementCoordinate {
             coordinateBuilder.withExtension(map.get(EXT_KEY));
         }
         return coordinateBuilder.build();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(group, name, version, classifier, extension);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final PsiElementCoordinate other = (PsiElementCoordinate) obj;
-        return Objects.equal(this.group, other.group)
-                && Objects.equal(this.name, other.name)
-                && Objects.equal(this.version, other.version)
-                && Objects.equal(this.classifier, other.classifier)
-                && Objects.equal(this.extension, other.extension);
-    }
-
-    @Override
-    public String toString() {
-        return "Coordinate{"
-                + "group=" + group
-                + ", name=" + name
-                + ", version=" + version
-                + ", classifier=" + classifier
-                + ", extension=" + extension
-                + '}';
     }
 
     public static class CoordinateBuilder {

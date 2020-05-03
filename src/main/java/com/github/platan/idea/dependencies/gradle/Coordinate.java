@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class Coordinate implements Comparable<Coordinate> {
+public class Coordinate extends BaseCoordinate<String> implements Comparable<Coordinate> {
     private static final String NAME_KEY = "name";
     private static final String GROUP_KEY = "group";
     private static final String VERSION_KEY = "version";
@@ -33,20 +33,12 @@ public class Coordinate implements Comparable<Coordinate> {
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
     private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<String>();
-    private final String group;
-    private final String name;
-    private final String version;
-    private final String classifier;
-    private final String extension;
 
     public Coordinate(@Nullable String group, String name, @Nullable String version, @Nullable String classifier,
                       @Nullable String extension) {
-        this.group = group;
-        this.name = name;
-        this.version = version;
-        this.classifier = classifier;
-        this.extension = extension;
+        super(group, name, version, classifier, extension);
     }
+
 
     public static Coordinate parse(String stringNotation) {
         Preconditions.checkArgument(!stringNotation.trim().isEmpty(), "Coordinate is empty!");
@@ -88,54 +80,10 @@ public class Coordinate implements Comparable<Coordinate> {
         return list.size() == index + 1;
     }
 
-    public Optional<String> getGroup() {
-        return Optional.fromNullable(group);
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public Optional<String> getVersion() {
-        return Optional.fromNullable(version);
-    }
-
-    public Optional<String> getClassifier() {
-        return Optional.fromNullable(classifier);
-    }
-
-    public Optional<String> getExtension() {
-        return Optional.fromNullable(extension);
-    }
-
     public String toMapNotation(String quote) {
         return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), new MapEntryToStringFunction(quote)));
     }
-
-    public String toStringNotation() {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (group != null) {
-            stringBuilder.append(group);
-        }
-        stringBuilder.append(':');
-        stringBuilder.append(name);
-        appendIfNotNull(stringBuilder, ':', version);
-        if (version == null && classifier != null) {
-            stringBuilder.append(':');
-        }
-        appendIfNotNull(stringBuilder, ':', classifier);
-        appendIfNotNull(stringBuilder, '@', extension);
-        return stringBuilder.toString();
-    }
-
-    private void appendIfNotNull(StringBuilder stringBuilder, char separator, String nullabeValue) {
-        if (nullabeValue != null) {
-            stringBuilder.append(separator);
-            stringBuilder.append(nullabeValue);
-        }
-    }
-
+    
     public static Coordinate fromMap(Map<String, String> map) {
         String name = map.get(NAME_KEY);
         Preconditions.checkArgument(!Strings.isNullOrEmpty(name), "'name' element is required. ");
@@ -173,38 +121,6 @@ public class Coordinate implements Comparable<Coordinate> {
 
     public static boolean isValidMap(Map<String, String> map) {
         return Sets.difference(map.keySet(), ALL_KEYS).isEmpty() && map.keySet().containsAll(REQUIRED_KEYS);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(group, name, version, classifier, extension);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final Coordinate other = (Coordinate) obj;
-        return Objects.equal(this.group, other.group)
-                && Objects.equal(this.name, other.name)
-                && Objects.equal(this.version, other.version)
-                && Objects.equal(this.classifier, other.classifier)
-                && Objects.equal(this.extension, other.extension);
-    }
-
-    @Override
-    public String toString() {
-        return "Coordinate{"
-                + "group=" + group
-                + ", name=" + name
-                + ", version=" + version
-                + ", classifier=" + classifier
-                + ", extension=" + extension
-                + '}';
     }
 
     @Override
