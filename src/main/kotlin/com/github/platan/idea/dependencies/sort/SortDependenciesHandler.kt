@@ -94,7 +94,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
                             return argument.firstChild.text.toLowerCase(Locale.ENGLISH)
                         }
                         if (argument.firstChild is GrReferenceExpression) {
-                            return argument.firstChild.text;
+                            return argument.firstChild.text
                         }
                         if (Coordinate.isValidMap(DependencyUtil.toMap(argument.namedArguments))) {
                             return Coordinate.fromMap(DependencyUtil.toMap(argument.namedArguments))

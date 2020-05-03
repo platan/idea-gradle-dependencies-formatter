@@ -17,8 +17,8 @@ object DependencyUtil {
                 continue
             }
             val key = namedArgument.label!!.text
-            var value = removeQuotesAndUnescape(expression)
-            map.put(key, value)
+            val value = removeQuotesAndUnescape(expression)
+            map[key] = value
         }
         return map
     }
@@ -32,7 +32,7 @@ object DependencyUtil {
                 continue
             }
             val key = namedArgument.label!!.text
-            var value = expression.text
+            val value = expression.text
             map[key] = value
         }
         return map
@@ -47,8 +47,7 @@ object DependencyUtil {
                 continue
             }
             val key = namedArgument.label!!.text
-            var value = expression
-            map[key] = value
+            map[key] = expression
         }
         return map
     }
