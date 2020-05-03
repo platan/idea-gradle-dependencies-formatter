@@ -2,7 +2,6 @@ package com.github.platan.idea.dependencies.gradle;
 
 
 import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -14,14 +13,14 @@ public final class Dependency {
     private final String group;
     private final String name;
     private final String version;
-    private final Optional<String> classifier;
+    private final String classifier;
     private final String configuration;
     private final List<Exclusion> exclusions;
     private final boolean optional;
     private final boolean transitive;
     private final Map<String, String> extraOptions;
 
-    public Dependency(String group, String name, String version, Optional<String> classifier, String configuration, List<Exclusion>
+    public Dependency(String group, String name, String version, String classifier, String configuration, List<Exclusion>
             exclusions, boolean transitive, Map<String, String> extraOptions, boolean optional) {
         this.group = group;
         this.name = name;
@@ -47,7 +46,7 @@ public final class Dependency {
     }
 
     public String getClassifier() {
-        return classifier.orNull();
+        return classifier;
     }
 
     public String getConfiguration() {
@@ -84,7 +83,7 @@ public final class Dependency {
     }
 
     public boolean hasClassifier() {
-        return classifier.isPresent();
+        return classifier != null;
     }
 
     @Override

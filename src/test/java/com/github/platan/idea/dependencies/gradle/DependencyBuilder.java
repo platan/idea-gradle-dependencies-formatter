@@ -1,7 +1,5 @@
 package com.github.platan.idea.dependencies.gradle;
 
-import com.google.common.base.Optional;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +9,7 @@ public class DependencyBuilder {
     private String group;
     private String name;
     private String version;
-    private Optional<String> classifier = Optional.absent();
+    private String classifier = null;
     private String configuration;
     private List<Exclusion> exclusions = new ArrayList<Exclusion>();
     private boolean transitive = true;
@@ -40,7 +38,7 @@ public class DependencyBuilder {
         return this;
     }
 
-    public DependencyBuilder withClassifier(Optional<String> classifier) {
+    public DependencyBuilder withClassifier(String classifier) {
         this.classifier = classifier;
         return this;
     }

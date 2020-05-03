@@ -3,7 +3,6 @@ package com.github.platan.idea.dependencies.maven;
 import com.github.platan.idea.dependencies.gradle.Dependency;
 import com.github.platan.idea.dependencies.gradle.Exclusion;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -43,7 +42,7 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
         Map<String, String> extraOptions = createExtraOptions(mavenDependency);
         boolean optional = isOptional(mavenDependency);
         return new Dependency(mavenDependency.getGroupId(), mavenDependency.getArtifactId(), mavenDependency.getVersion(),
-                Optional.fromNullable(mavenDependency.getClassifier()), getScope(mavenDependency.getScope()), excludes, transitive,
+                mavenDependency.getClassifier(), getScope(mavenDependency.getScope()), excludes, transitive,
                 extraOptions, optional);
     }
 
