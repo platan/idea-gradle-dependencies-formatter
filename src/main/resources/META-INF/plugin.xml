@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.github.platan.gradle-dependencies-formatter</id>
     <name>Gradle Dependencies Formatter</name>
     <version>@plugin.version@</version>
@@ -86,7 +86,7 @@
     </application-components>
     <actions>
         <action class="com.github.platan.idea.dependencies.sort.SortDependenciesAction"
-                id="sortGradleDependenciesAction" text="Sort Gradle dependencies"
+                id="sortGradleDependenciesAction" text="Sort Gradle Dependencies"
                 description="Sort Gradle dependencies">
             <add-to-group group-id="CodeMenu" anchor="last"/>
         </action>
