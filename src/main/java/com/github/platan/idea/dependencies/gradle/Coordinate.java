@@ -4,8 +4,6 @@ import static com.google.common.collect.Iterables.transform;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -23,11 +21,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Coordinate extends BaseCoordinate<String> implements Comparable<Coordinate> {
-    private static final String NAME_KEY = "name";
-    private static final String GROUP_KEY = "group";
-    private static final String VERSION_KEY = "version";
-    private static final String CLASSIFIER_KEY = "classifier";
-    private static final String EXT_KEY = "ext";
     private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
