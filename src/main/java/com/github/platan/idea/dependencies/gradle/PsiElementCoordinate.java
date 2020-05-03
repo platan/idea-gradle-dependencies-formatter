@@ -23,7 +23,6 @@ public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
     public String toGrStringNotation() {
         List<PsiElement> allElements = Stream.of(group, name, version, classifier, extension)
                 .filter(java.util.Objects::nonNull).collect(Collectors.toList());
-        boolean plainValues = allElements.stream().allMatch(this::isPlainValue);
         StringBuilder stringBuilder = new StringBuilder();
         if (group != null) {
             stringBuilder.append(getText(group));
@@ -36,6 +35,7 @@ public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
         }
         appendIfNotNull(stringBuilder, ':', classifier);
         appendIfNotNull(stringBuilder, '@', extension);
+        boolean plainValues = allElements.stream().allMatch(this::isPlainValue);
         char quote = plainValues ? '\'' : '"';
         return String.format("%c%s%c", quote, stringBuilder.toString(), quote);
     }
