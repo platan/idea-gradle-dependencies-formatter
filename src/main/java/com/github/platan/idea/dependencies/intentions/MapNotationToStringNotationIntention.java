@@ -11,8 +11,8 @@ import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
-import org.jetbrains.plugins.groovy.lang.psi.impl.statements.arguments.GrArgumentListImpl;
 
 import java.util.Map;
 
@@ -22,8 +22,11 @@ import static com.github.platan.idea.dependencies.sort.DependencyUtil.toSimpleMa
 public class MapNotationToStringNotationIntention extends Intention {
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) {
-        GrArgumentList argumentList = (GrArgumentList) element.getParent().getParent();
+    protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
+        GrArgumentList argumentList = getGrArgumentList(element);
+        if (argumentList == null) {
+            return;
+        }
         GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
         String stringNotation = toStringNotation(namedArguments);
         for (GrNamedArgument namedArgument : namedArguments) {
@@ -44,19 +47,32 @@ public class MapNotationToStringNotationIntention extends Intention {
     protected PsiElementPredicate getElementPredicate() {
         return new PsiElementPredicate() {
             @Override
-            public boolean satisfiedBy(PsiElement element) {
-                if (element == null || element.getParent() == null || !(element.getParent().getParent() instanceof GrArgumentListImpl)) {
+            public boolean satisfiedBy(@NotNull PsiElement element) {
+                GrArgumentList argumentList = getGrArgumentList(element);
+                if (argumentList == null) {
                     return false;
                 }
-                GrArgumentListImpl parent = (GrArgumentListImpl) element.getParent().getParent();
-                GrNamedArgument[] namedArguments = parent.getNamedArguments();
+                GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
                 if (namedArguments.length == 0) {
                     return false;
                 }
                 Map<String, String> map = toSimpleMap(namedArguments);
                 return Coordinate.isValidMap(map);
             }
+
         };
+    }
+
+    private GrArgumentList getGrArgumentList(@NotNull PsiElement element) {
+        if (element.getParent() == null || element.getParent().getParent() == null) {
+            return null;
+        }
+        if (element.getParent().getParent() instanceof GrArgumentList) {
+            return (GrArgumentList) element.getParent().getParent();
+        } else if (element.getParent().getParent() instanceof GrApplicationStatement) {
+            return (GrArgumentList) element.getParent().getParent().getLastChild();
+        }
+        return null;
     }
 
     @NotNull

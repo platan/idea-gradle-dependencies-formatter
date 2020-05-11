@@ -10,11 +10,6 @@ class MapNotationToStringNotationIntentionUnitTest extends Specification {
     @Subject
     private PsiElementPredicate predicate = new MapNotationToStringNotationIntention().elementPredicate
 
-    def "predicate should handle element = null"() {
-        expect:
-        !predicate.satisfiedBy(null)
-    }
-
     def "predicate should handle element with getParent() = null"() {
         given:
         def element = Stub(PsiElement) {
