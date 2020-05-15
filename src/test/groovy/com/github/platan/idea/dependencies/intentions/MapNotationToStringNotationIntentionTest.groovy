@@ -20,7 +20,7 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
-    void ignore_test_convert_multiple_map_notation() {
+    void test_convert_multiple_map_notation() {
         doTextTest('''dependencies {
     <selection>compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0'
     testCompile group: 'junit', name: 'junit', version: '4.13'</selection>

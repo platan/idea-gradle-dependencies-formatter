@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
@@ -19,7 +18,7 @@ import java.util.Map;
 import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMapWithPsiElementValues;
 import static com.github.platan.idea.dependencies.sort.DependencyUtil.toSimpleMap;
 
-public class MapNotationToStringNotationIntention extends Intention {
+public class MapNotationToStringNotationIntention extends SelectionIntention<GrApplicationStatement> {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
@@ -27,8 +26,14 @@ public class MapNotationToStringNotationIntention extends Intention {
         if (argumentList == null) {
             return;
         }
+        toStringNotation(project, argumentList);
+    }
+
+    private void toStringNotation(@NotNull Project project, GrArgumentList argumentList) {
         GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
-        String stringNotation = toStringNotation(namedArguments);
+        Map<String, PsiElement> map = toMapWithPsiElementValues(namedArguments);
+        PsiElementCoordinate coordinate = PsiElementCoordinate.fromMap(map);
+        String stringNotation = coordinate.toGrStringNotation();
         for (GrNamedArgument namedArgument : namedArguments) {
             namedArgument.delete();
         }
@@ -36,33 +41,29 @@ public class MapNotationToStringNotationIntention extends Intention {
         argumentList.add(expressionFromText);
     }
 
-    private String toStringNotation(GrNamedArgument[] namedArguments) {
-        Map<String, PsiElement> map = toMapWithPsiElementValues(namedArguments);
-        PsiElementCoordinate coordinate = PsiElementCoordinate.fromMap(map);
-        return coordinate.toGrStringNotation();
+    @Override
+    protected Class<GrApplicationStatement> elementTypeToFindInSelection() {
+        return GrApplicationStatement.class;
     }
 
     @NotNull
     @Override
     protected PsiElementPredicate getElementPredicate() {
-        return new PsiElementPredicate() {
-            @Override
-            public boolean satisfiedBy(@NotNull PsiElement element) {
-                GrArgumentList argumentList = getGrArgumentList(element);
-                if (argumentList == null) {
-                    return false;
-                }
-                GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
-                if (namedArguments.length == 0) {
-                    return false;
-                }
-                Map<String, String> map = toSimpleMap(namedArguments);
-                return Coordinate.isValidMap(map);
+        return element -> {
+            GrArgumentList argumentList = getGrArgumentList(element);
+            if (argumentList == null) {
+                return false;
             }
-
+            GrNamedArgument[] namedArguments = argumentList.getNamedArguments();
+            if (namedArguments.length == 0) {
+                return false;
+            }
+            Map<String, String> map = toSimpleMap(namedArguments);
+            return Coordinate.isValidMap(map);
         };
     }
 
+    // switch to GrApplicationStatement
     private GrArgumentList getGrArgumentList(@NotNull PsiElement element) {
         if (element.getParent() == null || element.getParent().getParent() == null) {
             return null;
@@ -71,6 +72,9 @@ public class MapNotationToStringNotationIntention extends Intention {
             return (GrArgumentList) element.getParent().getParent();
         } else if (element.getParent().getParent() instanceof GrApplicationStatement) {
             return (GrArgumentList) element.getParent().getParent().getLastChild();
+        } else if (element instanceof GrApplicationStatement) {
+            // switch to GrApplicationStatement#getArgumentList
+            return (GrArgumentList) element.getLastChild();
         }
         return null;
     }
@@ -86,4 +90,5 @@ public class MapNotationToStringNotationIntention extends Intention {
     public String getFamilyName() {
         return "Convert map notation to string notation";
     }
+
 }
