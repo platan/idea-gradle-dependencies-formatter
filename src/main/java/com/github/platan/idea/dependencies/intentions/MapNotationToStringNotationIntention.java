@@ -16,7 +16,6 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethod
 import java.util.Map;
 
 import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMapWithPsiElementValues;
-import static com.github.platan.idea.dependencies.sort.DependencyUtil.toSimpleMap;
 
 public class MapNotationToStringNotationIntention extends SelectionIntention<GrMethodCall> {
 
@@ -58,8 +57,7 @@ public class MapNotationToStringNotationIntention extends SelectionIntention<GrM
             if (namedArguments.length == 0) {
                 return false;
             }
-            Map<String, String> map = toSimpleMap(namedArguments);
-            // TODO pass keys only
+            Map<String, PsiElement> map = toMapWithPsiElementValues(namedArguments);
             return Coordinate.isValidMap(map);
         };
     }
