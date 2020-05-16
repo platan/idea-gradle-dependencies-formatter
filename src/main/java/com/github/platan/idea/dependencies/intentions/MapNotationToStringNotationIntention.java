@@ -12,6 +12,7 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgument
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall;
 
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class MapNotationToStringNotationIntention extends SelectionIntention<GrA
     }
 
     @Override
+    // TODO test for GrMethodCall
     protected Class<GrApplicationStatement> elementTypeToFindInSelection() {
         return GrApplicationStatement.class;
     }
@@ -59,22 +61,20 @@ public class MapNotationToStringNotationIntention extends SelectionIntention<GrA
                 return false;
             }
             Map<String, String> map = toSimpleMap(namedArguments);
+            // TODO pass keys only
             return Coordinate.isValidMap(map);
         };
     }
 
-    // switch to GrApplicationStatement
     private GrArgumentList getGrArgumentList(@NotNull PsiElement element) {
         if (element.getParent() == null || element.getParent().getParent() == null) {
             return null;
-        }
-        if (element.getParent().getParent() instanceof GrArgumentList) {
-            return (GrArgumentList) element.getParent().getParent();
-        } else if (element.getParent().getParent() instanceof GrApplicationStatement) {
-            return (GrArgumentList) element.getParent().getParent().getLastChild();
-        } else if (element instanceof GrApplicationStatement) {
-            // switch to GrApplicationStatement#getArgumentList
-            return (GrArgumentList) element.getLastChild();
+        } else if (element instanceof GrMethodCall) {
+            return ((GrMethodCall) element).getArgumentList();
+        } else if (element.getParent().getParent() instanceof GrMethodCall) {
+            return ((GrMethodCall) element.getParent().getParent()).getArgumentList();
+        } else if (element.getParent().getParent().getParent() instanceof GrMethodCall) {
+            return ((GrMethodCall) element.getParent().getParent().getParent()).getArgumentList();
         }
         return null;
     }
