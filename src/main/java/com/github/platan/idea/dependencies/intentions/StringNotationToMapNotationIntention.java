@@ -5,10 +5,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 
@@ -25,14 +27,32 @@ public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
-        String quote = getStartQuote(element.getText());
-        String stringNotation = removeQuotes(element.getText());
+        GrMethodCall found = findElement(element, GrMethodCall.class);
+        PsiElement firstArgument = getFirstArgument(found);
+        if (firstArgument == null) {
+            return;
+        }
+
+        String quote = getStartQuote(firstArgument.getText());
+        String stringNotation = removeQuotes(firstArgument.getText());
         String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);
         GrArgumentList argumentList = GroovyPsiElementFactory.getInstance(project).createArgumentListFromText(mapNotation);
         if (isInterpolableString(quote)) {
             replaceGStringMapValuesToString(argumentList, project);
         }
-        element.replace(argumentList);
+        firstArgument.replace(argumentList);
+    }
+
+    @Nullable
+    private PsiElement getFirstArgument(@Nullable GrMethodCall element) {
+        if (element == null) {
+            return null;
+        }
+        // TODO test this case
+        if (element.getArgumentList().getAllArguments().length == 0) {
+            return null;
+        }
+        return element.getArgumentList().getAllArguments()[0];
     }
 
     private boolean isInterpolableString(String quote) {
@@ -54,11 +74,28 @@ public class StringNotationToMapNotationIntention extends Intention {
     @NotNull
     @Override
     protected PsiElementPredicate getElementPredicate() {
-        return element -> element.getParent() instanceof GrArgumentList
-                && element instanceof GrLiteral
-                && !containsError(element)
-                && isStringLiteral((GrLiteral) element)
-                && isStringNotationCoordinate(removeQuotes(element.getText()));
+        return element -> {
+            GrMethodCall found = findElement(element, GrMethodCall.class);
+            PsiElement firstArgument = getFirstArgument(found);
+            if (firstArgument == null) {
+                return false;
+            }
+
+            return firstArgument instanceof GrLiteral
+                    && !containsError(firstArgument)
+                    && isStringLiteral((GrLiteral) firstArgument)
+                    && isStringNotationCoordinate(removeQuotes(firstArgument.getText()));
+        };
+    }
+
+    private <T> T findElement(PsiElement element, Class<T> aClass) {
+        if (aClass.isInstance(element)) {
+            return (T) element;
+        }
+        if (aClass.isInstance(element.getParent().getParent())) {
+            return (T) element.getParent().getParent();
+        }
+        return null;
     }
 
     @NotNull

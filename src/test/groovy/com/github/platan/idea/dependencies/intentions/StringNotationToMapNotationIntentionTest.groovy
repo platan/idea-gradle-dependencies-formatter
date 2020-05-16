@@ -110,4 +110,13 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     void test_convert_interpolated_string_dollar_brackets() {
         doTest()
     }
+
+    void test_convert_dependency_caret_at_configuration() {
+        doTextTest('''dependencies {
+    com<caret>pile 'com.google.guava:guava:18.0'
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
+}''')
+    }
 }
