@@ -83,6 +83,12 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_do_not_find_intention_for_method_call_without_arguments() {
+        doAntiTest('''dependencies {
+    compile(<caret>)
+}''')
+    }
+
     void test_do_not_find_intention_for_variable_with_dependency() {
         doAntiTest('''dependencies {
     def guava = 'com.google.<caret>guava:guava:18.0'

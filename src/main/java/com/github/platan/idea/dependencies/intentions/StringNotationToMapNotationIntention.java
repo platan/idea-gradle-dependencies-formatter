@@ -48,7 +48,6 @@ public class StringNotationToMapNotationIntention extends Intention {
         if (element == null) {
             return null;
         }
-        // TODO test this case
         if (element.getArgumentList().getAllArguments().length == 0) {
             return null;
         }
