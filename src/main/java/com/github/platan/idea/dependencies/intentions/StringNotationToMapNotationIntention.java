@@ -90,10 +90,10 @@ public class StringNotationToMapNotationIntention extends Intention {
 
     private <T> T findElement(PsiElement element, Class<T> aClass) {
         if (aClass.isInstance(element)) {
-            return (T) element;
+            return aClass.cast(element);
         }
         if (aClass.isInstance(element.getParent().getParent())) {
-            return (T) element.getParent().getParent();
+            return aClass.cast(element.getParent().getParent());
         }
         return null;
     }
