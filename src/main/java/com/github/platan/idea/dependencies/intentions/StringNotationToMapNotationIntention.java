@@ -1,14 +1,5 @@
 package com.github.platan.idea.dependencies.intentions;
 
-import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
-import static org.jetbrains.plugins.groovy.lang.psi.util.ErrorUtil.containsError;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.isStringLiteral;
-import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
-
 import com.github.platan.idea.dependencies.gradle.Coordinate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -21,10 +12,19 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgument
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
 
+import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
+import static org.jetbrains.plugins.groovy.lang.psi.util.ErrorUtil.containsError;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.TRIPLE_DOUBLE_QUOTES;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.escapeAndUnescapeSymbols;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQuote;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.isStringLiteral;
+import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
+
 public class StringNotationToMapNotationIntention extends Intention {
 
     @Override
-    protected void processIntention(@NotNull PsiElement element, Project project, Editor editor) {
+    protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
         String quote = getStartQuote(element.getText());
         String stringNotation = removeQuotes(element.getText());
         String mapNotation = Coordinate.parse(stringNotation).toMapNotation(quote);
@@ -54,16 +54,11 @@ public class StringNotationToMapNotationIntention extends Intention {
     @NotNull
     @Override
     protected PsiElementPredicate getElementPredicate() {
-        return new PsiElementPredicate() {
-            @Override
-            public boolean satisfiedBy(PsiElement element) {
-                return element.getParent() instanceof GrArgumentList
-                        && element instanceof GrLiteral
-                        && !containsError(element)
-                        && isStringLiteral((GrLiteral) element)
-                        && isStringNotationCoordinate(removeQuotes(element.getText()));
-            }
-        };
+        return element -> element.getParent() instanceof GrArgumentList
+                && element instanceof GrLiteral
+                && !containsError(element)
+                && isStringLiteral((GrLiteral) element)
+                && isStringNotationCoordinate(removeQuotes(element.getText()));
     }
 
     @NotNull
