@@ -22,11 +22,15 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 
     void test_convert_multiple_map_notation() {
         doTextTest('''dependencies {
-    <selection>compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0'
+    <selection>compile (group: '<caret>com.google.guava', name: 'guava', version: '18.0') {
+        transitive = false
+    }
     testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
 }''',
                 '''dependencies {
-    compile 'com.google.guava:guava:18.0'
+    compile ('com.google.guava:guava:18.0') {
+        transitive = false
+    }
     testCompile 'junit:junit:4.13'
 }''')
     }

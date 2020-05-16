@@ -10,7 +10,6 @@ import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrApplicationStatement;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrExpression;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall;
 
@@ -19,7 +18,7 @@ import java.util.Map;
 import static com.github.platan.idea.dependencies.sort.DependencyUtil.toMapWithPsiElementValues;
 import static com.github.platan.idea.dependencies.sort.DependencyUtil.toSimpleMap;
 
-public class MapNotationToStringNotationIntention extends SelectionIntention<GrApplicationStatement> {
+public class MapNotationToStringNotationIntention extends SelectionIntention<GrMethodCall> {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
@@ -43,9 +42,8 @@ public class MapNotationToStringNotationIntention extends SelectionIntention<GrA
     }
 
     @Override
-    // TODO test for GrMethodCall
-    protected Class<GrApplicationStatement> elementTypeToFindInSelection() {
-        return GrApplicationStatement.class;
+    protected Class<GrMethodCall> elementTypeToFindInSelection() {
+        return GrMethodCall.class;
     }
 
     @NotNull
