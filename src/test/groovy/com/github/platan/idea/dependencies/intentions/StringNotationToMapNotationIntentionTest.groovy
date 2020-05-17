@@ -125,4 +125,19 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
 }''')
     }
+
+    void test_convert_multiple_map_notation() {
+        doTextTest('''dependencies {
+    <selection>com<caret>pile ('com.google.guava:guava:18.0') {
+        transitive = false
+    }
+    testCompile 'junit:junit:4.13'</selection>
+}''',
+                '''dependencies {
+    compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
+        transitive = false
+    }
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+}''')
+    }
 }

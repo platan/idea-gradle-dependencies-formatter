@@ -6,7 +6,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
@@ -23,7 +22,7 @@ import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.getStartQu
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.isStringLiteral;
 import static org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil.removeQuotes;
 
-public class StringNotationToMapNotationIntention extends Intention {
+public class StringNotationToMapNotationIntention extends SelectionIntention<GrMethodCall> {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, @NotNull Project project, Editor editor) {
@@ -107,5 +106,10 @@ public class StringNotationToMapNotationIntention extends Intention {
     @Override
     public String getFamilyName() {
         return "Convert string notation to map notation";
+    }
+
+    @Override
+    protected Class<GrMethodCall> elementTypeToFindInSelection() {
+        return GrMethodCall.class;
     }
 }
