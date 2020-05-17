@@ -40,8 +40,11 @@ abstract public class SelectionIntention<T extends PsiElement> extends Intention
             int endOffset = selectionModel.getSelectionEnd();
             PsiElement startingElement = file.getViewProvider().findElementAt(startOffset, file.getLanguage());
             PsiElement endingElement = file.getViewProvider().findElementAt(endOffset - 1, file.getLanguage());
-            // handle case startingElement == endingElement
             if (startingElement != null && endingElement != null) {
+                if (startingElement == endingElement) {
+                    // allow org.jetbrains.plugins.groovy.intentions.base.Intention#isAvailable to handle this case
+                    return Collections.emptySet();
+                }
                 PsiElement commonParent = PsiTreeUtil.findCommonParent(startingElement, endingElement);
                 if (commonParent != null) {
                     return PsiTreeUtil.findChildrenOfType(commonParent, type);

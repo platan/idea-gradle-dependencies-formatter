@@ -128,7 +128,7 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 
     void test_convert_multiple_map_notation() {
         doTextTest('''dependencies {
-    <selection>com<caret>pile ('com.google.guava:guava:18.0') {
+    <selection><caret>compile ('com.google.guava:guava:18.0') {
         transitive = false
     }
     testCompile 'junit:junit:4.13'</selection>
@@ -137,6 +137,24 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
         transitive = false
     }
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+}''')
+    }
+
+    void test_convert_selection_with_one_dependency() {
+        doTextTest('''dependencies {
+    <selection><caret>testCompile 'junit:junit:4.13'</selection>
+}''',
+                '''dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+}''')
+    }
+
+    void test_convert_selection_with_one_dependency_configuration_selected() {
+        doTextTest('''dependencies {
+    <selection><caret>t</selection>estCompile 'junit:junit:4.13'
+}''',
+                '''dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.13'
 }''')
     }
