@@ -1,6 +1,7 @@
 package com.github.platan.idea.dependencies.intentions
 
 class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
+    private Random random = new Random()
 
     @Override
     protected String getTestDataPath() {
@@ -157,5 +158,30 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
                 '''dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.13'
 }''')
+    }
+
+    void test_do_not_find_intention_with_caret_in_build_gradle_without_dependencies() {
+        def buildGradleContent = getClass().getResource('/intentions/build_no_dependencies.gradle').text
+        for (int i = 0; i < buildGradleContent.length(); i++) {
+            def content = new StringBuilder(buildGradleContent)
+            content.insert(i, '<caret>')
+            doAntiTest(content.toString())
+        }
+    }
+
+    void test_do_not_find_intention_with_selection_in_build_gradle_without_dependencies() {
+        def buildGradleContent = getClass().getResource('/intentions/build_no_dependencies.gradle').text
+        def contentLength = buildGradleContent.length()
+        def threshold = 10 * (1 / (contentLength * contentLength))
+        for (int i = 0; i < contentLength; i++) {
+            for (int j = i; j < contentLength; j++) {
+                if (random.nextDouble() <= threshold) {
+                    def content = new StringBuilder(buildGradleContent)
+                    content.insert(j, '</selection>')
+                    content.insert(i, '<selection><caret>')
+                    doAntiTest(content.toString())
+                }
+            }
+        }
     }
 }
