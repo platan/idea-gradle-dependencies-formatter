@@ -6,6 +6,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.PsiTreeUtil.getChildrenOfTypeAsList
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.blocks.GrClosableBlock
@@ -31,7 +32,7 @@ class SortDependenciesHandler : CodeInsightActionHandler {
     }
 
     private fun findDependenciesClosure(psiFile: PsiFile): GrClosableBlock? {
-        val methodCalls = getChildrenOfTypeAsList(psiFile, GrMethodCall::class.java)
+        val methodCalls = PsiTreeUtil.findChildrenOfType(psiFile, GrMethodCall::class.java)
         val dependenciesBlock = methodCalls.find { it.invokedExpression.text == "dependencies" } ?: return null
         return dependenciesBlock.closureArguments.first()
     }
