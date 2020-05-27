@@ -22,19 +22,19 @@ class SortDependenciesHandler : CodeInsightActionHandler {
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile) {
         WriteCommandAction.writeCommandAction(project, file).run<Exception> {
-            val dependenciesClosure = findDependenciesClosure(file)
-            if (dependenciesClosure != null) {
-                val factory = GroovyPsiElementFactory.getInstance(project)
+            val dependenciesClosures = findDependenciesClosures(file)
+            val factory = GroovyPsiElementFactory.getInstance(project)
+            dependenciesClosures.forEach { dependenciesClosure ->
                 sortDependencies(dependenciesClosure, factory)
                 removeEmptyLines(dependenciesClosure, factory)
             }
         }
     }
 
-    private fun findDependenciesClosure(psiFile: PsiFile): GrClosableBlock? {
-        val methodCalls = PsiTreeUtil.findChildrenOfType(psiFile, GrMethodCall::class.java)
-        val dependenciesBlock = methodCalls.find { it.invokedExpression.text == "dependencies" } ?: return null
-        return dependenciesBlock.closureArguments.first()
+    private fun findDependenciesClosures(psiFile: PsiFile): List<GrClosableBlock> {
+        return PsiTreeUtil.findChildrenOfType(psiFile, GrMethodCall::class.java)
+                .filter { it.invokedExpression.text == "dependencies" }
+                .map { it.closureArguments.first() }
     }
 
     private fun sortDependencies(dependenciesClosure: GrClosableBlock, factory: GroovyPsiElementFactory) {
