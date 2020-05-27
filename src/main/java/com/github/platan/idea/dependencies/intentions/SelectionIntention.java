@@ -13,7 +13,7 @@ import org.jetbrains.plugins.groovy.intentions.base.Intention;
 import java.util.Collection;
 import java.util.Collections;
 
-abstract public class SelectionIntention<T extends PsiElement> extends Intention {
+public abstract class SelectionIntention<T extends PsiElement> extends Intention {
 
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
@@ -25,7 +25,7 @@ abstract public class SelectionIntention<T extends PsiElement> extends Intention
         }
     }
 
-    abstract protected Class<T> elementTypeToFindInSelection();
+    protected abstract Class<T> elementTypeToFindInSelection();
 
     protected boolean isAvailableForSelection(Project project, Editor editor, PsiFile file) {
         Collection<T> children = getElements(editor, file, elementTypeToFindInSelection());
