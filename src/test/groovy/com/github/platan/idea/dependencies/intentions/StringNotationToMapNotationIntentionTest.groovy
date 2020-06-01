@@ -74,6 +74,17 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_map_notation_and_map_notation() {
+        doTextTest('''dependencies {
+    <selection>testCompile 'junit:junit:4.1'
+    testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
+}''',
+                '''dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.1'
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+}''')
+    }
+
     void test_convert_interpolated_string() {
         doTest()
     }

@@ -12,6 +12,7 @@ import org.jetbrains.plugins.groovy.intentions.base.Intention;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 public abstract class SelectionIntention<T extends PsiElement> extends Intention {
 
@@ -28,8 +29,7 @@ public abstract class SelectionIntention<T extends PsiElement> extends Intention
     protected abstract Class<T> elementTypeToFindInSelection();
 
     protected boolean isAvailableForSelection(Project project, Editor editor, PsiFile file) {
-        Collection<T> children = getElements(editor, file, elementTypeToFindInSelection());
-        return children.stream().anyMatch(element -> getElementPredicate().satisfiedBy(element));
+        return !getElements(editor, file, elementTypeToFindInSelection()).isEmpty();
     }
 
     @NotNull
@@ -47,7 +47,9 @@ public abstract class SelectionIntention<T extends PsiElement> extends Intention
                 }
                 PsiElement commonParent = PsiTreeUtil.findCommonParent(startingElement, endingElement);
                 if (commonParent != null) {
-                    return PsiTreeUtil.findChildrenOfType(commonParent, type);
+                    return PsiTreeUtil.findChildrenOfType(commonParent, type).stream()
+                            .filter(element -> getElementPredicate().satisfiedBy(element))
+                            .collect(Collectors.toList());
                 }
             }
         }
