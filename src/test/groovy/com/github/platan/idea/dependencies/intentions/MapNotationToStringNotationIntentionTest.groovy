@@ -35,6 +35,32 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_from_selection_only() {
+        doTextTest('''dependencies {
+    <selection><caret>compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+    testCompile 'junit:junit:4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''')
+    }
+
+    void test_convert_partially_selected_elements() {
+        doTextTest('''dependencies {
+    com<selection><caret>pile group: 'com.google.guava', name: 'guava', version: '18.0'
+    testCompile group: 'junit', name: 'junit', </selection>version: '4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+    testCompile 'junit:junit:4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''')
+    }
+
     void test_convert_map_notation_and_string_notation() {
         doTextTest('''dependencies {
     <selection><caret>testCompile 'junit:junit:4.12'

@@ -49,11 +49,20 @@ public abstract class SelectionIntention<T extends PsiElement> extends Intention
                 if (commonParent != null) {
                     return PsiTreeUtil.findChildrenOfType(commonParent, type).stream()
                             .filter(element -> getElementPredicate().satisfiedBy(element))
+                            .filter(element -> {
+                                int start = element.getTextOffset();
+                                int end = element.getTextOffset() + element.getTextLength();
+                                return isBetween(start, startOffset, endOffset) || isBetween(end, startOffset, endOffset);
+                            })
                             .collect(Collectors.toList());
                 }
             }
         }
         return Collections.emptySet();
+    }
+
+    private boolean isBetween(int position, int start, int end) {
+        return position >= start && position <= end;
     }
 
     @Override
