@@ -63,12 +63,12 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 
     void test_convert_string_notation_with_single_quote_and_brackets_and_closure() {
         doTextTest('''dependencies {
-    compile ('com.google.<caret>guava:guava:18.0') {
+    compile('com.google.<caret>guava:guava:18.0') {
         transitive = false
     }
 }''',
                 '''dependencies {
-    compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
+    compile(group: 'com.google.guava', name: 'guava', version: '18.0') {
         transitive = false
     }
 }''')
@@ -140,13 +140,13 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 
     void test_convert_multiple_map_notation() {
         doTextTest('''dependencies {
-    <selection><caret>compile ('com.google.guava:guava:18.0') {
+    <selection><caret>compile('com.google.guava:guava:18.0') {
         transitive = false
     }
     testCompile 'junit:junit:4.13'</selection>
 }''',
                 '''dependencies {
-    compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
+    compile(group: 'com.google.guava', name: 'guava', version: '18.0') {
         transitive = false
     }
     testCompile group: 'junit', name: 'junit', version: '4.13'

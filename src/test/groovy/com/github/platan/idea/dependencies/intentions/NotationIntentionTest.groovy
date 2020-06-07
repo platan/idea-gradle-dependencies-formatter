@@ -11,7 +11,7 @@ class NotationIntentionTest extends LightCodeInsightFixtureTestCase {
         Registry.get("ide.check.structural.psi.text.consistency.in.tests").setValue(false)
     }
 
-    void wait_for_implementation__test_convert_to_map_and_to_string_again() {
+    void test_convert_to_map_and_to_string_again() {
         myFixture.configureByText("build.groovy", '''dependencies {
     compile 'com.google.<caret>guava:guava:18.0'
 }''')

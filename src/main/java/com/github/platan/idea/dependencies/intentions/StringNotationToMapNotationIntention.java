@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.groovy.intentions.base.PsiElementPredicate;
 import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrArgumentList;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArgument;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
@@ -39,7 +40,10 @@ public class StringNotationToMapNotationIntention extends SelectionIntention<GrM
         if (isInterpolableString(quote)) {
             replaceGStringMapValuesToString(argumentList, project);
         }
-        firstArgument.replace(argumentList);
+        for (GrNamedArgument namedArgument : argumentList.getNamedArguments()) {
+            found.getArgumentList().addNamedArgument(namedArgument);
+        }
+        firstArgument.delete();
     }
 
     @Nullable
