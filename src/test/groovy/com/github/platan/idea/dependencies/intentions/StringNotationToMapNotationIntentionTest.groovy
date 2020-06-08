@@ -162,6 +162,27 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_all_selected_elements() {
+        doTextTest('''<selection><caret>
+build {
+    dependencies {
+        compile 'com.google.guava:guava:18.0'
+    }
+}
+dependencies {
+    testCompile 'junit:junit:4.13'
+}</selection>''',
+                '''
+build {
+    dependencies {
+        compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    }
+}
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+}''')
+    }
+
     void test_convert_selection_with_one_dependency_configuration_selected() {
         doTextTest('''dependencies {
     <selection><caret>t</selection>estCompile 'junit:junit:4.13'
