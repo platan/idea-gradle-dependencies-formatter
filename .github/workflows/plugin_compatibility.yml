@@ -11,11 +11,14 @@ jobs:
         java-version: 8
     - name: Build the plugin using Gradle
       run: ./gradlew buildPlugin
-    - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.1
+    - uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1.0.3
       with:
-        plugin: '/home/runner/work/idea-gradle-dependencies-formatter/idea-gradle-dependencies-formatter/build/distributions/idea-gradle-dependencies-formatter-*'
-        versions: |
-          2019.1.4
-          2019.3.4
-          2020.1
-          LATEST-EAP-SNAPSHOT
+        ide-versions: |
+          ideaIC:2019.1.4
+          ideaIU:2019.1.4
+          ideaIC:2019.3.4
+          ideaIU:2019.3.4
+          ideaIC:2020.1
+          ideaIU:2020.1
+          ideaIC:LATEST-EAP-SNAPSHOT
+          ideaIU:LATEST-EAP-SNAPSHOT
