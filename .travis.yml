@@ -5,15 +5,15 @@ language: java
 matrix:
   include:
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.1.4" COVERALLS=true SONARQUBE=true
+      env: IDEA_VERSION="2019.3.5" COVERALLS=true SONARQUBE=true
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.2.4"
+      env: IDEA_VERSION="2019.3.5"
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.3.4"
+      env: IDEA_VERSION="2020.1.4"
     - jdk: openjdk8
-      env: IDEA_VERSION="2020.1"
+      env: IDEA_VERSION="2020.2.3"
     - jdk: openjdk11
-      env: IDEA_VERSION="2020.1"
+      env: IDEA_VERSION="2020.2.3"
     - jdk: openjdk8
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: openjdk11
