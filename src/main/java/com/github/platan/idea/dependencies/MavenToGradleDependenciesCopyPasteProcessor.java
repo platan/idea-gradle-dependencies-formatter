@@ -3,6 +3,9 @@ package com.github.platan.idea.dependencies;
 import static com.github.platan.idea.dependencies.gradle.GradleFileUtil.isGradleFile;
 import static com.github.platan.idea.dependencies.gradle.GradleFileUtil.isSettingGradle;
 
+import com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializerImpl;
+import com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializerImpl;
+import com.github.platan.idea.dependencies.maven.MavenToGradleMapperImpl;
 import com.intellij.codeInsight.editorActions.CopyPastePreProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RawText;
@@ -14,6 +17,10 @@ import org.jetbrains.annotations.Nullable;
 public class MavenToGradleDependenciesCopyPasteProcessor implements CopyPastePreProcessor {
 
     private final MavenToGradleConverter mavenToGradleConverter;
+
+    public MavenToGradleDependenciesCopyPasteProcessor() {
+        this(new MavenToGradleConverter(new MavenDependenciesDeserializerImpl(), new GradleDependenciesSerializerImpl(), new MavenToGradleMapperImpl()));
+    }
 
     public MavenToGradleDependenciesCopyPasteProcessor(MavenToGradleConverter mavenToGradleConverter) {
         this.mavenToGradleConverter = mavenToGradleConverter;
