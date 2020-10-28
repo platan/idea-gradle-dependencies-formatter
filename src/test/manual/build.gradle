@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    dependencies {
+        runtimeOnly 'org.springframework:spring-core:2.5',
+                'org.springframework:spring-aop:2.5'
+        jasper 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'
+    }
+}
+
+dependencies {
+    runtimeOnly group: 'org.hibernate', name: 'hibernate', version: '3.0.5', transitive: true
+    compileClasspath.extendsFrom(someConfiguration)
+    runtimeOnly(
+            [group: 'org.springframework', name: 'spring-core', version: '2.5'],
+            [group: 'org.springframework', name: 'spring-aop', version: '2.5']
+    )
+    jasper 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'
+    runtimeOnly('org.hibernate:hibernate:3.0.5') {
+        transitive = true
+    }
+    smokeTest 'org.apache.httpcomponents:httpclient:4.5.5'
+    runtimeOnly(group: 'org.hibernate', name: 'hibernate', version: hibernateVersion) {
+        transitive = true
+    }
+    runtimeOnly 'org.springframework:spring-core:2.5',
+            'org.springframework:spring-aop:2.5'
+    someConfiguration project(":lib")
+    testImplementation 'junit:junit:4.13'
+}
