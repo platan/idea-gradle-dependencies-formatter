@@ -35,6 +35,17 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void not_supported_test_convert_transitive_dependency() {
+        doTextTest('''dependencies {
+    runtimeOnly group: 'org.hibernate', name: 'hibernate', version: '3.0.5', transitive: true
+}''',
+                '''dependencies {
+    runtimeOnly ('org.hibernate:hibernate:3.0.5') {
+        transitive = true
+    }
+}''')
+    }
+
     void test_convert_from_selection_only() {
         doTextTest('''dependencies {
     <selection><caret>compile group: 'com.google.guava', name: 'guava', version: '18.0'
