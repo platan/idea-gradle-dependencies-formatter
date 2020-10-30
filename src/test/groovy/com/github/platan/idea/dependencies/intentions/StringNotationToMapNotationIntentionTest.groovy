@@ -113,6 +113,31 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_do_not_find_intention_for_project_dependency() {
+        doAntiTest('''dependencies {
+    compile project(":l<caret>ib")
+}''')
+    }
+
+    void test_do_not_find_intention_for_project_dependency_with_brackets() {
+        doAntiTest('''dependencies {
+    compile(project(":l<caret>ib"))
+}''')
+    }
+
+    void test_do_not_find_intention_for_project_dependency_plus_closure() {
+        doAntiTest('''dependencies {
+    compile(project(":l<caret>ib")) {
+    }
+}''')
+    }
+
+    void test_do_not_find_intention_for_dependency_with_project_configuration() {
+        doAntiTest('''dependencies {
+    project("com.google.<caret>guava:guava:18.0'")
+}''')
+    }
+
     void test_convert_gstring_with_escaped_character() {
         doTest()
     }

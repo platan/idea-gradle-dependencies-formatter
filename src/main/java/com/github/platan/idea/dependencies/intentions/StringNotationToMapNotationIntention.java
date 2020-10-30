@@ -84,6 +84,7 @@ public class StringNotationToMapNotationIntention extends SelectionIntention<GrM
             }
 
             return firstArgument instanceof GrLiteral
+                    && !found.getInvokedExpression().getText().equals("project")
                     && !containsError(firstArgument)
                     && isStringLiteral((GrLiteral) firstArgument)
                     && isStringNotationCoordinate(removeQuotes(firstArgument.getText()));
