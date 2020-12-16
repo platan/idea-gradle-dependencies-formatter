@@ -168,7 +168,34 @@ class StringNotationToMapNotationIntentionTest extends IntentionTestBase {
     com<caret>pile "com.google.guava:guava:$guavaVersion"
 }''',
                 '''dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
+    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+}''')
+    }
+
+    void test_convert_dependency_with_object_variable() {
+        doTextTest('''dependencies {
+    com<caret>pile "com.google.guava:guava:$guava.version"
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: guava.version
+}''')
+    }
+
+    void test_convert_dependency_with_variable_in_braces() {
+        doTextTest('''dependencies {
+    com<caret>pile "com.google.guava:guava:${guavaVersion}"
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
+}''')
+    }
+
+    void test_convert_dependency_with_method_invocation() {
+        doTextTest('''dependencies {
+    com<caret>pile "com.google.guava:guava:${guavaVersion()}"
+}''',
+                '''dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: "${guavaVersion()}"
 }''')
     }
 

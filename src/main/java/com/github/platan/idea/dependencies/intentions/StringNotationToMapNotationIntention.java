@@ -13,6 +13,7 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.arguments.GrNamedArg
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrMethodCall;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrString;
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrStringInjection;
 
 import static com.github.platan.idea.dependencies.gradle.Coordinate.isStringNotationCoordinate;
 import static org.jetbrains.plugins.groovy.lang.psi.util.ErrorUtil.containsError;
@@ -64,6 +65,14 @@ public class StringNotationToMapNotationIntention extends SelectionIntention<GrM
     private void replaceGStringMapValuesToString(GrArgumentList map, Project project) {
         for (PsiElement psiElement : map.getChildren()) {
             PsiElement lastChild = psiElement.getLastChild();
+            if (lastChild instanceof GrString && lastChild.getChildren().length == 1
+                    && lastChild.getChildren()[0] instanceof GrStringInjection) {
+                GrStringInjection child = (GrStringInjection) lastChild.getChildren()[0];
+                if (child.getClosableBlock() == null && child.getExpression() != null) {
+                    String text = child.getExpression().getText();
+                    lastChild.replace(GroovyPsiElementFactory.getInstance(project).createExpressionFromText(text));
+                }
+            }
             if (lastChild instanceof GrLiteral && !(lastChild instanceof GrString)) {
                 String stringWithoutQuotes = removeQuotes(lastChild.getText());
                 String unescaped = escapeAndUnescapeSymbols(stringWithoutQuotes, "", "\"$", new StringBuilder());
