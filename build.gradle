@@ -20,7 +20,7 @@ plugins {
     id 'me.champeau.gradle.jmh' version '0.5.2'
     id 'org.jetbrains.intellij' version '0.6.5'
     id 'net.saliman.cobertura' version '3.0.0'
-    id 'com.github.ben-manes.versions' version '0.33.0'
+    id 'com.github.ben-manes.versions' version '0.36.0'
 }
 
 apply plugin: 'kotlin'
