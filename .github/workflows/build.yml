@@ -9,15 +9,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-  strategy:
-    matrix:
-      include:
-        - java: 8
-          idea: 2020.2.3
-        - java: 11
-          idea: 2020.2.3
-
+    strategy:
+      matrix:
+        include:
+          - java: 8
+            idea: 2020.2.3
+          - java: 11
+            idea: 2020.2.3
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
