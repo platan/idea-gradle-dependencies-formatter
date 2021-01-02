@@ -89,11 +89,6 @@ dependencies {
     // workaround from https://baijifeilong.github.io/2018/06/27/kotlin/
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
-    compile 'javax.xml.bind:jaxb-api:2.3.1'
-    compile 'com.sun.xml.bind:jaxb-core:2.3.0.1'
-    compile 'com.sun.xml.bind:jaxb-impl:2.3.3'
-    compile 'javax.activation:activation:1.1.1'
 }
 
 configurations {
@@ -124,18 +119,4 @@ test {
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
-}
-
-if (JavaVersion.current().isJava10()) {
-    compileJava {
-        options.compilerArgs += ["--add-modules", "java.xml.bind"]
-    }
-
-    compileTestJava {
-        options.compilerArgs += ["--add-modules", "java.xml.bind"]
-    }
-
-    test {
-        jvmArgs += ["--add-modules", "java.xml.bind"]
-    }
 }
