@@ -112,7 +112,7 @@ public class Coordinate extends BaseCoordinate<String> implements Comparable<Coo
         }
     }
 
-    public static boolean isValidMap(Map<String, String> map) {
+    public static boolean isValidMap(Map<String, ?> map) {
         return Sets.difference(map.keySet(), ALL_KEYS).isEmpty() && map.keySet().containsAll(REQUIRED_KEYS);
     }
 

@@ -81,6 +81,26 @@ class SortDependenciesTest extends LightCodeInsightFixtureTestCase {
         doTest()
     }
 
+    void test__build_dependencies_simple() {
+        doTest()
+    }
+
+    void test__allprojects_dependencies_simple() {
+        doTest()
+    }
+
+    void test__many_dependencies_blocks() {
+        doTest()
+    }
+
+    void test__unknown_parent_block() {
+        doTest()
+    }
+
+    void test__do_not_sort_dependencies_in_block_not_named_dependencies() {
+        doTest()
+    }
+
     private doTest() {
         def fileName = getTestName(false).replaceFirst('__', '')
         myFixture.configureByFile("${fileName}.groovy")

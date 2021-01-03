@@ -35,7 +35,6 @@ sonarqube {
 
 
 group 'com.github.platan'
-project.version = '0.5.4-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -52,6 +51,11 @@ intellij {
     downloadSources = false
     updateSinceUntilBuild = false
     instrumentCode = false
+}
+
+publishPlugin {
+    token = project.hasProperty('publishToken') ? project['publishToken'] : null
+    channels = project.hasProperty('publishChannels') ? project['publishChannels'] : ['developer']
 }
 
 import com.vdurmont.semver4j.Semver
@@ -80,7 +84,6 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.intellij:annotations:12.0'
     testCompile("org.spockframework:spock-core:1.3-groovy-2.4") {
         exclude module: 'groovy-all'
     }

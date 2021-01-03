@@ -9,10 +9,8 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.util.Producer;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.groovy.GroovyFileType;
 
 import java.awt.Component;
@@ -64,8 +62,7 @@ public class MavenToGradleDependenciesCopyPasteProcessorTest extends LightPlatfo
         myFixture.checkResult("compile 'org.spockframework:spock-core:1.0-groovy-2.4'");
     }
 
-    // TODO turn me on
-    public void skip_test__do_not_convert_maven_to_gradle_while_pasting_to_non_gradle_file() {
+    public void test__do_not_convert_maven_to_gradle_while_pasting_to_non_gradle_file() {
         myFixture.configureByText("Test.groovy", "<caret>");
         String toPaste = "<dependency>\n"
                 + "\t<groupId>org.spockframework</groupId>\n"
@@ -83,22 +80,14 @@ public class MavenToGradleDependenciesCopyPasteProcessorTest extends LightPlatfo
     }
 
     private void runPasteAction(final String toPaste) {
-        final Producer<Transferable> producer = new Producer<Transferable>() {
-            @Nullable
-            @Override
-            public Transferable produce() {
-                return new StringSelection(toPaste);
-            }
-        };
+        final Producer<Transferable> producer = () -> new StringSelection(toPaste);
         EditorActionManager actionManager = EditorActionManager.getInstance();
         EditorActionHandler pasteActionHandler = actionManager.getActionHandler(ACTION_EDITOR_PASTE);
         final PasteHandler pasteHandler = new PasteHandler(pasteActionHandler);
-        new WriteCommandAction.Simple(getProject(), new PsiFile[0]) {
-            protected void run() throws Throwable {
+        WriteCommandAction.runWriteCommandAction(getProject(), () -> {
                 Component component = myFixture.getEditor().getComponent();
                 DataContext dataContext = DataManager.getInstance().getDataContext(component);
                 pasteHandler.execute(myFixture.getEditor(), dataContext, producer);
-            }
-        }.execute();
+        });
     }
 }

@@ -1,3 +1,3 @@
 dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: "$guavaVersion"
+    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
 }

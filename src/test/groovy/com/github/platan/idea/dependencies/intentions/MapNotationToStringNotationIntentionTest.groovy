@@ -20,12 +20,84 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
+    void test_convert_multiple_map_notation() {
+        doTextTest('''dependencies {
+    <selection><caret>compile (group: 'com.google.guava', name: 'guava', version: '18.0') {
+        transitive = false
+    }
+    testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
+}''',
+                '''dependencies {
+    compile ('com.google.guava:guava:18.0') {
+        transitive = false
+    }
+    testCompile 'junit:junit:4.13'
+}''')
+    }
+
+    void not_supported_test_convert_transitive_dependency() {
+        doTextTest('''dependencies {
+    runtimeOnly group: 'org.hibernate', name: 'hibernate', version: '3.0.5', transitive: true
+}''',
+                '''dependencies {
+    runtimeOnly ('org.hibernate:hibernate:3.0.5') {
+        transitive = true
+    }
+}''')
+    }
+
+    void test_convert_from_selection_only() {
+        doTextTest('''dependencies {
+    <selection><caret>compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+    testCompile 'junit:junit:4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''')
+    }
+
+    void test_convert_partially_selected_elements() {
+        doTextTest('''dependencies {
+    com<selection><caret>pile group: 'com.google.guava', name: 'guava', version: '18.0'
+    testCompile group: 'junit', name: 'junit', </selection>version: '4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+    testCompile 'junit:junit:4.13'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5'
+}''')
+    }
+
+    void test_convert_map_notation_and_string_notation() {
+        doTextTest('''dependencies {
+    <selection><caret>testCompile 'junit:junit:4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.13'</selection>
+}''',
+                '''dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13'
+}''')
+    }
+
     void test_convert_optional_dependency() {
         doTextTest('''dependencies {
     compile group:<caret> 'com.google.guava', name: 'guava', version: '18.0', optional
 }''',
                 '''dependencies {
     compile 'com.google.guava:guava:18.0', optional
+}''')
+    }
+
+    void test_convert_dependency_caret_at_configuration() {
+        doTextTest('''dependencies {
+    com<caret>pile group: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
 }''')
     }
 
@@ -100,6 +172,7 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
     compile 'com.google.guava:guava:19.0'
 }''')
     }
+
     void test_convert_map_notation_with_interpolated_slashy_string() {
         doTextTest('''dependencies {
     compile group:<caret> 'com.google.guava', name: 'guava', version: /${19.0}/
@@ -172,9 +245,21 @@ class MapNotationToStringNotationIntentionTest extends IntentionTestBase {
 }''')
     }
 
-    void test_intention_not_applicable_to_map_notation_and_caret_after_configuration() {
-        doAntiTest('''dependencies {
+    void test_convert_map_notation_with_caret_before_configuration() {
+        doTextTest('''dependencies {
+    <caret>compile group: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
+}''')
+    }
+
+    void test_convert_map_notation_with_caret_after_configuration() {
+        doTextTest('''dependencies {
     compile<caret> group: 'com.google.guava', name: 'guava', version: '18.0'
+}''',
+                '''dependencies {
+    compile 'com.google.guava:guava:18.0'
 }''')
     }
 
