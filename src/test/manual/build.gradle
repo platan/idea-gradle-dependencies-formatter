@@ -29,4 +29,6 @@ dependencies {
             'org.springframework:spring-aop:2.5'
     someConfiguration project(":lib")
     testImplementation 'junit:junit:4.13'
+    runtimeOnly 'org.springframework:spring-core:2.4'
+    runtimeOnly 'org.springframework:spring-core:2.6'
 }
