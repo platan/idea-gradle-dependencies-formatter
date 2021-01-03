@@ -17,5 +17,6 @@ jobs:
         versions: |
           2019.3.5
           2020.1.4
-          2020.2.3
+          2020.2.4
+          2020.3.1
           LATEST-EAP-SNAPSHOT
