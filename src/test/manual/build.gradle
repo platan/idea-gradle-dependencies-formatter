@@ -4,8 +4,7 @@ plugins {
 
 allprojects {
     dependencies {
-        runtimeOnly 'org.springframework:spring-core:2.5',
-                'org.springframework:spring-aop:2.5'
+        runtimeOnly 'org.springframework:spring-core:2.5', 'org.springframework:spring-aop:2.5'
         jasper 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.2'
     }
 }
@@ -25,8 +24,7 @@ dependencies {
     runtimeOnly(group: 'org.hibernate', name: 'hibernate', version: hibernateVersion) {
         transitive = true
     }
-    runtimeOnly 'org.springframework:spring-core:2.5',
-            'org.springframework:spring-aop:2.5'
+    runtimeOnly 'org.springframework:spring-core:2.5', 'org.springframework:spring-aop:2.5'
     someConfiguration project(":lib")
     testImplementation 'junit:junit:4.13'
     runtimeOnly 'org.springframework:spring-core:2.4'
