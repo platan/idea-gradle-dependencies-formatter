@@ -25,7 +25,7 @@ public class Coordinate extends BaseCoordinate<String> implements Comparable<Coo
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
     private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
-    private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<String>();
+    private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<>();
 
     public Coordinate(@Nullable String group, String name, @Nullable String version, @Nullable String classifier,
                       @Nullable String extension) {
@@ -97,7 +97,7 @@ public class Coordinate extends BaseCoordinate<String> implements Comparable<Coo
     }
 
     private Map<String, String> toMap() {
-        Map<String, String> map = new LinkedHashMap<String, String>();
+        Map<String, String> map = new LinkedHashMap<>();
         putIfNotNull(map, group, GROUP_KEY);
         map.put(NAME_KEY, name);
         putIfNotNull(map, version, VERSION_KEY);

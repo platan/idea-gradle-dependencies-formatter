@@ -74,7 +74,7 @@ public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeser
             JAXBContext jaxbContext = JAXBContext.newInstance(MavenDependency.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             unmarshaller.setSchema(schema);
-            List<MavenDependency> dependencies = new ArrayList<MavenDependency>();
+            List<MavenDependency> dependencies = new ArrayList<>();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 MavenDependency dependency = unmarshall(nodeList.item(i), unmarshaller);
                 dependencies.add(dependency);
