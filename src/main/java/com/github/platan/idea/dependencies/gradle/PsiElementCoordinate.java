@@ -10,6 +10,7 @@ import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,8 +54,8 @@ public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
             return GrStringUtil.removeQuotes(element.getText());
         }
         if (element instanceof GrReferenceElement) {
-            GrReferenceElement referenceElement = (GrReferenceElement) element;
-            if (referenceElement.getQualifiedReferenceName().equals(referenceElement.getReferenceName())) {
+            GrReferenceElement<?> referenceElement = (GrReferenceElement<?>) element;
+            if (Objects.equals(referenceElement.getQualifiedReferenceName(), referenceElement.getReferenceName())) {
                 return String.format("$%s", element.getText());
             } else {
                 return String.format("${%s}", element.getText());
