@@ -1,14 +1,13 @@
 package com.github.platan.idea.dependencies.gradle;
 
-import static com.google.common.collect.Iterables.transform;
-
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
 
@@ -51,7 +50,8 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
         }
 
         private String createComment(Map<String, String> extraOptions) {
-            return String.format(" // %s", COMMA_JOINER.join(transform(extraOptions.entrySet(), EXTRA_OPTION_FORMATTER)));
+            return String.format(" // %s", COMMA_JOINER.join(extraOptions.entrySet().stream().map(EXTRA_OPTION_FORMATTER)
+                    .collect(Collectors.toList())));
         }
 
         private boolean useClosure(Dependency dependency) {
@@ -97,6 +97,6 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
     @NotNull
     @Override
     public String serialize(@NotNull List<Dependency> dependencies) {
-        return NEW_LINE_JOINER.join(transform(dependencies, FORMAT_GRADLE_DEPENDENCY));
+        return NEW_LINE_JOINER.join(dependencies.stream().map(FORMAT_GRADLE_DEPENDENCY).collect(Collectors.toList()));
     }
 }
