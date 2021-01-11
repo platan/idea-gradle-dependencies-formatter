@@ -18,10 +18,10 @@ matrix:
     - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT" KOTLIN_VERSION="1.4.21"
 
-install: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=KOTLIN_VERSION assemble
+install: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION assemble
 
-script: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=KOTLIN_VERSION build
+script: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION build
 
 after_success:
-  - if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=KOTLIN_VERSION cobertura coveralls; fi
+  - if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION cobertura coveralls; fi
   - if [ "$SONARQUBE" == "true" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./gradlew sonarqube -Dsonar.login=$SONAR_TOKEN; fi
