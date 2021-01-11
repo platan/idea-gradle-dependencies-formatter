@@ -8,7 +8,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 
-class SortDependenciesAction() : CodeInsightAction() {
+class SortDependenciesAction : CodeInsightAction() {
 
     override fun getHandler(): CodeInsightActionHandler = SortDependenciesHandler()
 

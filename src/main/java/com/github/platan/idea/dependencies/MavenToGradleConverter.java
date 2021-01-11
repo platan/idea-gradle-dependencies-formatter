@@ -35,9 +35,7 @@ public class MavenToGradleConverter {
             if (mavenDependencies.isEmpty()) {
                 return mavenDependencyXml;
             }
-        } catch (UnsupportedContentException e) {
-            return mavenDependencyXml;
-        } catch (DependencyValidationException e) {
+        } catch (UnsupportedContentException | DependencyValidationException e) {
             return mavenDependencyXml;
         }
         List<Dependency> dependencies = Lists.transform(mavenDependencies, new Function<MavenDependency, Dependency>() {

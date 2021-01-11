@@ -48,11 +48,7 @@ public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeser
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             return builder.parse(new ByteArrayInputStream(wrapperMavenDependencyXml.getBytes(UTF_8)));
-        } catch (ParserConfigurationException e) {
-            throw new UnsupportedContentException();
-        } catch (SAXException e) {
-            throw new UnsupportedContentException();
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new UnsupportedContentException();
         }
     }
