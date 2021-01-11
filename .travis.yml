@@ -5,13 +5,13 @@ language: java
 matrix:
   include:
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.3.5" COVERALLS=true SONARQUBE=true
+      env: IDEA_VERSION="2019.3.5" KOTLIN_VERSION="1.3.60" COVERALLS=true SONARQUBE=true
     - jdk: openjdk8
-      env: IDEA_VERSION="2020.1.4"
+      env: IDEA_VERSION="2020.1.4" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk8
-      env: IDEA_VERSION="2020.2.4"
+      env: IDEA_VERSION="2020.2.4" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk11
-      env: IDEA_VERSION="2020.3.1"
+      env: IDEA_VERSION="2020.3.1" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT" KOTLIN_VERSION="1.4.21"
   allow_failures:
