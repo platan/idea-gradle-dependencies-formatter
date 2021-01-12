@@ -1,6 +1,5 @@
 package com.github.platan.idea.dependencies.gradle;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -14,18 +13,16 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.joining;
 
 public class Coordinate extends BaseCoordinate<String> implements Comparable<Coordinate> {
-    private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
-    private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
+    private static final ImmutableSet<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
+    private static final ImmutableSet<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
-    public static final String COMMA_SPACE = ", ";
-    private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(COMMA_SPACE);
+    private static final String COMMA_SPACE = ", ";
     private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<>();
 
     public Coordinate(@Nullable String group, String name, @Nullable String version, @Nullable String classifier,

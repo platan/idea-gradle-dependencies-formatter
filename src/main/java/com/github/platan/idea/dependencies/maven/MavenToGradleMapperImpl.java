@@ -7,15 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
 public class MavenToGradleMapperImpl implements MavenToGradleMapper {
 
-    private static final Function<MavenExclusion, Exclusion> MAVEN_EXCLUSION_TO_EXCLUSION_FUNCTION =
-            mavenExclusion -> new Exclusion(mavenExclusion.getGroupId(), mavenExclusion.getArtifactId());
     private static final String ASTERISK = "*";
     private static final Predicate<MavenExclusion> IS_WILDCARD_EXCLUDE = mavenExclusion ->
             mavenExclusion.getGroupId().equals(ASTERISK) && mavenExclusion.getArtifactId().equals(ASTERISK);
@@ -30,7 +27,7 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
                 .anyMatch(IS_WILDCARD_EXCLUDE);
         List<Exclusion> excludes = mavenDependency.getExclusions().stream()
                 .filter(IS_WILDCARD_EXCLUDE.negate())
-                .map(MAVEN_EXCLUSION_TO_EXCLUSION_FUNCTION)
+                .map(mavenExclusion -> new Exclusion(mavenExclusion.getGroupId(), mavenExclusion.getArtifactId()))
                 .collect(toList());
         boolean transitive = !hasWildcardExclude;
         Map<String, String> extraOptions = createExtraOptions(mavenDependency);

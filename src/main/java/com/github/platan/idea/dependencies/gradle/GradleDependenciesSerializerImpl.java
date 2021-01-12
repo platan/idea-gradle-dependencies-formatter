@@ -3,11 +3,11 @@ package com.github.platan.idea.dependencies.gradle;
 import com.google.common.base.Joiner;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
@@ -17,16 +17,7 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
     // See: http://www.jetbrains.org/intellij/sdk/docs/basics/architectural_overview/documents.html
     private static final char NEW_LINE = '\n';
     private static final Joiner NEW_LINE_JOINER = Joiner.on(NEW_LINE);
-    private static final Joiner COMMA_JOINER = Joiner.on(", ");
-    private static final Function<Map.Entry<String, String>, String> EXTRA_OPTION_FORMATTER =
-            new Function<Map.Entry<String, String>, String>() {
-                @Nullable
-                @Override
-                public String apply(Map.Entry<String, String> extraOption) {
-                    return String.format("%s = %s (%s is not supported)", extraOption.getKey(), extraOption.getValue(), extraOption
-                            .getKey());
-                }
-            };
+    private static final String COMMA_SPACE = ", ";
     private static final Function<Dependency, String> FORMAT_GRADLE_DEPENDENCY = new Function<Dependency, String>() {
         @NotNull
         @Override
@@ -51,8 +42,11 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
         }
 
         private String createComment(Map<String, String> extraOptions) {
-            return String.format(" // %s", COMMA_JOINER.join(extraOptions.entrySet().stream().map(EXTRA_OPTION_FORMATTER)
-                    .collect(toList())));
+            String comment = extraOptions.entrySet().stream()
+                    .map(extraOption ->
+                            String.format("%s = %s (%s is not supported)", extraOption.getKey(), extraOption.getValue(), extraOption.getKey()))
+                    .collect(joining(COMMA_SPACE));
+            return String.format(" // %s", comment);
         }
 
         private boolean useClosure(Dependency dependency) {
