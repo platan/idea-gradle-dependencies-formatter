@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
 
     public PsiElementCoordinate(@Nullable PsiElement group, PsiElement name, @Nullable PsiElement version,
@@ -35,7 +37,7 @@ public class PsiElementCoordinate extends BaseCoordinate<PsiElement> {
         appendIfNotNull(stringBuilder, ':', classifier);
         appendIfNotNull(stringBuilder, '@', extension);
         List<PsiElement> allElements = Stream.of(group, name, version, classifier, extension)
-                .filter(java.util.Objects::nonNull).collect(Collectors.toList());
+                .filter(java.util.Objects::nonNull).collect(toList());
         boolean plainValues = allElements.stream().allMatch(this::isPlainValue);
         char quote = plainValues ? '\'' : '"';
         return String.format("%c%s%c", quote, stringBuilder.toString(), quote);

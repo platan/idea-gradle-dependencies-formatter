@@ -7,12 +7,12 @@ import com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializer;
 import com.github.platan.idea.dependencies.maven.MavenDependency;
 import com.github.platan.idea.dependencies.maven.MavenToGradleMapper;
 import com.github.platan.idea.dependencies.maven.UnsupportedContentException;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class MavenToGradleConverter {
 
@@ -38,13 +38,7 @@ public class MavenToGradleConverter {
         } catch (UnsupportedContentException | DependencyValidationException e) {
             return mavenDependencyXml;
         }
-        List<Dependency> dependencies = Lists.transform(mavenDependencies, new Function<MavenDependency, Dependency>() {
-            @Nullable
-            @Override
-            public Dependency apply(MavenDependency mavenDependency) {
-                return mavenToGradleMapper.map(mavenDependency);
-            }
-        });
+        List<Dependency> dependencies = mavenDependencies.stream().map(mavenToGradleMapper::map).collect(toList());
         return gradleDependencySerializer.serialize(dependencies);
     }
 

@@ -1,7 +1,5 @@
 package com.github.platan.idea.dependencies.maven;
 
-import static com.google.common.base.Charsets.UTF_8;
-
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeserializer {
 

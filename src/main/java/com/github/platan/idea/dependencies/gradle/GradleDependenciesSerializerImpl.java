@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 public class GradleDependenciesSerializerImpl implements GradleDependenciesSerializer {
 
     // https://github.com/platan/idea-gradle-dependencies-formatter/issues/3
@@ -51,7 +53,7 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
 
         private String createComment(Map<String, String> extraOptions) {
             return String.format(" // %s", COMMA_JOINER.join(extraOptions.entrySet().stream().map(EXTRA_OPTION_FORMATTER)
-                    .collect(Collectors.toList())));
+                    .collect(toList())));
         }
 
         private boolean useClosure(Dependency dependency) {
@@ -97,6 +99,6 @@ public class GradleDependenciesSerializerImpl implements GradleDependenciesSeria
     @NotNull
     @Override
     public String serialize(@NotNull List<Dependency> dependencies) {
-        return NEW_LINE_JOINER.join(dependencies.stream().map(FORMAT_GRADLE_DEPENDENCY).collect(Collectors.toList()));
+        return NEW_LINE_JOINER.join(dependencies.stream().map(FORMAT_GRADLE_DEPENDENCY).collect(toList()));
     }
 }

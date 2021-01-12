@@ -1,8 +1,5 @@
 package com.github.platan.idea.dependencies.gradle;
 
-import static com.google.common.collect.Iterables.transform;
-
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -18,13 +15,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.joining;
 
 public class Coordinate extends BaseCoordinate<String> implements Comparable<Coordinate> {
     private static final Set<String> ALL_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY, VERSION_KEY, CLASSIFIER_KEY, EXT_KEY);
     private static final Set<String> REQUIRED_KEYS = ImmutableSet.of(GROUP_KEY, NAME_KEY);
     private static final Splitter ON_SEMICOLON_SPLITTER = Splitter.onPattern(":").limit(4);
-    private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(", ");
+    public static final String COMMA_SPACE = ", ";
+    private static final Joiner ON_COMMA_SPACE_JOINER = Joiner.on(COMMA_SPACE);
     private static final Comparator<String> COMPARATOR = new NaturalNullFirstOrdering<>();
 
     public Coordinate(@Nullable String group, String name, @Nullable String version, @Nullable String classifier,
@@ -74,9 +75,9 @@ public class Coordinate extends BaseCoordinate<String> implements Comparable<Coo
     }
 
     public String toMapNotation(String quote) {
-        return ON_COMMA_SPACE_JOINER.join(transform(toMap().entrySet(), new MapEntryToStringFunction(quote)));
+        return toMap().entrySet().stream().map(new MapEntryToStringFunction(quote)).collect(joining(COMMA_SPACE));
     }
-    
+
     public static Coordinate fromMap(Map<String, String> map) {
         String name = map.get(NAME_KEY);
         Preconditions.checkArgument(!Strings.isNullOrEmpty(name), "'name' element is required. ");

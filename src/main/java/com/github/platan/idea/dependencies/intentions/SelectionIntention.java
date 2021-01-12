@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 public abstract class SelectionIntention<T extends PsiElement> extends Intention {
 
     @Override
@@ -54,7 +56,7 @@ public abstract class SelectionIntention<T extends PsiElement> extends Intention
                                 int end = element.getTextOffset() + element.getTextLength();
                                 return isBetween(start, startOffset, endOffset) || isBetween(end, startOffset, endOffset);
                             })
-                            .collect(Collectors.toList());
+                            .collect(toList());
                 }
             }
         }
