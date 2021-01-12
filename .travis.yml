@@ -11,7 +11,7 @@ matrix:
     - jdk: openjdk8
       env: IDEA_VERSION="2020.2.4" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk11
-      env: IDEA_VERSION="2020.3.1" KOTLIN_VERSION="1.3.60"
+      env: IDEA_VERSION="2020.3.1" KOTLIN_VERSION="1.4.21"
     - jdk: openjdk11
       env: IDEA_VERSION="LATEST-EAP-SNAPSHOT" KOTLIN_VERSION="1.4.21"
   allow_failures:
