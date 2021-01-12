@@ -10,7 +10,6 @@ import com.github.platan.idea.dependencies.maven.UnsupportedContentException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 

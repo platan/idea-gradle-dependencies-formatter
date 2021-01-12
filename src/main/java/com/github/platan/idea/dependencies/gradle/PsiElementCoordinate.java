@@ -11,7 +11,6 @@ import org.jetbrains.plugins.groovy.lang.psi.util.GrStringUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;

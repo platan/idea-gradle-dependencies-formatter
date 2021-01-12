@@ -12,7 +12,6 @@ import org.jetbrains.plugins.groovy.intentions.base.Intention;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
