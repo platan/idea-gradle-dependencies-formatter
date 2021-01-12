@@ -5,27 +5,23 @@ language: java
 matrix:
   include:
     - jdk: openjdk8
-      env: IDEA_VERSION="2019.3.5" COVERALLS=true SONARQUBE=true
+      env: IDEA_VERSION="2019.3.5" KOTLIN_VERSION="1.3.60" COVERALLS=true SONARQUBE=true
     - jdk: openjdk8
-      env: IDEA_VERSION="2020.1.4"
+      env: IDEA_VERSION="2020.1.4" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk8
-      env: IDEA_VERSION="2020.2.3"
+      env: IDEA_VERSION="2020.2.4" KOTLIN_VERSION="1.3.60"
     - jdk: openjdk11
-      env: IDEA_VERSION="2020.2.3"
-    - jdk: openjdk8
-      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
+      env: IDEA_VERSION="2020.3.1" KOTLIN_VERSION="1.4.21"
     - jdk: openjdk11
-      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
+      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT" KOTLIN_VERSION="1.4.21"
   allow_failures:
-    - jdk: openjdk8
-      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
     - jdk: openjdk11
-      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT"
+      env: IDEA_VERSION="LATEST-EAP-SNAPSHOT" KOTLIN_VERSION="1.4.21"
 
-install: ./gradlew -P ideaVersion=$IDEA_VERSION assemble
+install: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION assemble
 
-script: ./gradlew -P ideaVersion=$IDEA_VERSION build
+script: ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION build
 
 after_success:
-  - if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION cobertura coveralls; fi
+  - if [ "$COVERALLS" == "true" ]; then ./gradlew -P ideaVersion=$IDEA_VERSION -P kotlinVersion=$KOTLIN_VERSION cobertura coveralls; fi
   - if [ "$SONARQUBE" == "true" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./gradlew sonarqube -Dsonar.login=$SONAR_TOKEN; fi
