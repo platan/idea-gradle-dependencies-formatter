@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="src/main/resources/META-INF/pluginIcon.svg" height="120">
+    <img src="src/main/etc/logo/pluginIcon_all-full.svg" height="120">
 </p>
 
 # Gradle dependencies formatter
