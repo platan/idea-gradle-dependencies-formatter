@@ -73,23 +73,6 @@
             <className>com.github.platan.idea.dependencies.intentions.MapNotationToStringNotationIntention</className>
         </intentionAction>
     </extensions>
-    <application-components>
-        <component>
-            <implementation-class>com.github.platan.idea.dependencies.MavenToGradleConverter</implementation-class>
-        </component>
-        <component>
-            <interface-class>com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializer</interface-class>
-            <implementation-class>com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializerImpl</implementation-class>
-        </component>
-        <component>
-            <interface-class>com.github.platan.idea.dependencies.maven.MavenToGradleMapper</interface-class>
-            <implementation-class>com.github.platan.idea.dependencies.maven.MavenToGradleMapperImpl</implementation-class>
-        </component>
-        <component>
-            <interface-class>com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializer</interface-class>
-            <implementation-class>com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializerImpl</implementation-class>
-        </component>
-    </application-components>
     <actions>
         <action class="com.github.platan.idea.dependencies.sort.SortDependenciesAction"
                 id="sortGradleDependenciesAction" text="Sort Gradle Dependencies"
