@@ -82,6 +82,7 @@ private String getIdeaMainVersion() {
 
 dependencies {
     compile files("src/main/resources")
+    compile 'org.glassfish.jaxb:jaxb-runtime:3.0.0'
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
