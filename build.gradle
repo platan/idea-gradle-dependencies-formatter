@@ -54,6 +54,13 @@ intellij {
     instrumentCode = false
 }
 
+runPluginVerifier {
+    ideVersions = ["IC-2019.3.5",
+                   "IC-2020.1.4",
+                   "IC-2020.2.4",
+                   "IC-2020.3.1"]
+}
+
 publishPlugin {
     token = project.hasProperty('publishToken') ? project['publishToken'] : null
     channels = project.hasProperty('publishChannels') ? project['publishChannels'] : ['developer']
@@ -82,6 +89,7 @@ private String getIdeaMainVersion() {
 
 dependencies {
     compile files("src/main/resources")
+    compile 'javax.xml.bind:jaxb-api:2.3.1'
     compile 'org.glassfish.jaxb:jaxb-runtime:3.0.0'
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
