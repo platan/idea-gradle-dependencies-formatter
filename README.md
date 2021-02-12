@@ -73,7 +73,7 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-### unreleased
+### 0.6.0 (2021-02-12)
 - (feature) Sort dependencies in allprojects block and in subprojects block [#39](https://github.com/platan/idea-gradle-dependencies-formatter/issues/39)
 - (feature) Change notation type on multiple dependencies at once [#38](https://github.com/platan/idea-gradle-dependencies-formatter/issues/38)
 - (bugfix) Convert a map notation that uses a variable to a string notation properly [#42](https://github.com/platan/idea-gradle-dependencies-formatter/issues/42)
