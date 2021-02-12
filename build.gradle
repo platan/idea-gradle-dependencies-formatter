@@ -63,7 +63,7 @@ runPluginVerifier {
 
 publishPlugin {
     token = project.hasProperty('publishToken') ? project['publishToken'] : null
-    channels = project.hasProperty('publishChannels') ? project['publishChannels'] : ['developer']
+    channels = project.hasProperty('publishChannels') ? [project['publishChannels']] : ['developer']
 }
 
 import com.vdurmont.semver4j.Semver
