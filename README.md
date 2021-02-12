@@ -73,6 +73,11 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### unreleased
+- (feature) Sort dependencies in allprojects block and in subprojects block [#39](https://github.com/platan/idea-gradle-dependencies-formatter/issues/39)
+- (feature) Change notation type on multiple dependencies at once [#38](https://github.com/platan/idea-gradle-dependencies-formatter/issues/38)
+- (bugfix) Convert a map notation that uses a variable to a string notation properly [#42](https://github.com/platan/idea-gradle-dependencies-formatter/issues/42)
+
 ### 0.5.3 (2017-12-19)
 - (bugfix) Unable to paste multiple Maven dependencies at once [#3](https://github.com/platan/idea-gradle-dependencies-formatter/issues/3)
 
