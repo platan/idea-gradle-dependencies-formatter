@@ -18,7 +18,7 @@
         <b>0.6.0</b>
         <ul>
             <li>(feature) Sort dependencies in allprojects block and in subprojects block <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/39">#39</a></li>
-            <li>(improvement) Change notation type on multiple dependencies at once <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/38">#38</a></li>
+            <li>(feature) Change notation type on multiple dependencies at once <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/38">#38</a></li>
             <li>(bugfix) Convert a map notation that uses a variable to a string notation properly <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/42">#42</a></li>
         </ul>
         <b>0.5.3</b>
