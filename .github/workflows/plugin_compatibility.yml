@@ -11,7 +11,7 @@ jobs:
         java-version: 8
     - name: Build the plugin using Gradle
       run: ./gradlew buildPlugin
-    - uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1.0.3
+    - uses: ChrisCarini/intellij-platform-plugin-verifier-action@v1.0.5
       with:
         ide-versions: |
           ideaIC:2019.1.4
