@@ -104,7 +104,7 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
     if (JavaVersion.current().isJava9Compatible()) {
-        errorprone("com.google.errorprone:error_prone_core:2.5.1")
+        errorprone("com.google.errorprone:error_prone_core:2.6.0")
     }
 }
 
