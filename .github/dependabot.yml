@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: net.ltgt.errorprone
+    versions:
+    - 2.0.0
+  - dependency-name: org.jetbrains.intellij
+    versions:
+    - 0.7.0
+    - 0.7.1
