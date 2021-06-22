@@ -34,4 +34,4 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} build
       - name: Coveralls
-        run: if [ "${{ matrix.kotlin }}" == "true" ]; then ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} cobertura coveralls; fi
+        run: if [ "${{ matrix.coveralls }}" == "true" ]; then ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} cobertura coveralls; fi
