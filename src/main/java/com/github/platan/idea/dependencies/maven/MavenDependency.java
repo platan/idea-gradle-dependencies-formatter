@@ -3,11 +3,11 @@ package com.github.platan.idea.dependencies.maven;
 
 import com.google.common.base.Objects;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class MavenDependency {
     private String type;
     @XmlElement(name = "exclusion")
     @XmlElementWrapper(name = "exclusions")
-    private List<MavenExclusion> exclusionList = new ArrayList<MavenExclusion>();
+    private List<MavenExclusion> exclusionList = new ArrayList<>();
 
     public String getGroupId() {
         return groupId;

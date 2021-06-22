@@ -1,7 +1,8 @@
 package com.github.platan.idea.dependencies.maven;
 
-import static com.google.common.base.Charsets.UTF_8;
-
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -10,9 +11,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeserializer {
 
@@ -48,11 +48,7 @@ public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeser
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             return builder.parse(new ByteArrayInputStream(wrapperMavenDependencyXml.getBytes(UTF_8)));
-        } catch (ParserConfigurationException e) {
-            throw new UnsupportedContentException();
-        } catch (SAXException e) {
-            throw new UnsupportedContentException();
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new UnsupportedContentException();
         }
     }
@@ -75,10 +71,10 @@ public class MavenDependenciesDeserializerImpl implements MavenDependenciesDeser
     private List<MavenDependency> unmarshall(NodeList nodeList) throws UnsupportedContentException {
         Schema schema = getSchema();
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(MavenDependency.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance("com.github.platan.idea.dependencies.maven", this.getClass().getClassLoader());
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             unmarshaller.setSchema(schema);
-            List<MavenDependency> dependencies = new ArrayList<MavenDependency>();
+            List<MavenDependency> dependencies = new ArrayList<>();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 MavenDependency dependency = unmarshall(nodeList.item(i), unmarshaller);
                 dependencies.add(dependency);

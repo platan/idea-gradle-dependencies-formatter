@@ -3,7 +3,6 @@ package com.github.platan.idea.dependencies;
 import com.github.platan.idea.dependencies.gradle.GradleDependenciesSerializerImpl;
 import com.github.platan.idea.dependencies.maven.MavenDependenciesDeserializerImpl;
 import com.github.platan.idea.dependencies.maven.MavenToGradleMapperImpl;
-import com.github.platan.idea.dependencies.maven.UnsupportedContentException;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
@@ -21,7 +20,7 @@ public class ConverterBenchmark {
             + "        </dependency>";
 
     @Benchmark
-    public void convertBenchmark() throws UnsupportedContentException {
+    public void convertBenchmark() {
         mavenToGradleConverter.convert(MAVEN_DEPENDENCY);
     }
 }

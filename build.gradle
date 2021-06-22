@@ -17,10 +17,11 @@ plugins {
     id 'idea'
     id 'checkstyle'
     id 'codenarc'
-    id 'me.champeau.gradle.jmh' version '0.5.2'
-    id 'org.jetbrains.intellij' version '0.6.5'
-    id 'net.saliman.cobertura' version '3.0.0'
-    id 'com.github.ben-manes.versions' version '0.33.0'
+    id 'me.champeau.gradle.jmh' version '0.5.3'
+    id 'org.jetbrains.intellij' version '0.7.3'
+    id 'net.saliman.cobertura' version '4.0.0'
+    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'net.ltgt.errorprone' version '2.0.1'
 }
 
 apply plugin: 'kotlin'
@@ -35,7 +36,6 @@ sonarqube {
 
 
 group 'com.github.platan'
-project.version = '0.5.4-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -52,6 +52,18 @@ intellij {
     downloadSources = false
     updateSinceUntilBuild = false
     instrumentCode = false
+}
+
+runPluginVerifier {
+    ideVersions = ["IC-2019.3.5",
+                   "IC-2020.1.4",
+                   "IC-2020.2.4",
+                   "IC-2020.3.1"]
+}
+
+publishPlugin {
+    token = project.hasProperty('publishToken') ? project['publishToken'] : null
+    channels = project.hasProperty('publishChannels') ? [project['publishChannels']] : ['developer']
 }
 
 import com.vdurmont.semver4j.Semver
@@ -77,10 +89,11 @@ private String getIdeaMainVersion() {
 
 dependencies {
     compile files("src/main/resources")
+    compile 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.0'
+    compile 'com.sun.xml.bind:jaxb-impl:3.0.0'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    compile 'com.intellij:annotations:12.0'
     testCompile("org.spockframework:spock-core:1.3-groovy-2.4") {
         exclude module: 'groovy-all'
     }
@@ -90,10 +103,9 @@ dependencies {
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
-    compile 'javax.xml.bind:jaxb-api:2.3.1'
-    compile 'com.sun.xml.bind:jaxb-core:2.3.0.1'
-    compile 'com.sun.xml.bind:jaxb-impl:2.3.3'
-    compile 'javax.activation:activation:1.1.1'
+    if (JavaVersion.current().isJava9Compatible()) {
+        errorprone("com.google.errorprone:error_prone_core:2.7.1")
+    }
 }
 
 configurations {
@@ -124,18 +136,4 @@ test {
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
-}
-
-if (JavaVersion.current().isJava10()) {
-    compileJava {
-        options.compilerArgs += ["--add-modules", "java.xml.bind"]
-    }
-
-    compileTestJava {
-        options.compilerArgs += ["--add-modules", "java.xml.bind"]
-    }
-
-    test {
-        jvmArgs += ["--add-modules", "java.xml.bind"]
-    }
 }

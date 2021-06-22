@@ -1,8 +1,12 @@
+<p align="center">
+    <img src="src/main/etc/logo/pluginIcon_all-full.svg" height="160">
+</p>
+
 # Gradle dependencies formatter
+    
 [![Build Status](https://travis-ci.org/platan/idea-gradle-dependencies-formatter.svg?branch=master)](https://travis-ci.org/platan/idea-gradle-dependencies-formatter)
 [![Build Status (Windows)](https://img.shields.io/appveyor/ci/platan/idea-gradle-dependencies-formatter/master.svg?label=build%20(Windows))](https://ci.appveyor.com/project/platan/idea-gradle-dependencies-formatter)
 [![Coverage Status](https://coveralls.io/repos/platan/idea-gradle-dependencies-formatter/badge.svg?branch=master&service=github)](https://coveralls.io/github/platan/idea-gradle-dependencies-formatter?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2524f23e9b49538760cdce6368bf8e)](https://www.codacy.com/app/platan/idea-gradle-dependencies-formatter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=platan/idea-gradle-dependencies-formatter&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/669c521f-7ecb-4e0a-a079-fa5c28ca17c7)](https://codebeat.co/projects/github-com-platan-idea-gradle-dependencies-formatter-master)
 [![Version](https://img.shields.io/jetbrains/plugin/v/7937.svg?label=latest)](https://plugins.jetbrains.com/plugin/7937-gradle-dependencies-formatter)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/7937.svg)](https://plugins.jetbrains.com/plugin/7937-gradle-dependencies-formatter)
@@ -68,6 +72,11 @@ This project uses [gradle-intellij-plugin](https://github.com/JetBrains/gradle-i
 Note: Currently the project is not prepared to be imported as a IntelliJ Platform Plugin.
 
 ## Changelog
+
+### 0.6.0 (2021-02-12)
+- (feature) Sort dependencies in allprojects block and in subprojects block [#39](https://github.com/platan/idea-gradle-dependencies-formatter/issues/39)
+- (feature) Change notation type on multiple dependencies at once [#38](https://github.com/platan/idea-gradle-dependencies-formatter/issues/38)
+- (bugfix) Convert a map notation that uses a variable to a string notation properly [#42](https://github.com/platan/idea-gradle-dependencies-formatter/issues/42)
 
 ### 0.5.3 (2017-12-19)
 - (bugfix) Unable to paste multiple Maven dependencies at once [#3](https://github.com/platan/idea-gradle-dependencies-formatter/issues/3)
