@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 8 * * *' # every day 8am
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - java: 8
+            idea: 2019.3.5
+            kotlin: 1.3.60
+            coveralls: true
+          - java: 8
+            idea: 2020.1.4
+            kotlin: 1.3.60
+          - java: 8
+            idea: 2020.2.4
+            kotlin: 1.3.60
+          - java: 11
+            idea: 2020.3.1
+            kotlin: 1.4.21
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build with Gradle
+        run: ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} build
+      - name: Coveralls
+        run: if [ "${{ matrix.coveralls }}" == "true" ]; then ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} cobertura coveralls; fi
