@@ -34,4 +34,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} build
       - name: Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: if [ "${{ matrix.coveralls }}" == "true" ]; then ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} cobertura coveralls; fi
