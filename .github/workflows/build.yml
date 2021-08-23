@@ -39,5 +39,5 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: if [ "${{ matrix.coveralls }}" == "true" ]; then ./gradlew -P ideaVersion=${{ matrix.idea }} -P kotlinVersion=${{ matrix.kotlin }} cobertura coveralls; fi
       - name: IntelliJ Plugin Verifier
-        if: ${{ matrix.verify_plugin == "true" }}
+        if: ${{ matrix.verify_plugin == 'true' }}
         run: ./gradlew runPluginVerifier
