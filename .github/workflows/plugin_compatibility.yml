@@ -11,7 +11,7 @@ jobs:
         java-version: 8
     - name: Build the plugin using Gradle
       run: ./gradlew buildPlugin
-    - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.1
+    - uses: thepieterdc/intellij-plugin-verifier-action@v1.3.0
       with:
         plugin: '/home/runner/work/idea-gradle-dependencies-formatter/idea-gradle-dependencies-formatter/build/distributions/idea-gradle-dependencies-formatter-*'
         versions: |
