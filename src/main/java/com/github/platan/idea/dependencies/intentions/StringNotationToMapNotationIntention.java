@@ -104,7 +104,7 @@ public class StringNotationToMapNotationIntention extends SelectionIntention<GrM
         if (aClass.isInstance(element)) {
             return aClass.cast(element);
         }
-        if (aClass.isInstance(element.getParent().getParent())) {
+        if (element.getParent() != null && aClass.isInstance(element.getParent().getParent())) {
             return aClass.cast(element.getParent().getParent());
         }
         return null;
