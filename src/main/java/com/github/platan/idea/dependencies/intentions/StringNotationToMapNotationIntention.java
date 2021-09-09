@@ -41,10 +41,13 @@ public class StringNotationToMapNotationIntention extends SelectionIntention<GrM
         if (isInterpolableString(quote)) {
             replaceGStringMapValuesToString(argumentList, project);
         }
+        GrMethodCall callCopy = (GrMethodCall) found.copy();
+        PsiElement copyFirstArgument = callCopy.getArgumentList().getAllArguments()[0];
         for (GrNamedArgument namedArgument : argumentList.getNamedArguments()) {
-            found.getArgumentList().addNamedArgument(namedArgument);
+            callCopy.addNamedArgument(namedArgument);
         }
-        firstArgument.delete();
+        copyFirstArgument.delete();
+        found.replace(callCopy);
     }
 
     @Nullable
