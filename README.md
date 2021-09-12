@@ -73,6 +73,9 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
+### 0.6.1 (2021-09-08)
+- (bugfix) fixed NPE in `StringNotationToMapNotationIntention` [#76](https://github.com/platan/idea-gradle-dependencies-formatter/issues/76)
+
 ### 0.6.0 (2021-02-12)
 - (feature) Sort dependencies in allprojects block and in subprojects block [#39](https://github.com/platan/idea-gradle-dependencies-formatter/issues/39)
 - (feature) Change notation type on multiple dependencies at once [#38](https://github.com/platan/idea-gradle-dependencies-formatter/issues/38)

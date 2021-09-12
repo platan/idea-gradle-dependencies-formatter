@@ -15,6 +15,10 @@
     </description>
     <change-notes><![CDATA[
       <p>
+        <b>0.6.1</b>
+        <ul>
+            <li>(bugfix) fixed NPE in `StringNotationToMapNotationIntention` <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/76">#76</a></li>
+        </ul>
         <b>0.6.0</b>
         <ul>
             <li>(feature) Sort dependencies in allprojects block and in subprojects block <a href="https://github.com/platan/idea-gradle-dependencies-formatter/issues/39">#39</a></li>
