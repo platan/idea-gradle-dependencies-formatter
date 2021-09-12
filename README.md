@@ -73,7 +73,7 @@ Note: Currently the project is not prepared to be imported as a IntelliJ Platfor
 
 ## Changelog
 
-### 0.6.1 (2021-09-08)
+### 0.6.1 (2021-09-12)
 - (bugfix) fixed NPE in `StringNotationToMapNotationIntention` [#76](https://github.com/platan/idea-gradle-dependencies-formatter/issues/76)
 
 ### 0.6.0 (2021-02-12)
