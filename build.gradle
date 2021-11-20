@@ -94,7 +94,7 @@ dependencies {
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    testCompile("org.spockframework:spock-core:2.0-groovy-2.5") {
+    testCompile("org.spockframework:spock-core:2.0-groovy-3.0") {
         exclude module: 'groovy-all'
     }
     // without this dependency I get java.lang.NoClassDefFoundError: kotlin/reflect/jvm/ReflectJvmMapping
