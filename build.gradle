@@ -132,6 +132,7 @@ checkstyle {
 
 test {
     jvmArgs '-XX:MaxPermSize=256m'
+    useJUnitPlatform()
 }
 
 sourceSets {
