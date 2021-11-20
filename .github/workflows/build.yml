@@ -13,12 +13,9 @@ jobs:
       matrix:
         include:
           - java: 8
-            idea: 2019.3.5
-            kotlin: 1.3.60
-            coveralls: true
-          - java: 8
             idea: 2020.1.4
             kotlin: 1.3.60
+            coveralls: true
           - java: 8
             idea: 2020.2.4
             kotlin: 1.3.60
