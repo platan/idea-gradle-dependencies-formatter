@@ -97,12 +97,6 @@ dependencies {
     testCompile("org.spockframework:spock-core:2.0-groovy-2.5") {
         exclude module: 'groovy-all'
     }
-    // without this dependency I get java.lang.NoClassDefFoundError: kotlin/reflect/jvm/ReflectJvmMapping
-    // in StringNotationToMapNotationIntentionTest, MapNotationToStringNotationIntentionTest and SortDependenciesTest
-    // workaround from https://baijifeilong.github.io/2018/06/27/kotlin/
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlinVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
     if (JavaVersion.current().isJava9Compatible()) {
         errorprone("com.google.errorprone:error_prone_core:2.11.0")
     }
