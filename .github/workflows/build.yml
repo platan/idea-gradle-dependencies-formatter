@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - java: 8
+          - java: 11
             idea: 2020.2.4
             kotlin: 1.3.60
             coveralls: true
