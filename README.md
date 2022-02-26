@@ -4,7 +4,7 @@
 
 # Gradle dependencies formatter
     
-[![Build Status](https://travis-ci.org/platan/idea-gradle-dependencies-formatter.svg?branch=master)](https://travis-ci.org/platan/idea-gradle-dependencies-formatter)
+[![Build Status](https://img.shields.io/github/workflow/status/platan/idea-gradle-dependencies-formatter/CI/master)](https://github.com/platan/idea-gradle-dependencies-formatter/actions/workflows/build.yml?query=branch%3Amaster)
 [![Build Status (Windows)](https://img.shields.io/appveyor/ci/platan/idea-gradle-dependencies-formatter/master.svg?label=build%20(Windows))](https://ci.appveyor.com/project/platan/idea-gradle-dependencies-formatter)
 [![Coverage Status](https://coveralls.io/repos/platan/idea-gradle-dependencies-formatter/badge.svg?branch=master&service=github)](https://coveralls.io/github/platan/idea-gradle-dependencies-formatter?branch=master)
 [![codebeat badge](https://codebeat.co/badges/669c521f-7ecb-4e0a-a079-fa5c28ca17c7)](https://codebeat.co/projects/github-com-platan-idea-gradle-dependencies-formatter-master)
