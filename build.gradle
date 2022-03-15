@@ -88,13 +88,12 @@ private String getIdeaMainVersion() {
 }
 
 dependencies {
-    compile files("src/main/resources")
-    compile 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
-    compile 'com.sun.xml.bind:jaxb-impl:3.0.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:3.0.2'
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    testCompile("org.spockframework:spock-core:2.1-groovy-2.5") {
+    testImplementation("org.spockframework:spock-core:2.1-groovy-2.5") {
         exclude module: 'groovy-all'
     }
     errorprone("com.google.errorprone:error_prone_core:2.11.0")
