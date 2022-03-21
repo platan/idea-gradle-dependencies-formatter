@@ -25,7 +25,6 @@ plugins {
 }
 
 apply plugin: 'kotlin'
-apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'org.sonarqube'
 
 sonarqube {
