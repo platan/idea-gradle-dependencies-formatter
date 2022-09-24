@@ -94,7 +94,7 @@ dependencies {
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    testCompile("org.spockframework:spock-core:2.1-groovy-2.5") {
+    testCompile("org.spockframework:spock-core:2.2-groovy-4.0") {
         exclude module: 'groovy-all'
     }
     errorprone("com.google.errorprone:error_prone_core:2.15.0")
