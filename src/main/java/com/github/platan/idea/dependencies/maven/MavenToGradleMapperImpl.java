@@ -5,6 +5,7 @@ import com.github.platan.idea.dependencies.gradle.Exclusion;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -38,7 +39,7 @@ public class MavenToGradleMapperImpl implements MavenToGradleMapper {
     }
 
     private HashMap<String, String> createExtraOptions(MavenDependency mavenDependency) {
-        HashMap<String, String> extraOptions = new HashMap<>();
+        HashMap<String, String> extraOptions = new LinkedHashMap<>();
         if (mavenDependency.getSystemPath() != null) {
             extraOptions.put(SYSTEM_PATH, mavenDependency.getSystemPath());
         }
