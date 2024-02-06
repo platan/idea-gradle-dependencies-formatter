@@ -18,7 +18,7 @@ plugins {
     id 'checkstyle'
     id 'codenarc'
     id 'me.champeau.gradle.jmh' version '0.5.3'
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.17.1'
     id 'net.saliman.cobertura' version '4.0.0'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id 'net.ltgt.errorprone' version '2.0.2'
